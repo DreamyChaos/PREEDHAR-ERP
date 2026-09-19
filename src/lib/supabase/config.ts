@@ -22,8 +22,8 @@ export const SUPABASE_URL = sanitizeUrl(rawUrl);
 export const SUPABASE_ANON_KEY = sanitizeKey(rawKey);
 
 export function getSupabaseConfig() {
-  const url = sanitizeUrl(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "");
-  const anonKey = sanitizeKey(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "");
+  const url = SUPABASE_URL;
+  const anonKey = SUPABASE_ANON_KEY;
 
   const isConfigured =
     url.length > 0 &&
