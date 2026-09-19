@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { getSupabaseEnv } from "@/lib/supabase/client";
 
 export async function middleware(request: NextRequest) {
   const res = NextResponse.next();
@@ -24,8 +25,29 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-project.supabase.co";
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
+  const { supabaseUrl, supabaseAnonKey, isConfigured } = getSupabaseEnv();
+
+  // If Supabase environment variables are missing, allow login page and redirect protected routes
+  if (!isConfigured) {
+    if (pathname.startsWith("/login")) {
+      return res;
+    }
+    const isProtectedRoute =
+      pathname.startsWith("/dashboard") ||
+      pathname.startsWith("/customers") ||
+      pathname.startsWith("/quotations") ||
+      pathname.startsWith("/invoices") ||
+      pathname.startsWith("/purchase-orders") ||
+      pathname.startsWith("/work-completion") ||
+      pathname.startsWith("/work-completion-reports") ||
+      pathname.startsWith("/team") ||
+      pathname.startsWith("/settings");
+
+    if (isProtectedRoute) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+    return res;
+  }
 
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {

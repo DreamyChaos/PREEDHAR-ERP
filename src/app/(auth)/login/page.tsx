@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, getSupabaseEnv } from "@/lib/supabase/client";
 import { Mail, Lock, AlertCircle, ShieldCheck, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
@@ -22,6 +22,14 @@ export default function LoginPage() {
       return;
     }
 
+    const { isConfigured } = getSupabaseEnv();
+    if (!isConfigured) {
+      setErrorMessage(
+        "Supabase configuration is missing. Please ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are configured in your Vercel project settings and redeploy."
+      );
+      return;
+    }
+
     setIsLoading(true);
     try {
       const supabase = createClient();
@@ -31,19 +39,31 @@ export default function LoginPage() {
       });
 
       if (error) {
-        // Standard user-friendly error message
-        if (error.message.toLowerCase().includes("invalid login credentials")) {
+        const msg = (error.message || "").toLowerCase();
+        if (msg.includes("invalid login credentials") || msg.includes("invalid_credentials")) {
           setErrorMessage("Invalid email address or password. Please verify and try again.");
-        } else if (error.message.toLowerCase().includes("email not confirmed")) {
+        } else if (msg.includes("email not confirmed")) {
           setErrorMessage("Email address has not been confirmed yet. Please check your inbox.");
+        } else if (msg.includes("failed to fetch") || msg.includes("network")) {
+          setErrorMessage(
+            "Unable to connect to the Supabase authentication server. Please check your network connection and ensure NEXT_PUBLIC_SUPABASE_URL is properly configured in Vercel."
+          );
         } else {
           setErrorMessage(error.message);
         }
       } else if (data?.user) {
         router.push("/dashboard");
+        router.refresh();
       }
-    } catch {
-      setErrorMessage("An unexpected authentication error occurred. Please try again.");
+    } catch (err: unknown) {
+      const errStr = err instanceof Error ? err.message.toLowerCase() : String(err).toLowerCase();
+      if (errStr.includes("failed to fetch") || errStr.includes("network")) {
+        setErrorMessage(
+          "Unable to connect to the Supabase authentication server. Please verify your network connection and NEXT_PUBLIC_SUPABASE_URL in Vercel settings."
+        );
+      } else {
+        setErrorMessage("An unexpected authentication error occurred. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }

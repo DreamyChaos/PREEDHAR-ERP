@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, getSupabaseEnv } from "@/lib/supabase/client";
 import type { UserProfile, UserRole } from "./types";
 
 interface AuthContextType {
@@ -29,6 +29,12 @@ export function AuthProvider({
 
   // Initialize Supabase session on client
   React.useEffect(() => {
+    const { isConfigured } = getSupabaseEnv();
+    if (!isConfigured) {
+      setIsLoading(false);
+      return;
+    }
+
     const supabase = createClient();
 
     async function fetchSession() {
@@ -137,8 +143,11 @@ export function AuthProvider({
   const signOut = async () => {
     setIsLoading(true);
     try {
-      const supabase = createClient();
-      await supabase.auth.signOut();
+      const { isConfigured } = getSupabaseEnv();
+      if (isConfigured) {
+        const supabase = createClient();
+        await supabase.auth.signOut();
+      }
     } catch (err) {
       console.warn("Supabase sign out error:", err);
     } finally {
