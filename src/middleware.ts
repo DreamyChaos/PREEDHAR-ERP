@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { getSupabaseEnv } from "@/lib/supabase/client";
+import { getSupabaseConfig } from "@/lib/supabase/config";
 
 export async function middleware(request: NextRequest) {
   const res = NextResponse.next();
@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  const { supabaseUrl, supabaseAnonKey, isConfigured } = getSupabaseEnv();
+  const { supabaseUrl, supabaseAnonKey, isConfigured } = getSupabaseConfig();
 
   // If Supabase environment variables are missing, allow login page and redirect protected routes
   if (!isConfigured) {
