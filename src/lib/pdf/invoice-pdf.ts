@@ -28,7 +28,7 @@ export function generateInvoicePDF(
   const usableWidth = pageWidth - 28;
 
   // 1. Official Header
-  let currentY = renderOfficialHeader(doc, "TAX INVOICE", invoice.invoiceNumber, companyOverride);
+  let currentY = renderOfficialHeader(doc, "TAX INVOICE", invoice.invoiceNumber, companyOverride, true);
 
   // 2. Metadata Table (5 rows on each side)
   currentY = renderMetadataTable(
@@ -120,17 +120,19 @@ export function generateInvoicePDF(
     currentY = 16;
   }
 
-  currentY = renderBankRemittanceDetails(doc, currentY, companyOverride);
+  if (!invoice.amountPaid) {
+    currentY = renderBankRemittanceDetails(doc, currentY, companyOverride);
+  }
 
   if (invoice.notes || invoice.termsAndConditions) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(7.5);
     doc.setTextColor(...PDF_COLORS.primaryNavy);
-    doc.text("Remarks / Payment Terms:", startX, currentY);
+    doc.text("Remarks / Payment Instructions:", startX, currentY);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(6.5);
-    doc.setTextColor(...PDF_COLORS.textDark);
+    doc.setTextColor(...PDF_COLORS.brandBlue);
     const remarks =
       invoice.notes ||
       invoice.termsAndConditions ||
@@ -150,7 +152,6 @@ export function generateInvoicePDF(
   renderOfficialSignatureBlocks(doc, currentY, {
     leftTitle: "For PREEDHAR TECHNICAL SERVICES CO. L.L.C.",
     leftSigner: "Authorized Signature & Stamp",
-    leftSub: "Accounts & Commercial Finance Dept",
     showRight: false,
   });
 

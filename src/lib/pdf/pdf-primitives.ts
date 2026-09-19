@@ -60,7 +60,8 @@ export function renderOfficialHeader(
   doc: jsPDF,
   documentTitle: string,
   _docNumber?: string,
-  companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>
+  companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>,
+  showAddressInHeader?: boolean
 ): number {
   const comp = { ...PDF_COMPANY_DETAILS, ...companyOverride };
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -87,19 +88,21 @@ export function renderOfficialHeader(
   doc.setTextColor(...PDF_COLORS.primaryNavy);
   doc.text(comp.name, startX + 28, 16);
 
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(7.5);
-  doc.setTextColor(...PDF_COLORS.textMuted);
-  doc.text(
-    `${comp.address} • Mob: ${comp.phone} • Email: ${comp.email}`,
-    startX + 28,
-    21
-  );
-  doc.text(
-    `TRN: ${comp.trn} • Commercial Electro-Mechanical & HVAC Technical Services`,
-    startX + 28,
-    25.5
-  );
+  if (showAddressInHeader) {
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...PDF_COLORS.textMuted);
+    doc.text(
+      `${comp.address} • Mob: ${comp.phone} • Email: ${comp.email}`,
+      startX + 28,
+      21
+    );
+    doc.text(
+      `TRN: ${comp.trn} • Commercial Electro-Mechanical & HVAC Technical Services`,
+      startX + 28,
+      25.5
+    );
+  }
 
   // Thin Navy Header Divider
   doc.setDrawColor(...PDF_COLORS.primaryNavy);

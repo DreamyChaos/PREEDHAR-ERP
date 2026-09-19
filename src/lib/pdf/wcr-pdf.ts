@@ -42,7 +42,7 @@ export function generateWCRPDF(
       { label: "Date", value: formatDate(report.workCompletionDate || report.reportDate) },
       { label: "Project", value: report.projectName || "Electro-Mechanical Works" },
       { label: "Purchase Order", value: report.purchaseOrderNumber || "N/A" },
-      { label: "Status", value: `${report.status} (${report.completionPercentage}% Handover)` },
+      { label: "Status", value: report.status },
     ]
   );
 
@@ -91,12 +91,16 @@ export function generateWCRPDF(
 
   currentY += 7;
 
-  doc.setFont("helvetica", "normal");
+  let beforeText = report.observations;
+  if (!beforeText) {
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(...PDF_COLORS.textMuted);
+    beforeText = "No photos attached for this section.";
+  } else {
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...PDF_COLORS.textDark);
+  }
   doc.setFontSize(7);
-  doc.setTextColor(...PDF_COLORS.textDark);
-  const beforeText =
-    report.observations ||
-    "Initial site assessment conducted. Verified parameters, operating pressures, temperatures, electrical loads, and diagnostic telemetry prior to commencement of physical overhaul.";
 
   const wrappedBefore = doc.splitTextToSize(beforeText, usableWidth - 6);
   const beforeHeight = Math.max(wrappedBefore.length * 3 + 2, 10);
@@ -109,7 +113,7 @@ export function generateWCRPDF(
 
   currentY += beforeHeight + 3;
 
-  // 5. Section: AFTER WORK (Execution Items / Scope & Materials)
+  // 5. Section: AFTER WORK
   doc.setFillColor(...PDF_COLORS.tableLabelBg);
   doc.setDrawColor(...PDF_COLORS.tableBorder);
   doc.setLineWidth(0.2);
@@ -122,47 +126,27 @@ export function generateWCRPDF(
 
   currentY += 7;
 
-  // Table of executed work items
-  const tableRows = report.items.map((item, index) => [
-    (index + 1).toString(),
-    item.description || "Service Item",
-    `${item.quantity !== undefined ? item.quantity : 1} ${item.unit || "LOT"}`,
-    item.status,
-    item.remarks || "Executed and site verified",
-  ]);
+  let afterText = (report as any).afterWorkNotes;
+  if (!afterText) {
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(...PDF_COLORS.textMuted);
+    afterText = "No photos attached for this section.";
+  } else {
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...PDF_COLORS.textDark);
+  }
+  doc.setFontSize(7);
 
-  autoTable(doc, {
-    startY: currentY,
-    head: [["#", "EXECUTED TECHNICAL ITEM", "QTY / UNIT", "STATUS", "INSPECTION REMARKS"]],
-    body: tableRows,
-    theme: "grid",
-    headStyles: {
-      fillColor: PDF_COLORS.primaryNavy,
-      textColor: [255, 255, 255],
-      fontSize: 7.5,
-      fontStyle: "bold",
-      halign: "center",
-      cellPadding: 1.8,
-    },
-    bodyStyles: {
-      fontSize: 7,
-      textColor: PDF_COLORS.textDark,
-      cellPadding: 1.8,
-      lineColor: PDF_COLORS.tableBorder,
-      lineWidth: 0.2,
-    },
-    columnStyles: {
-      0: { halign: "center", cellWidth: 10 },
-      1: { halign: "left", cellWidth: "auto" },
-      2: { halign: "center", cellWidth: 24 },
-      3: { halign: "center", cellWidth: 26, fontStyle: "bold" },
-      4: { halign: "left", cellWidth: 48 },
-    },
-    margin: { left: startX, right: startX },
-  });
+  const wrappedAfter = doc.splitTextToSize(afterText, usableWidth - 6);
+  const afterHeight = Math.max(wrappedAfter.length * 3 + 2, 10);
 
-  const lastTable = (doc as any).lastAutoTable;
-  currentY = lastTable ? lastTable.finalY + 3 : currentY + 30;
+  doc.setFillColor(255, 255, 255);
+  doc.setDrawColor(...PDF_COLORS.tableBorder);
+  doc.setLineWidth(0.2);
+  doc.rect(startX, currentY, usableWidth, afterHeight, "FD");
+  doc.text(wrappedAfter, startX + 3, currentY + 4);
+
+  currentY += afterHeight + 3;
 
   // Materials if provided
   if (report.materialsUsed) {
@@ -223,14 +207,10 @@ export function generateWCRPDF(
   renderOfficialSignatureBlocks(doc, currentY, {
     leftTitle: "PREEDHAR TECHNICAL SERVICES CO. L.L.C.",
     leftSigner: "Authorized Signature & Stamp",
-    leftSub: report.engineerInCharge || "Lead MEP Engineer",
+    leftSub: "Name / Designation / Date",
     rightTitle: "CLIENT / CUSTOMER ACCEPTANCE",
-    rightSigner: report.clientAcknowledgement
-      ? `${report.clientAcknowledgement.clientRepresentativeName} (${report.clientAcknowledgement.designation || "Representative"})`
-      : "Authorized Client Signature & Stamp",
-    rightSub: report.clientAcknowledgement?.acknowledgementDate
-      ? `Date: ${formatDate(report.clientAcknowledgement.acknowledgementDate)}`
-      : `Date: ${formatDate(report.workCompletionDate)}`,
+    rightSigner: "Customer Signature & Stamp",
+    rightSub: "Name / Designation / Date",
   });
 
   // 8. Common Footer

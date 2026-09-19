@@ -37,7 +37,7 @@ export function generateQuotationPDF(
       { label: "Company", value: quotation.clientPrintedName || quotation.customerName },
       { label: "Attn", value: quotation.attention || "Manager / Project In-Charge" },
       { label: "Site", value: quotation.projectLocation || "Dubai, UAE" },
-      { label: "Contact", value: quotation.attention ? "Via Representative" : "Dubai, UAE" },
+      { label: "Contact", value: quotation.customerPhone || quotation.customerEmail || "N/A" },
     ],
     [
       { label: "Ref. No.", value: quotation.quotationNumber },
@@ -57,7 +57,7 @@ export function generateQuotationPDF(
   doc.setFontSize(7.5);
   doc.setTextColor(...PDF_COLORS.textDark);
   doc.text(
-    "With reference to the above mentioned subject, we are pleased to submit our best commercial offer for the following scope of works:",
+    "We are pleased to submit our quotation for the below mentioned scope of work.",
     startX,
     currentY + 7
   );
@@ -143,7 +143,7 @@ export function generateQuotationPDF(
   doc.setTextColor(...PDF_COLORS.textDark);
   const termsText =
     quotation.termsAndConditions ||
-    "1. Payment Terms: 30 days from date of Tax Invoice.\n2. Validity: 30 days from quotation date.\n3. Work Completion: As per agreed site schedule upon LPO receipt.\n4. Standard warranty applies to installed equipment and components.";
+    "• Payment Terms: 60% cash Advance, 40% cash After Completion of works\n• Validity: 30 days from quotation date\n• Work Completion: As per agreed site schedule upon LPO receipt\n• Standard warranty applies to installed equipment and components";
 
   const wrappedTerms = doc.splitTextToSize(termsText, usableWidth);
   doc.text(wrappedTerms, startX, currentY + 4.5);
@@ -161,7 +161,7 @@ export function generateQuotationPDF(
   doc.setFontSize(6.5);
   doc.setTextColor(...PDF_COLORS.textDark);
   doc.text(
-    "Civil work, structural modifications, main incoming power supply, and permits unless specifically noted above.",
+    "Any works, materials or services not specifically mentioned in the above scope are excluded from this quotation.",
     startX,
     currentY + 3.5
   );
@@ -184,10 +184,7 @@ export function generateQuotationPDF(
   renderOfficialSignatureBlocks(doc, currentY, {
     leftTitle: "PREEDHAR TECHNICAL SERVICES CO. L.L.C.",
     leftSigner: "Authorized Signature & Stamp",
-    leftSub: "Managing Director / Lead Technical Engineer",
-    rightTitle: "Client Acceptance & Authorization",
-    rightSigner: quotation.attention || quotation.clientPrintedName || "Authorized Client Representative",
-    rightSub: "Signature & Official Company Stamp",
+    showRight: false,
   });
 
   // 9. Page Numbers & Common Footer

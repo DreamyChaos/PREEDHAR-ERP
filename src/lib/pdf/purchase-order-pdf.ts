@@ -35,7 +35,7 @@ export function generatePurchaseOrderPDF(
     currentY,
     [
       { label: "Supplier", value: po.clientPrintedName || po.customerName },
-      { label: "Project", value: `${po.projectName} (${po.projectLocation})` },
+      { label: "Project", value: po.projectName || "Electro-Mechanical Works" },
       { label: "Quote Ref.", value: po.quotationNumber || "N/A" },
     ],
     [
@@ -118,9 +118,9 @@ export function generatePurchaseOrderPDF(
   doc.setTextColor(...PDF_COLORS.primaryNavy);
   doc.text("Special Instructions / Delivery Terms:", startX, currentY + 1);
 
-  doc.setFont("helvetica", "normal");
+  doc.setFont("helvetica", "italic");
   doc.setFontSize(6.5);
-  doc.setTextColor(...PDF_COLORS.textDark);
+  doc.setTextColor(...PDF_COLORS.brandBlue);
   const deliveryText =
     po.termsAndConditions ||
     `1. Delivery Site: ${po.deliveryAddress || po.projectLocation || "Dubai, UAE"}\n2. Expected Delivery Date: ${formatDate(po.expectedDeliveryDate)}\n3. Standard inspection and warranty certifications required upon handover.`;
@@ -137,13 +137,18 @@ export function generatePurchaseOrderPDF(
     currentY = 16;
   }
 
+  // Draw Issued By above left signature block
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7);
+  doc.setTextColor(...PDF_COLORS.textDark);
+  doc.text("Issued By:", startX, currentY);
+  currentY += 4.5;
+
   renderOfficialSignatureBlocks(doc, currentY, {
-    leftTitle: "Issued By: PREEDHAR TECHNICAL SERVICES CO. L.L.C.",
+    leftTitle: "PREEDHAR TECHNICAL SERVICES CO. L.L.C.",
     leftSigner: "Procurement Manager",
-    leftSub: "Supply Chain & Technical Procurement",
     rightTitle: "Supplier Acknowledgment:",
     rightSigner: "Authorized Supplier Signature",
-    rightSub: po.customerName || "Vendor Representative Stamp",
   });
 
   // 7. Common Footer
