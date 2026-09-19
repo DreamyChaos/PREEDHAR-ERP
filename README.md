@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PREEDHAR TECHNICAL SERVICES CO. L.L.C. — ENTERPRISE ERP
 
-## Getting Started
+An enterprise-grade commercial operations, ERP, and field-service management platform built specifically for **PREEDHAR Technical Services Co. L.L.C.** (Dubai, United Arab Emirates).
 
-First, run the development server:
+---
+
+## 🌟 Key Capabilities & Modules
+
+- **Commercial Quotations (`PTS-Q`)**: Full quotation workspace with multi-line item calculations, automated 5% UAE VAT, standard terms, exclusions, and official PDF generation matching official PTSC standards.
+- **Official Tax Invoices (`PTSC-INV`)**: UAE FTA-compliant commercial tax invoices with payment status tracking (`UNPAID`, `PARTIALLY_PAID`, `PAID`, `OVERDUE`), amount paid / balance due calculations, bank remittance details, and official PDF exports.
+- **Purchase Orders (`PTSC-PO`)**: Procurement and vendor orders with expected delivery tracking, project site routing, supplier acknowledgment blocks, and dual signature PDF generation.
+- **Work Completion Reports (`PTSC-WCR`)**: Engineering handover certificates with before/after technical observations, materials logs, photo attachments (Supabase Storage), and client acceptance sign-off.
+- **Customer CRM & Master Data**: Complete customer directory with 15-digit UAE FTA TRN management, credit terms, and live entity search.
+- **Team Management & RBAC**: Role-based access control (`ADMIN`, `MANAGER`, `STAFF`) with user profile state and Supabase Authentication.
+- **Company Settings Singleton**: Single source of truth for corporate legal name, trade license, 15-digit FTA TRN (`100234567800003`), banking details (Emirates NBD), and document prefixes.
+- **Official PDF Engine**: High-fidelity jsPDF engine embedding the official PREEDHAR JPEG binary logo (`18,941 bytes`), two-column shaded metadata grids, right-aligned currency formatting, dynamic amount-to-words in UAE Dirhams, and page pagination.
+
+---
+
+## 🛠 Tech Stack
+
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/) with Turbopack
+- **Language**: TypeScript (Strict Mode)
+- **Styling**: Tailwind CSS with enterprise color system (Navy `#0B1F33`, Corporate Blue `#2563EB`, Slate `#F5F7FA`)
+- **Database & Auth**: [Supabase](https://supabase.com/) (PostgreSQL with Row Level Security, SSR Auth, and Storage)
+- **PDF Generation**: [jsPDF](https://github.com/parallax/jsPDF) & `jspdf-autotable`
+- **Icons**: Lucide React
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+
+- [Node.js](https://nodejs.org/) v20.x or higher
+- [npm](https://www.npmjs.com/) or `pnpm`
+- A Supabase project with database migrations applied
+
+### 2. Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd PREEDHAR
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Environment Configuration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file in the root directory by copying `.env.example`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.example .env.local
+```
 
-## Learn More
+Fill in your Supabase project credentials:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-public-key
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> [!IMPORTANT]
+> Never commit `.env.local` or any service role keys to Git. Keep all sensitive values in `.env.local` (local development) or in Vercel Environment Variables (production).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. Running Locally
 
-## Deploy on Vercel
+```bash
+# Start development server
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🏗 Build & Production Verification
+
+```bash
+# Type check the codebase
+npx tsc --noEmit
+
+# Create optimized production build
+npm run build
+
+# Start production server
+npm run start
+```
+
+---
+
+## 🗄 Database Schema & Migrations
+
+Database definitions and seed scripts are located in `supabase/`:
+
+- `supabase/migrations/20260919000001_initial_schema.sql`: Core tables (`profiles`, `customers`, `quotations`, `invoices`, `purchase_orders`, `work_completion_reports`, `company_settings`) and RLS policies.
+- `supabase/migrations/20260919000002_photos_and_audit.sql`: WCR photo attachments and storage bucket policies.
+- `supabase/seed.sql`: Clean production baseline containing official company settings and TRN configuration.
+
+---
+
+## ☁️ Vercel Deployment Guide
+
+1. **Push to GitHub**: Ensure all changes are pushed to your private GitHub repository (`main` branch).
+2. **Import into Vercel**:
+   - Log in to [Vercel](https://vercel.com).
+   - Click **Add New Project** $\rightarrow$ **Import Git Repository**.
+   - Select your private `PREEDHAR-ERP` repository.
+3. **Configure Environment Variables**:
+   - In the Vercel project configuration, add:
+     - `NEXT_PUBLIC_SUPABASE_URL`: Your production Supabase URL.
+     - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your production Supabase Anon Key.
+4. **Deploy**:
+   - Framework preset: **Next.js**
+   - Build command: `npm run build`
+   - Output directory: `.next`
+   - Click **Deploy**.
+
+---
+
+## 📄 License & Proprietary Notice
+
+Copyright &copy; 2026 PREEDHAR TECHNICAL SERVICES CO. L.L.C. (Dubai, UAE). All rights reserved. Proprietary and confidential enterprise software.
