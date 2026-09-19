@@ -4,23 +4,28 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { PREEDHAR_LOGO_BASE64 } from "./logo-base64";
 import { numberToWordsAED } from "./amount-to-words";
 
-// PREEDHAR Official Brand Colors
+// PREEDHAR Official Brand Colors — matched exactly to screenshots
 export const PDF_COLORS = {
-  primaryNavy: [11, 31, 51] as [number, number, number], // #0B1F33
-  brandOrange: [194, 65, 12] as [number, number, number], // #C2410C / #FF6500 accent
-  brandBlue: [37, 99, 235] as [number, number, number], // #2563EB Corporate Blue
-  textDark: [15, 23, 42] as [number, number, number], // #0F172A
-  textMuted: [100, 116, 139] as [number, number, number], // #64748B
-  tableLabelBg: [241, 245, 249] as [number, number, number], // #F1F5F9
-  tableBorder: [203, 213, 225] as [number, number, number], // #CBD5E1
-  borderLight: [226, 232, 240] as [number, number, number], // #E2E8F0
-  dangerRed: [185, 28, 28] as [number, number, number], // #B91C1C
-  successGreen: [21, 128, 61] as [number, number, number], // #15803D
+  primaryNavy:  [11, 31, 51]    as [number, number, number], // #0B1F33
+  brandOrange:  [224, 118, 20]  as [number, number, number], // #E07614 warm orange (PREEDHAR name)
+  brandBlue:    [30, 81, 162]   as [number, number, number], // #1E51A2 link/invoice blue
+  textDark:     [15, 23, 42]    as [number, number, number], // #0F172A
+  textMuted:    [100, 116, 139] as [number, number, number], // #64748B
+  tableLabelBg: [220, 230, 242] as [number, number, number], // #DCE6F2 blue-grey label bg
+  tableBodyBg:  [255, 255, 255] as [number, number, number], // white
+  tableBorder:  [180, 195, 215] as [number, number, number], // #B4C3D7
+  totalRowBg:   [220, 230, 242] as [number, number, number], // same as label bg for total row
+  balanceBg:    [255, 240, 220] as [number, number, number], // warm orange tint for balance
+  balanceText:  [180, 80, 0]    as [number, number, number], // #B45000 orange for balance due
+  wordsBg:      [235, 245, 255] as [number, number, number], // light blue for amount in words box
+  footerLine:   [194, 65, 12]   as [number, number, number], // orange footer line (matches screenshots)
 };
 
 export const PDF_COMPANY_DETAILS = {
   name: "PREEDHAR TECHNICAL SERVICES CO. L.L.C.",
-  tagline: "Commercial HVAC, Chiller Overhauls, MEP & Facility Engineering",
+  nameFirst: "PREEDHAR",                                     // orange part
+  nameRest: " TECHNICAL SERVICES CO. L.L.C.",               // navy part
+  tagline: "Commercial Electro-Mechanical & HVAC Technical Services",
   address: "Dubai – United Arab Emirates",
   phone: "+971-569653603",
   email: "preedhartechinicalservice@gmail.com",
@@ -33,7 +38,9 @@ export const PDF_COMPANY_DETAILS = {
 
 function getLogoBytes(): Uint8Array {
   try {
-    const cleanBase64 = PREEDHAR_LOGO_BASE64.replace(/^data:image\/[a-z]+;base64,/, "").replace(/\s+/g, "");
+    const cleanBase64 = PREEDHAR_LOGO_BASE64
+      .replace(/^data:image\/[a-z]+;base64,/, "")
+      .replace(/\s+/g, "");
     if (typeof Buffer !== "undefined") {
       return new Uint8Array(Buffer.from(cleanBase64, "base64"));
     }
@@ -41,20 +48,37 @@ function getLogoBytes(): Uint8Array {
       const binaryString = atob(cleanBase64);
       const len = binaryString.length;
       const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
+      for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
       return bytes;
     }
-  } catch {
-    // fallback
-  }
+  } catch { /* fallback */ }
   return new Uint8Array();
 }
 
 /**
- * 1. HEADER: Common across all official PREEDHAR documents
- * Real Logo at top-left, corporate title, thin divider, centered document title.
+ * Draw two-tone company name: "PREEDHAR" in orange, rest in navy
+ */
+function drawTwoToneCompanyName(doc: jsPDF, x: number, y: number, fontSize: number): void {
+  const comp = PDF_COMPANY_DETAILS;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(fontSize);
+
+  // "PREEDHAR" in orange
+  doc.setTextColor(...PDF_COLORS.brandOrange);
+  doc.text(comp.nameFirst, x, y);
+
+  // Get width of "PREEDHAR" to position rest
+  const orangeWidth = doc.getTextWidth(comp.nameFirst);
+
+  // " TECHNICAL SERVICES CO. L.L.C." in navy
+  doc.setTextColor(...PDF_COLORS.primaryNavy);
+  doc.text(comp.nameRest, x + orangeWidth, y);
+}
+
+/**
+ * 1. HEADER: Official PREEDHAR document header
+ * Logo (square, not stretched) + two-tone company name + divider + document title
+ * showAddressInHeader = true for invoices (shows address/TRN lines)
  */
 export function renderOfficialHeader(
   doc: jsPDF,
@@ -68,54 +92,47 @@ export function renderOfficialHeader(
   const startX = 14;
   const usableWidth = pageWidth - 28;
 
-  // Render Real Logo
+  // Logo — square aspect ratio (logo is ~square), size 20x20
+  const logoSize = 20;
+  const logoY = 9;
   try {
     const logoBytes = getLogoBytes();
-    if (logoBytes && logoBytes.length > 0) {
-      doc.addImage(logoBytes, "JPEG", startX, 10, 24, 18, undefined, "FAST");
-    } else {
-      doc.addImage(PREEDHAR_LOGO_BASE64, "JPEG", startX, 10, 24, 18, undefined, "FAST");
-    }
+    const imgData = (logoBytes && logoBytes.length > 0) ? logoBytes : PREEDHAR_LOGO_BASE64;
+    const fmt = PREEDHAR_LOGO_BASE64.startsWith("data:image/png") ? "PNG" : "JPEG";
+    doc.addImage(imgData as string, fmt, startX, logoY, logoSize, logoSize, undefined, "FAST");
   } catch {
-    // Fallback placeholder if image fails
-    doc.setFillColor(...PDF_COLORS.tableLabelBg);
-    doc.rect(startX, 10, 24, 18, "F");
+    doc.setFillColor(220, 230, 242);
+    doc.rect(startX, logoY, logoSize, logoSize, "F");
   }
 
-  // Company Name & Subtitle
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(13);
-  doc.setTextColor(...PDF_COLORS.primaryNavy);
-  doc.text(comp.name, startX + 28, 16);
+  const textX = startX + logoSize + 4;
 
   if (showAddressInHeader) {
+    // Full header (Invoice style): 3 lines — name, address/phone, TRN
+    drawTwoToneCompanyName(doc, textX, 15, 13);
+
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.5);
+    doc.setFontSize(7);
     doc.setTextColor(...PDF_COLORS.textMuted);
-    doc.text(
-      `${comp.address} • Mob: ${comp.phone} • Email: ${comp.email}`,
-      startX + 28,
-      21
-    );
-    doc.text(
-      `TRN: ${comp.trn} • Commercial Electro-Mechanical & HVAC Technical Services`,
-      startX + 28,
-      25.5
-    );
+    doc.text(`${comp.address} • Mob: ${comp.phone} • Email: ${comp.email}`, textX, 20);
+    doc.text(`TRN: ${comp.trn} • ${comp.tagline}`, textX, 24.5);
+  } else {
+    // Simple header (Quotation/PO/WCR): just company name, vertically centered in logo height
+    drawTwoToneCompanyName(doc, textX, 21, 14);
   }
 
-  // Thin Navy Header Divider
+  // Divider line — navy
   doc.setDrawColor(...PDF_COLORS.primaryNavy);
-  doc.setLineWidth(0.6);
-  doc.line(startX, 30, startX + usableWidth, 30);
+  doc.setLineWidth(0.7);
+  doc.line(startX, 32, startX + usableWidth, 32);
 
-  // Centered Document Title
+  // Document title — bold, centered, navy
   doc.setFont("helvetica", "bold");
   doc.setFontSize(13);
   doc.setTextColor(...PDF_COLORS.primaryNavy);
-  doc.text(documentTitle.toUpperCase(), pageWidth / 2, 36.5, { align: "center" });
+  doc.text(documentTitle.toUpperCase(), pageWidth / 2, 39, { align: "center" });
 
-  return 40;
+  return 43;
 }
 
 export interface MetadataPair {
@@ -124,8 +141,10 @@ export interface MetadataPair {
 }
 
 /**
- * 2. STRUCTURED METADATA TABLE
- * Two-column grid (Left and Right) with shaded label cells and clean value text.
+ * 2. METADATA TABLE
+ * Two-column layout: [label | value | label | value]
+ * Label cells: blue-grey bg, bold navy text
+ * Value cells: white bg, navy text
  */
 export function renderMetadataTable(
   doc: jsPDF,
@@ -134,10 +153,10 @@ export function renderMetadataTable(
   rightPairs: MetadataPair[]
 ): number {
   const maxRows = Math.max(leftPairs.length, rightPairs.length);
-  const bodyRows: any[][] = [];
+  const bodyRows: string[][] = [];
 
   for (let i = 0; i < maxRows; i++) {
-    const left = leftPairs[i] || { label: "", value: "" };
+    const left  = leftPairs[i]  || { label: "", value: "" };
     const right = rightPairs[i] || { label: "", value: "" };
     bodyRows.push([left.label, left.value, right.label, right.value]);
   }
@@ -147,32 +166,35 @@ export function renderMetadataTable(
     body: bodyRows,
     theme: "grid",
     styles: {
-      fontSize: 7.5,
-      cellPadding: 1.8,
+      fontSize: 8,
+      cellPadding: 2.2,
       lineColor: PDF_COLORS.tableBorder,
-      lineWidth: 0.2,
-      textColor: PDF_COLORS.textDark,
+      lineWidth: 0.25,
     },
     columnStyles: {
       0: {
-        cellWidth: 31,
+        cellWidth: 30,
         fillColor: PDF_COLORS.tableLabelBg,
         fontStyle: "bold",
         textColor: PDF_COLORS.primaryNavy,
       },
       1: {
-        cellWidth: 60,
-        fillColor: [255, 255, 255],
+        cellWidth: 61,
+        fillColor: PDF_COLORS.tableBodyBg,
+        textColor: PDF_COLORS.primaryNavy,
+        fontStyle: "normal",
       },
       2: {
-        cellWidth: 31,
+        cellWidth: 30,
         fillColor: PDF_COLORS.tableLabelBg,
         fontStyle: "bold",
         textColor: PDF_COLORS.primaryNavy,
       },
       3: {
-        cellWidth: 60,
-        fillColor: [255, 255, 255],
+        cellWidth: 61,
+        fillColor: PDF_COLORS.tableBodyBg,
+        textColor: PDF_COLORS.primaryNavy,
+        fontStyle: "normal",
       },
     },
     tableWidth: 182,
@@ -180,11 +202,12 @@ export function renderMetadataTable(
   });
 
   const lastTable = (doc as any).lastAutoTable;
-  return lastTable ? lastTable.finalY + 3 : startY + 25;
+  return lastTable ? lastTable.finalY + 4 : startY + 28;
 }
 
 /**
- * 3. FINANCIAL SUMMARY AND AMOUNT IN WORDS
+ * 3. FINANCIAL TOTALS BLOCK
+ * Right-aligned summary table + Amount in Words box
  */
 export function renderFinancialTotalsBlock(
   doc: jsPDF,
@@ -201,12 +224,12 @@ export function renderFinancialTotalsBlock(
   },
   isInvoice: boolean = false
 ): number {
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const startX = 14;
+  const pageWidth  = doc.internal.pageSize.getWidth();
+  const startX     = 14;
   const usableWidth = pageWidth - 28;
 
-  // Build Summary Rows
-  const summaryRows: Array<{ label: string; value: string; isBold?: boolean; isTotal?: boolean; isBalance?: boolean }> = [];
+  type SummaryRow = { label: string; value: string; isTotal?: boolean; isBalance?: boolean };
+  const summaryRows: SummaryRow[] = [];
 
   summaryRows.push({
     label: "Sub Total (AED)",
@@ -228,7 +251,6 @@ export function renderFinancialTotalsBlock(
   summaryRows.push({
     label: "TOTAL AMOUNT (AED)",
     value: formatCurrency(data.grandTotal).replace("AED", "").trim(),
-    isBold: true,
     isTotal: true,
   });
 
@@ -237,20 +259,18 @@ export function renderFinancialTotalsBlock(
       summaryRows.push({
         label: "Amount Paid (AED)",
         value: formatCurrency(data.amountPaid).replace("AED", "").trim(),
-        isBold: true,
       });
     }
-
     summaryRows.push({
       label: "BALANCE DUE (AED)",
-      value: formatCurrency(data.outstandingAmount !== undefined ? data.outstandingAmount : data.grandTotal).replace("AED", "").trim(),
-      isBold: true,
+      value: formatCurrency(
+        data.outstandingAmount !== undefined ? data.outstandingAmount : data.grandTotal
+      ).replace("AED", "").trim(),
       isBalance: true,
     });
   }
 
-  // Draw Summary Table aligned to the right side
-  const boxWidth = 85;
+  const boxWidth = 88;
   const boxX = startX + usableWidth - boxWidth;
   let currentY = startY;
 
@@ -260,37 +280,39 @@ export function renderFinancialTotalsBlock(
     theme: "grid",
     styles: {
       fontSize: 8,
-      cellPadding: 1.8,
+      cellPadding: 2,
       lineColor: PDF_COLORS.tableBorder,
-      lineWidth: 0.2,
+      lineWidth: 0.25,
     },
     columnStyles: {
       0: {
-        cellWidth: 48,
+        cellWidth: 50,
         halign: "left",
         fontStyle: "bold",
         fillColor: PDF_COLORS.tableLabelBg,
         textColor: PDF_COLORS.primaryNavy,
       },
       1: {
-        cellWidth: 37,
+        cellWidth: 38,
         halign: "right",
         fontStyle: "bold",
-        textColor: PDF_COLORS.textDark,
+        textColor: PDF_COLORS.primaryNavy,
+        fillColor: PDF_COLORS.tableBodyBg,
       },
     },
     didParseCell: (hookData) => {
-      const rowIndex = hookData.row.index;
-      const rowItem = summaryRows[rowIndex];
-      if (rowItem?.isTotal) {
-        hookData.cell.styles.fillColor = [241, 245, 249];
+      const row = summaryRows[hookData.row.index];
+      if (row?.isTotal) {
+        hookData.cell.styles.fillColor = PDF_COLORS.totalRowBg;
         hookData.cell.styles.textColor = PDF_COLORS.primaryNavy;
         hookData.cell.styles.fontSize = 8.5;
+        hookData.cell.styles.fontStyle = "bold";
       }
-      if (rowItem?.isBalance) {
-        hookData.cell.styles.fillColor = [254, 242, 242]; // subtle light red
-        hookData.cell.styles.textColor = PDF_COLORS.dangerRed;
+      if (row?.isBalance) {
+        hookData.cell.styles.fillColor = PDF_COLORS.balanceBg;
+        hookData.cell.styles.textColor = PDF_COLORS.balanceText;
         hookData.cell.styles.fontSize = 8.5;
+        hookData.cell.styles.fontStyle = "bold";
       }
     },
     tableWidth: boxWidth,
@@ -298,29 +320,34 @@ export function renderFinancialTotalsBlock(
   });
 
   const lastTable = (doc as any).lastAutoTable;
-  currentY = lastTable ? lastTable.finalY + 3 : currentY + 30;
+  currentY = lastTable ? lastTable.finalY + 3 : currentY + 32;
 
-  // Amount in Words
-  const words = numberToWordsAED(data.grandTotal);
-  doc.setFillColor(...PDF_COLORS.tableLabelBg);
+  // Amount in Words — light blue box, italic blue text
+  const amountForWords = isInvoice
+    ? (data.outstandingAmount !== undefined ? data.outstandingAmount : data.grandTotal)
+    : data.grandTotal;
+  const words = numberToWordsAED(amountForWords);
+
+  doc.setFillColor(...PDF_COLORS.wordsBg);
   doc.setDrawColor(...PDF_COLORS.tableBorder);
-  doc.setLineWidth(0.2);
-  doc.rect(startX, currentY, usableWidth, 6.5, "FD");
+  doc.setLineWidth(0.25);
+  doc.rect(startX, currentY, usableWidth, 7, "FD");
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(7.5);
   doc.setTextColor(...PDF_COLORS.primaryNavy);
-  doc.text("Amount in Words:", startX + 3, currentY + 4.5);
+  doc.text("Amount in Words:", startX + 3, currentY + 4.8);
 
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(...PDF_COLORS.textDark);
-  doc.text(words, startX + 28, currentY + 4.5);
+  doc.setFont("helvetica", "italic");
+  doc.setFontSize(7.5);
+  doc.setTextColor(...PDF_COLORS.brandBlue);
+  doc.text(words, startX + 30, currentY + 4.8);
 
-  return currentY + 9;
+  return currentY + 10;
 }
 
 /**
- * 4. BANK REMITTANCE INSTRUCTIONS
+ * 4. BANK REMITTANCE BLOCK
  */
 export function renderBankRemittanceDetails(
   doc: jsPDF,
@@ -328,108 +355,101 @@ export function renderBankRemittanceDetails(
   companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>
 ): number {
   const comp = { ...PDF_COMPANY_DETAILS, ...companyOverride };
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const startX = 14;
+  const pageWidth  = doc.internal.pageSize.getWidth();
+  const startX     = 14;
   const usableWidth = pageWidth - 28;
 
-  doc.setFillColor(248, 250, 252);
+  doc.setFillColor(245, 248, 252);
   doc.setDrawColor(...PDF_COLORS.tableBorder);
-  doc.setLineWidth(0.2);
-  doc.rect(startX, startY, usableWidth, 12, "FD");
+  doc.setLineWidth(0.25);
+  doc.rect(startX, startY, usableWidth, 13, "FD");
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(7.5);
   doc.setTextColor(...PDF_COLORS.primaryNavy);
-  doc.text("Official Bank Remittance & Payment Details:", startX + 3, startY + 4);
+  doc.text("Official Bank Remittance & Payment Details:", startX + 3, startY + 4.5);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(7);
-  doc.setTextColor(...PDF_COLORS.textDark);
+  doc.setTextColor(...PDF_COLORS.brandBlue);
   doc.text(
     `Beneficiary: ${comp.accountName} • Bank: ${comp.bankName}`,
     startX + 3,
-    startY + 7.5
+    startY + 8.5
   );
   doc.text(
     `IBAN: ${comp.iban} • SWIFT: ${comp.swift} • Currency: AED`,
     startX + 3,
-    startY + 10.5
+    startY + 12
   );
 
-  return startY + 14.5;
+  return startY + 16;
 }
 
 /**
- * 5. SIGNATURES: Left and Right blocks matching PREEDHAR samples
+ * 5. SIGNATURE BLOCKS
+ * Title (bold navy) → blank space for signature → line → label below line
+ * No sub-text, clean and professional
  */
 export function renderOfficialSignatureBlocks(
   doc: jsPDF,
   startY: number,
   options: {
     leftTitle?: string;
-    leftSigner?: string;
-    leftSub?: string;
+    leftLabel?: string;
     rightTitle?: string;
-    rightSigner?: string;
-    rightSub?: string;
+    rightLabel?: string;
     showRight?: boolean;
   }
 ): number {
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const startX = 14;
+  const pageWidth  = doc.internal.pageSize.getWidth();
+  const startX     = 14;
   const usableWidth = pageWidth - 28;
-  const colWidth = (usableWidth - 10) / 2;
+  const colWidth   = (usableWidth - 10) / 2;
 
-  // Left Signatory
+  // LEFT
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(7.5);
+  doc.setFontSize(8);
   doc.setTextColor(...PDF_COLORS.primaryNavy);
-  doc.text(options.leftTitle || "For PREEDHAR TECHNICAL SERVICES CO. L.L.C.", startX, startY);
+  doc.text(options.leftTitle || "PREEDHAR TECHNICAL SERVICES CO. L.L.C.", startX, startY);
 
-  // Line for signature
   doc.setDrawColor(...PDF_COLORS.tableBorder);
-  doc.setLineWidth(0.4);
-  doc.line(startX, startY + 15, startX + colWidth, startY + 15);
+  doc.setLineWidth(0.5);
+  doc.line(startX, startY + 14, startX + colWidth, startY + 14);
 
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(7);
-  doc.setTextColor(...PDF_COLORS.textDark);
-  doc.text(options.leftSigner || "Authorized Signature & Stamp", startX, startY + 19);
-  if (options.leftSub) {
-    doc.setFontSize(6.5);
-    doc.setTextColor(...PDF_COLORS.textMuted);
-    doc.text(options.leftSub, startX, startY + 22.5);
-  }
-
-  // Right Signatory (if applicable)
-  if (options.showRight !== false) {
-    const rightX = startX + colWidth + 10;
-    doc.setFont("helvetica", "bold");
+  if (options.leftLabel) {
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
     doc.setTextColor(...PDF_COLORS.primaryNavy);
-    doc.text(options.rightTitle || "Client / Supplier Acceptance", rightX, startY);
+    doc.text(options.leftLabel, startX, startY + 18);
+  }
+
+  // RIGHT (optional)
+  if (options.showRight !== false) {
+    const rightX = startX + colWidth + 10;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.setTextColor(...PDF_COLORS.primaryNavy);
+    doc.text(options.rightTitle || "CLIENT / CUSTOMER ACCEPTANCE", rightX, startY);
 
     doc.setDrawColor(...PDF_COLORS.tableBorder);
-    doc.setLineWidth(0.4);
-    doc.line(rightX, startY + 15, rightX + colWidth, startY + 15);
+    doc.setLineWidth(0.5);
+    doc.line(rightX, startY + 14, rightX + colWidth, startY + 14);
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7);
-    doc.setTextColor(...PDF_COLORS.textDark);
-    doc.text(options.rightSigner || "Authorized Signature & Stamp", rightX, startY + 19);
-    if (options.rightSub) {
-      doc.setFontSize(6.5);
-      doc.setTextColor(...PDF_COLORS.textMuted);
-      doc.text(options.rightSub, rightX, startY + 22.5);
+    if (options.rightLabel) {
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      doc.setTextColor(...PDF_COLORS.primaryNavy);
+      doc.text(options.rightLabel, rightX, startY + 18);
     }
   }
 
-  return startY + 25;
+  return startY + 22;
 }
 
 /**
- * 6. COMMON FOOTER ACROSS ALL PAGES
- * Thin divider line, contact text, and Page X of Y.
+ * 6. FOOTER — orange + navy divider line, grey text, page number
  */
 export function renderOfficialFooter(
   doc: jsPDF,
@@ -437,32 +457,36 @@ export function renderOfficialFooter(
 ): void {
   const comp = { ...PDF_COMPANY_DETAILS, ...companyOverride };
   const totalPages = doc.getNumberOfPages();
-  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageWidth  = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
-  const startX = 14;
+  const startX     = 14;
   const usableWidth = pageWidth - 28;
 
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
 
-    // Thin Footer Divider
-    doc.setDrawColor(...PDF_COLORS.tableBorder);
-    doc.setLineWidth(0.3);
-    doc.line(startX, pageHeight - 11, startX + usableWidth, pageHeight - 11);
+    // Two-tone footer line: left half orange, right half navy (matches screenshots)
+    const midX = startX + usableWidth / 2;
+    doc.setLineWidth(0.5);
+    doc.setDrawColor(...PDF_COLORS.footerLine);
+    doc.line(startX, pageHeight - 12, midX, pageHeight - 12);
+    doc.setDrawColor(...PDF_COLORS.primaryNavy);
+    doc.line(midX, pageHeight - 12, startX + usableWidth, pageHeight - 12);
 
-    // Footer Contact Info
+    // Footer text
     doc.setFont("helvetica", "normal");
     doc.setFontSize(6.5);
     doc.setTextColor(...PDF_COLORS.textMuted);
     doc.text(
       `${comp.name} | DUBAI – UAE | Mob: ${comp.phone} | Email: ${comp.email}`,
       startX,
-      pageHeight - 6.5
+      pageHeight - 7
     );
-
-    // Page Number
-    doc.text(`Page ${i} of ${totalPages}`, startX + usableWidth, pageHeight - 6.5, {
+    doc.text(`Page ${i} of ${totalPages}`, startX + usableWidth, pageHeight - 7, {
       align: "right",
     });
   }
 }
+
+// Expose formatDate for use by individual PDF generators
+export { formatDate };
