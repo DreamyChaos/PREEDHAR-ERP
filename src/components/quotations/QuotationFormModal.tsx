@@ -245,7 +245,7 @@ export function QuotationFormModal({
   return (
     <EnterpriseWorkspace open={open} onClose={() => onOpenChange(false)}>
       <WorkspaceHeader
-        title={isEditing ? "Edit Commercial Quotation" : "Create Commercial Quotation"}
+        title={isEditing ? "Edit Quotation" : "Create Quotation"}
         subtitle="PREEDHAR TECHNICAL SERVICES CO. L.L.C. • Commercial Proposal Builder"
         documentNumber={formData.quotationNumber}
         onClose={() => onOpenChange(false)}

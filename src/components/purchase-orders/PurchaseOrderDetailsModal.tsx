@@ -25,14 +25,12 @@ export function PurchaseOrderDetailsModal({
   onOpenChange,
   purchaseOrder,
   onEdit,
-  onDuplicate,
   onChangeStatus,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   purchaseOrder: PurchaseOrder | null;
   onEdit: (po: PurchaseOrder) => void;
-  onDuplicate: (po: PurchaseOrder) => void;
   onChangeStatus: (po: PurchaseOrder) => void;
 }) {
   if (!purchaseOrder) return null;
@@ -83,16 +81,6 @@ export function PurchaseOrderDetailsModal({
       </Button>
 
       <Button
-        variant="outline"
-        size="sm"
-        leftIcon={<Copy className="w-3.5 h-3.5" />}
-        onClick={() => onDuplicate(purchaseOrder)}
-        className="hidden lg:inline-flex"
-      >
-        Duplicate
-      </Button>
-
-      <Button
         variant="primary"
         size="sm"
         leftIcon={<Edit className="w-3.5 h-3.5" />}
@@ -120,7 +108,7 @@ export function PurchaseOrderDetailsModal({
         <div className="flex items-center gap-3.5">
           <div className="w-14 h-14 bg-white rounded-md p-1 border border-slate-200 flex items-center justify-center shrink-0 shadow-2xs">
             <Image
-              src="/brand/preedhar-logo.jpeg"
+              src="/brand/preedhar-logo.png"
               alt="PREEDHAR Logo"
               width={48}
               height={48}
@@ -297,28 +285,6 @@ export function PurchaseOrderDetailsModal({
         </div>
       </div>
 
-      {/* Signatory Box */}
-      <div className="pt-6 border-t border-slate-200 grid grid-cols-2 gap-6 text-[11px] text-slate-500">
-        <div className="space-y-6">
-          <p className="font-semibold text-slate-700">
-            For PREEDHAR TECHNICAL SERVICES CO. L.L.C.:
-          </p>
-          <div className="h-10 border-b border-dashed border-slate-300 w-48" />
-          <p className="text-[10px] text-slate-400 uppercase">
-            Authorized Procurement Officer / Stamp
-          </p>
-        </div>
-
-        <div className="space-y-6 text-right">
-          <p className="font-semibold text-slate-700">
-            Supplier / Vendor Acceptance:
-          </p>
-          <div className="h-10 border-b border-dashed border-slate-300 w-48 ml-auto" />
-          <p className="text-[10px] text-slate-400 uppercase">
-            Confirmed By Supplier / Stamp & Date
-          </p>
-        </div>
-      </div>
     </DocumentViewer>
   );
 }

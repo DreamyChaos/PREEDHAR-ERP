@@ -80,9 +80,9 @@ export const DEFAULT_APP_SETTINGS: AppSettings = {
   },
   documentDefaults: {
     quotationPrefix: "PTS-Q",
-    invoicePrefix: "PTSC-INV",
-    purchaseOrderPrefix: "PTSC-PO",
-    workCompletionPrefix: "PTSC-WCR",
+    invoicePrefix: "PTS-INV",
+    purchaseOrderPrefix: "PTS-PO",
+    workCompletionPrefix: "PTS-WCR",
     defaultPaymentTerms: "30 Days",
     standardWarrantyClause: "12 months comprehensive warranty on replacement equipment and 6 months on workmanship.",
     standardRemittanceClause: "Please quote invoice reference on bank transfer advice and remit strictly within agreed credit terms.",

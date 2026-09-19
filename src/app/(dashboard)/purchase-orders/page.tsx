@@ -199,28 +199,6 @@ export default function PurchaseOrdersPage() {
     setIsDetailsOpen(true);
   };
 
-  // Duplicate Action
-  const handleDuplicate = async (po: PurchaseOrder) => {
-    const today = new Date().toISOString().split("T")[0];
-    const newDeliveryDate = calculateDeliveryDate(today, 14);
-    const nextSeq = Math.floor(Math.random() * 800) + 100;
-
-    const duplicated: PurchaseOrder = {
-      ...po,
-      id: `po-${Date.now()}`,
-      purchaseOrderNumber: `PTSC-PO-2026-${nextSeq}`,
-      poDate: today,
-      expectedDeliveryDate: newDeliveryDate,
-      status: "DRAFT",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    await PurchaseOrdersRepository.save(duplicated);
-    setPurchaseOrders((prev) => [duplicated, ...prev]);
-    toast.success(`Purchase Order duplicated as ${duplicated.purchaseOrderNumber} (Draft)`);
-  };
-
   // Change Status Action
   const handleOpenStatusModal = (po: PurchaseOrder) => {
     setPoForStatus(po);
@@ -270,7 +248,7 @@ export default function PurchaseOrdersPage() {
           { label: "Dashboard", href: "/dashboard" },
           { label: "Purchase Orders", isCurrent: true },
         ]}
-        badge={<Badge variant="navy" size="sm">PTSC-PO</Badge>}
+        badge={<Badge variant="navy" size="sm">PTS-PO</Badge>}
         actions={
           <Button
             variant="primary"
@@ -300,7 +278,6 @@ export default function PurchaseOrdersPage() {
         purchaseOrders={filteredPurchaseOrders}
         onView={handleViewDetails}
         onEdit={handleOpenEdit}
-        onDuplicate={handleDuplicate}
         onChangeStatus={handleOpenStatusModal}
       />
 
@@ -320,7 +297,6 @@ export default function PurchaseOrdersPage() {
         onOpenChange={setIsDetailsOpen}
         purchaseOrder={selectedPO}
         onEdit={handleOpenEdit}
-        onDuplicate={handleDuplicate}
         onChangeStatus={handleOpenStatusModal}
       />
 

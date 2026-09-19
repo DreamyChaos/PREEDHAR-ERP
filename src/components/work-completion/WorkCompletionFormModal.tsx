@@ -163,7 +163,7 @@ export function WorkCompletionFormModal({
       const randomSeq = Math.floor(Math.random() * 800) + 100;
 
       setFormData({
-        reportNumber: `PTSC-WCR-2026-${randomSeq}`,
+        reportNumber: `PTS-WCR-2026-${randomSeq}`,
         customerId: defaultCust?.id || "",
         customerName: defaultCust?.companyName || "",
         clientPrintedName: defaultCust?.companyName || "",

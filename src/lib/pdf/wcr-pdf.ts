@@ -6,7 +6,6 @@ import {
   PDF_COMPANY_DETAILS,
   renderOfficialHeader,
   renderMetadataTable,
-  renderOfficialSignatureBlocks,
   renderOfficialFooter,
 } from "./pdf-primitives";
 
@@ -154,14 +153,6 @@ export function generateWCRPDF(
     doc.addPage();
     currentY = 16;
   }
-
-  renderOfficialSignatureBlocks(doc, currentY, {
-    leftTitle:  "PREEDHAR TECHNICAL SERVICES CO. L.L.C.",
-    leftLabel:  "Authorized Signature & Stamp",
-    rightTitle: "CLIENT / CUSTOMER ACCEPTANCE",
-    rightLabel: "Customer Signature & Stamp",
-    showRight:  true,
-  });
 
   // 8. Footer
   renderOfficialFooter(doc, companyOverride);

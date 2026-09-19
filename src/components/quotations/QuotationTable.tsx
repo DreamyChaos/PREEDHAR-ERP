@@ -22,14 +22,12 @@ export function QuotationTable({
   quotations,
   onView,
   onEdit,
-  onDuplicate,
   onChangeStatus,
   onDelete,
 }: {
   quotations: Quotation[];
   onView: (quotation: Quotation) => void;
   onEdit: (quotation: Quotation) => void;
-  onDuplicate: (quotation: Quotation) => void;
   onChangeStatus: (quotation: Quotation) => void;
   onDelete: (quotation: Quotation) => void;
 }) {
@@ -177,15 +175,6 @@ export function QuotationTable({
                         onClick={() => onEdit(q)}
                       >
                         <Edit className="w-3.5 h-3.5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 w-7 p-0 text-slate-500 hover:text-[#0B1F33]"
-                        title="Duplicate Quotation"
-                        onClick={() => onDuplicate(q)}
-                      >
-                        <Copy className="w-3.5 h-3.5" />
                       </Button>
                       <Button
                         variant="ghost"

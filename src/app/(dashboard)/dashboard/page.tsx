@@ -60,7 +60,7 @@ export default function DashboardPage() {
 
   const [activityMetrics, setActivityMetrics] = React.useState<ActivityMetric[]>([
     {
-      category: "Commercial Quotations",
+      category: "Quotations",
       count: 0,
       amount: 0,
       percentage: 0,
@@ -172,7 +172,7 @@ export default function DashboardPage() {
 
         setActivityMetrics([
           {
-            category: "Commercial Quotations",
+            category: "Quotations",
             count: quotations.length,
             amount: quotesTotalVal,
             percentage: qPct,

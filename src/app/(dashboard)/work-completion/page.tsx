@@ -212,29 +212,6 @@ export default function WorkCompletionPage() {
     setIsDetailsOpen(true);
   };
 
-  // Duplicate Action
-  const handleDuplicate = async (report: WorkCompletionReport) => {
-    const today = new Date().toISOString().split("T")[0];
-    const nextSeq = Math.floor(Math.random() * 800) + 100;
-
-    const duplicated: WorkCompletionReport = {
-      ...report,
-      id: `wcr-${Date.now()}`,
-      reportNumber: `PTSC-WCR-2026-${nextSeq}`,
-      reportDate: today,
-      workStartDate: today,
-      workCompletionDate: today,
-      status: "DRAFT",
-      clientAcknowledgement: undefined,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    await WorkCompletionRepository.save(duplicated);
-    setReports((prev) => [duplicated, ...prev]);
-    toast.success(`Report duplicated as ${duplicated.reportNumber} (Draft)`);
-  };
-
   // Change Status Action
   const handleOpenStatusModal = (report: WorkCompletionReport) => {
     setReportForStatus(report);
@@ -286,7 +263,7 @@ export default function WorkCompletionPage() {
           { label: "Dashboard", href: "/dashboard" },
           { label: "Work Completion", isCurrent: true },
         ]}
-        badge={<Badge variant="navy" size="sm">PTSC-WCR</Badge>}
+        badge={<Badge variant="navy" size="sm">PTS-WCR</Badge>}
         actions={
           <Button
             variant="primary"

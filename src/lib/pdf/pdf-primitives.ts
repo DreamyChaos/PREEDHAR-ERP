@@ -92,47 +92,48 @@ export function renderOfficialHeader(
   const startX = 14;
   const usableWidth = pageWidth - 28;
 
-  // Logo — square aspect ratio (logo is ~square), size 20x20
+  // Logo — square 20x20
   const logoSize = 20;
-  const logoY = 9;
+  const logoY = 8;
   try {
     const logoBytes = getLogoBytes();
     const imgData = (logoBytes && logoBytes.length > 0) ? logoBytes : PREEDHAR_LOGO_BASE64;
-    const fmt = PREEDHAR_LOGO_BASE64.startsWith("data:image/png") ? "PNG" : "JPEG";
-    doc.addImage(imgData as string, fmt, startX, logoY, logoSize, logoSize, undefined, "FAST");
+    const fmt = PREEDHAR_LOGO_BASE64.startsWith('data:image/png') ? 'PNG' : 'JPEG';
+    doc.addImage(imgData as string, fmt, startX, logoY, logoSize, logoSize, undefined, 'FAST');
   } catch {
     doc.setFillColor(220, 230, 242);
-    doc.rect(startX, logoY, logoSize, logoSize, "F");
+    doc.rect(startX, logoY, logoSize, logoSize, 'F');
   }
 
-  const textX = startX + logoSize + 4;
+  const textX = startX + logoSize + 5;
 
   if (showAddressInHeader) {
-    // Full header (Invoice style): 3 lines — name, address/phone, TRN
-    drawTwoToneCompanyName(doc, textX, 15, 13);
-
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7);
+    // Invoice: 3 lines
+    drawTwoToneCompanyName(doc, textX, 14, 14);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
     doc.setTextColor(...PDF_COLORS.textMuted);
     doc.text(`${comp.address} • Mob: ${comp.phone} • Email: ${comp.email}`, textX, 20);
-    doc.text(`TRN: ${comp.trn} • ${comp.tagline}`, textX, 24.5);
+    doc.text(`TRN: ${comp.trn} • ${comp.tagline}`, textX, 25);
   } else {
-    // Simple header (Quotation/PO/WCR): just company name, vertically centered in logo height
-    drawTwoToneCompanyName(doc, textX, 21, 14);
+    // Quotation/PO/WCR: just name
+    drawTwoToneCompanyName(doc, textX, 20, 15);
   }
 
-  // Divider line — navy
+  // Thin navy divider
   doc.setDrawColor(...PDF_COLORS.primaryNavy);
-  doc.setLineWidth(0.7);
-  doc.line(startX, 32, startX + usableWidth, 32);
+  doc.setLineWidth(0.5);
+  doc.line(0, 32, pageWidth, 32);
 
-  // Document title — bold, centered, navy
-  doc.setFont("helvetica", "bold");
+  // FULL WIDTH title band — navy background, white bold text
+  doc.setFillColor(...PDF_COLORS.primaryNavy);
+  doc.rect(0, 32, pageWidth, 10, 'F');
+  doc.setFont('helvetica', 'bold');
   doc.setFontSize(13);
-  doc.setTextColor(...PDF_COLORS.primaryNavy);
-  doc.text(documentTitle.toUpperCase(), pageWidth / 2, 39, { align: "center" });
+  doc.setTextColor(255, 255, 255);
+  doc.text(documentTitle.toUpperCase(), pageWidth / 2, 38.5, { align: 'center' });
 
-  return 43;
+  return 45;
 }
 
 export interface MetadataPair {
@@ -402,50 +403,8 @@ export function renderOfficialSignatureBlocks(
     showRight?: boolean;
   }
 ): number {
-  const pageWidth  = doc.internal.pageSize.getWidth();
-  const startX     = 14;
-  const usableWidth = pageWidth - 28;
-  const colWidth   = (usableWidth - 10) / 2;
-
-  // LEFT
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(8);
-  doc.setTextColor(...PDF_COLORS.primaryNavy);
-  doc.text(options.leftTitle || "PREEDHAR TECHNICAL SERVICES CO. L.L.C.", startX, startY);
-
-  doc.setDrawColor(...PDF_COLORS.tableBorder);
-  doc.setLineWidth(0.5);
-  doc.line(startX, startY + 14, startX + colWidth, startY + 14);
-
-  if (options.leftLabel) {
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.5);
-    doc.setTextColor(...PDF_COLORS.primaryNavy);
-    doc.text(options.leftLabel, startX, startY + 18);
-  }
-
-  // RIGHT (optional)
-  if (options.showRight !== false) {
-    const rightX = startX + colWidth + 10;
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8);
-    doc.setTextColor(...PDF_COLORS.primaryNavy);
-    doc.text(options.rightTitle || "CLIENT / CUSTOMER ACCEPTANCE", rightX, startY);
-
-    doc.setDrawColor(...PDF_COLORS.tableBorder);
-    doc.setLineWidth(0.5);
-    doc.line(rightX, startY + 14, rightX + colWidth, startY + 14);
-
-    if (options.rightLabel) {
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(7.5);
-      doc.setTextColor(...PDF_COLORS.primaryNavy);
-      doc.text(options.rightLabel, rightX, startY + 18);
-    }
-  }
-
-  return startY + 22;
+  // Signatures not required for internal company use
+  return startY;
 }
 
 /**

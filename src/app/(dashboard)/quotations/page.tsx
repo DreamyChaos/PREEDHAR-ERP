@@ -170,30 +170,6 @@ export default function QuotationsPage() {
     setIsDetailsOpen(true);
   };
 
-  // Duplicate Action
-  const handleDuplicate = async (quote: Quotation) => {
-    const today = new Date().toISOString().split("T")[0];
-    const validityDate = new Date();
-    validityDate.setDate(validityDate.getDate() + 30);
-    const validUntilStr = validityDate.toISOString().split("T")[0];
-    const nextSeq = Math.floor(Math.random() * 800) + 100;
-
-    const duplicated: Quotation = {
-      ...quote,
-      id: `quot-${Date.now()}`,
-      quotationNumber: `PTS-Q2026-${nextSeq}`,
-      quotationDate: today,
-      validUntil: validUntilStr,
-      status: "DRAFT",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    await QuotationsRepository.save(duplicated);
-    setQuotations((prev) => [duplicated, ...prev]);
-    toast.success(`Quotation duplicated as ${duplicated.quotationNumber} (Draft)`);
-  };
-
   // Change Status Action
   const handleOpenStatusModal = (quote: Quotation) => {
     setQuotationForStatus(quote);
@@ -237,7 +213,7 @@ export default function QuotationsPage() {
     <div className="space-y-6">
       {/* Header */}
       <PageHeader
-        title="Commercial Quotations"
+        title="Quotations"
         description="Build, price, and manage technical service quotations with itemized rate schedules and UAE 5% VAT calculations."
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard" },
@@ -273,7 +249,6 @@ export default function QuotationsPage() {
         quotations={filteredQuotations}
         onView={handleViewDetails}
         onEdit={handleOpenEdit}
-        onDuplicate={handleDuplicate}
         onChangeStatus={handleOpenStatusModal}
         onDelete={handleDelete}
       />
@@ -293,7 +268,6 @@ export default function QuotationsPage() {
         onOpenChange={setIsDetailsOpen}
         quotation={selectedQuotation}
         onEdit={handleOpenEdit}
-        onDuplicate={handleDuplicate}
         onChangeStatus={handleOpenStatusModal}
       />
 

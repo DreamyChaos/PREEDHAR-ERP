@@ -95,7 +95,7 @@ export const MOCK_DASHBOARD_DATA: DashboardData = {
   ],
   activityMetrics: [
     {
-      category: "Commercial Quotations",
+      category: "Quotations",
       count: 0,
       amount: 0,
       percentage: 0,

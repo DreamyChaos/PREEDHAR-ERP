@@ -30,7 +30,7 @@ export function RecentQuotationsTable({ quotations }: { quotations: RecentQuotat
       title={
         <div className="flex items-center gap-2">
           <FileText className="w-4 h-4 text-[#2563EB]" />
-          <span>Recent Commercial Quotations</span>
+          <span>Recent Quotations</span>
         </div>
       }
       subtitle="Latest commercial proposals submitted to clients"

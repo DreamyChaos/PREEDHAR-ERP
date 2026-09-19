@@ -21,13 +21,11 @@ export function PurchaseOrderTable({
   purchaseOrders,
   onView,
   onEdit,
-  onDuplicate,
   onChangeStatus,
 }: {
   purchaseOrders: PurchaseOrder[];
   onView: (po: PurchaseOrder) => void;
   onEdit: (po: PurchaseOrder) => void;
-  onDuplicate: (po: PurchaseOrder) => void;
   onChangeStatus: (po: PurchaseOrder) => void;
 }) {
   const getStatusBadge = (status: PurchaseOrderStatus) => {
@@ -192,15 +190,6 @@ export function PurchaseOrderTable({
                         onClick={() => onEdit(po)}
                       >
                         <Edit className="w-3.5 h-3.5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 w-7 p-0 text-slate-500 hover:text-[#0B1F33]"
-                        title="Duplicate Purchase Order"
-                        onClick={() => onDuplicate(po)}
-                      >
-                        <Copy className="w-3.5 h-3.5" />
                       </Button>
                       <Button
                         variant="ghost"

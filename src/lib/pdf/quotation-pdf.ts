@@ -8,7 +8,6 @@ import {
   renderOfficialHeader,
   renderMetadataTable,
   renderFinancialTotalsBlock,
-  renderOfficialSignatureBlocks,
   renderOfficialFooter,
 } from "./pdf-primitives";
 
@@ -165,24 +164,6 @@ export function generateQuotationPDF(
     doc.addPage();
     currentY = 16;
   }
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(8);
-  doc.setTextColor(...PDF_COLORS.textDark);
-  doc.text("Thanks & Regards,", startX, currentY);
-  currentY += 5;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(8);
-  doc.setTextColor(...PDF_COLORS.primaryNavy);
-  doc.text("PREEDHAR TECHNICAL SERVICES CO. L.L.C.", startX, currentY);
-  currentY += 5;
-
-  renderOfficialSignatureBlocks(doc, currentY, {
-    leftTitle: "",
-    leftLabel: "Authorized Signature & Stamp",
-    showRight: false,
-  });
 
   // 9. Footer
   renderOfficialFooter(doc, companyOverride);

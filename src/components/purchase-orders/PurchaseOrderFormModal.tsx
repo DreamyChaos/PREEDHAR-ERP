@@ -124,7 +124,7 @@ export function PurchaseOrderFormModal({
       const randomSeq = Math.floor(Math.random() * 800) + 100;
 
       setFormData({
-        purchaseOrderNumber: `PTSC-PO-2026-${randomSeq}`,
+        purchaseOrderNumber: `PTS-PO-2026-${randomSeq}`,
         customerId: defaultCust?.id || "",
         customerName: defaultCust?.companyName || "",
         clientPrintedName: defaultCust?.companyName || "",

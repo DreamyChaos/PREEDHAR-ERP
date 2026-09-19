@@ -128,7 +128,7 @@ export function InvoiceFormModal({
       const initialTerms = "30 Days";
 
       setFormData({
-        invoiceNumber: `PTSC-INV-2026-${randomSeq}`,
+        invoiceNumber: `PTS-INV-2026-${randomSeq}`,
         customerId: defaultCust?.id || "",
         customerName: defaultCust?.companyName || "",
         clientPrintedName: defaultCust?.companyName || "",

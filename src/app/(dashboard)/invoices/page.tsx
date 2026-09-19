@@ -221,31 +221,6 @@ export default function InvoicesPage() {
     setIsDetailsOpen(true);
   };
 
-  // Duplicate Action
-  const handleDuplicate = async (inv: Invoice) => {
-    const today = new Date().toISOString().split("T")[0];
-    const newDueDate = calculateDueDate(today, inv.paymentTerms || "30 Days");
-    const nextSeq = Math.floor(Math.random() * 800) + 100;
-
-    const duplicated: Invoice = {
-      ...inv,
-      id: `inv-${Date.now()}`,
-      invoiceNumber: `PTSC-INV-2026-${nextSeq}`,
-      invoiceDate: today,
-      dueDate: newDueDate,
-      status: "DRAFT",
-      amountPaid: 0,
-      outstandingAmount: inv.grandTotal,
-      paymentStatus: "UNPAID",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    await InvoicesRepository.save(duplicated);
-    setInvoices((prev) => [duplicated, ...prev]);
-    toast.success(`Invoice duplicated as ${duplicated.invoiceNumber} (Draft)`);
-  };
-
   // Status & Payment Modal Actions
   const handleOpenDocStatusModal = (inv: Invoice) => {
     setInvoiceForStatus(inv);
@@ -311,7 +286,7 @@ export default function InvoicesPage() {
           { label: "Dashboard", href: "/dashboard" },
           { label: "Invoices", isCurrent: true },
         ]}
-        badge={<Badge variant="navy" size="sm">PTSC-INV</Badge>}
+        badge={<Badge variant="navy" size="sm">PTS-INV</Badge>}
         actions={
           <Button
             variant="primary"
@@ -341,7 +316,6 @@ export default function InvoicesPage() {
         invoices={filteredInvoices}
         onView={handleViewDetails}
         onEdit={handleOpenEdit}
-        onDuplicate={handleDuplicate}
         onChangeStatus={handleOpenDocStatusModal}
         onUpdatePayment={handleOpenPaymentModal}
       />
@@ -362,7 +336,6 @@ export default function InvoicesPage() {
         onOpenChange={setIsDetailsOpen}
         invoice={selectedInvoice}
         onEdit={handleOpenEdit}
-        onDuplicate={handleDuplicate}
         onChangeStatus={handleOpenDocStatusModal}
         onUpdatePayment={handleOpenPaymentModal}
       />

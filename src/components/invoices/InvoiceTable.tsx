@@ -22,14 +22,12 @@ export function InvoiceTable({
   invoices,
   onView,
   onEdit,
-  onDuplicate,
   onChangeStatus,
   onUpdatePayment,
 }: {
   invoices: Invoice[];
   onView: (invoice: Invoice) => void;
   onEdit: (invoice: Invoice) => void;
-  onDuplicate: (invoice: Invoice) => void;
   onChangeStatus: (invoice: Invoice) => void;
   onUpdatePayment: (invoice: Invoice) => void;
 }) {
@@ -262,15 +260,6 @@ export function InvoiceTable({
                         onClick={() => onEdit(inv)}
                       >
                         <Edit className="w-3.5 h-3.5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 w-7 p-0 text-slate-500 hover:text-[#0B1F33]"
-                        title="Duplicate Invoice"
-                        onClick={() => onDuplicate(inv)}
-                      >
-                        <Copy className="w-3.5 h-3.5" />
                       </Button>
                       <Button
                         variant="ghost"

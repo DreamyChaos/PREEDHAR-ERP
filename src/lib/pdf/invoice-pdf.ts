@@ -9,7 +9,6 @@ import {
   renderMetadataTable,
   renderFinancialTotalsBlock,
   renderBankRemittanceDetails,
-  renderOfficialSignatureBlocks,
   renderOfficialFooter,
 } from "./pdf-primitives";
 
@@ -161,17 +160,6 @@ export function generateInvoicePDF(
     doc.addPage();
     currentY = 16;
   }
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(8);
-  doc.setTextColor(...PDF_COLORS.textDark);
-  doc.text("For PREEDHAR TECHNICAL SERVICES CO. L.L.C.", startX, currentY);
-  currentY += 5;
-
-  renderOfficialSignatureBlocks(doc, currentY, {
-    leftLabel: "Authorized Signature & Stamp",
-    showRight: false,
-  });
 
   // 9. Footer
   renderOfficialFooter(doc, companyOverride);

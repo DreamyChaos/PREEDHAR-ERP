@@ -26,14 +26,12 @@ export function WorkCompletionDetailsModal({
   onOpenChange,
   report,
   onEdit,
-  onDuplicate,
   onChangeStatus,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   report: WorkCompletionReport | null;
   onEdit: (report: WorkCompletionReport) => void;
-  onDuplicate: (report: WorkCompletionReport) => void;
   onChangeStatus: (report: WorkCompletionReport) => void;
 }) {
   if (!report) return null;
@@ -93,16 +91,6 @@ export function WorkCompletionDetailsModal({
       </Button>
 
       <Button
-        variant="outline"
-        size="sm"
-        leftIcon={<Copy className="w-3.5 h-3.5" />}
-        onClick={() => onDuplicate(report)}
-        className="hidden lg:inline-flex"
-      >
-        Duplicate
-      </Button>
-
-      <Button
         variant="primary"
         size="sm"
         leftIcon={<Edit className="w-3.5 h-3.5" />}
@@ -130,7 +118,7 @@ export function WorkCompletionDetailsModal({
         <div className="flex items-center gap-3">
           <div className="relative w-12 h-12 rounded border border-slate-200 bg-white p-1 flex items-center justify-center">
             <Image
-              src="/brand/preedhar-logo.jpeg"
+              src="/brand/preedhar-logo.png"
               alt="PREEDHAR Logo"
               width={48}
               height={48}
@@ -318,40 +306,6 @@ export function WorkCompletionDetailsModal({
         </pre>
       </div>
 
-      {/* Dual Signatory Handover Block */}
-      <div className="pt-6 border-t border-slate-200 grid grid-cols-2 gap-6 text-[11px] text-slate-500">
-        <div className="space-y-4">
-          <p className="font-semibold text-slate-700">
-            For PREEDHAR TECHNICAL SERVICES CO. L.L.C.:
-          </p>
-          <div className="h-10 border-b border-dashed border-slate-300 w-48" />
-          <div>
-            <p className="font-bold text-slate-800">
-              {report.engineerInCharge}
-            </p>
-            <p className="text-[10px] text-slate-400 uppercase">
-              Lead Engineer / Project Signatory
-            </p>
-          </div>
-        </div>
-
-        <div className="space-y-4 text-right">
-          <p className="font-semibold text-slate-700">
-            Client Acceptance & Handover Sign-Off:
-          </p>
-          <div className="h-10 border-b border-dashed border-slate-300 w-48 ml-auto" />
-          <div>
-            <p className="font-bold text-slate-800">
-              {report.clientAcknowledgement?.clientRepresentativeName ||
-                report.customerName}
-            </p>
-            <p className="text-[10px] text-slate-400 uppercase">
-              {report.clientAcknowledgement?.designation ||
-                "Authorized Facility Representative"} • {formatDate(report.workCompletionDate)}
-            </p>
-          </div>
-        </div>
-      </div>
     </DocumentViewer>
   );
 }

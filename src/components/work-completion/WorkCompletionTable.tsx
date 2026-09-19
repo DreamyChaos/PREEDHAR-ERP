@@ -22,13 +22,11 @@ export function WorkCompletionTable({
   reports,
   onView,
   onEdit,
-  onDuplicate,
   onChangeStatus,
 }: {
   reports: WorkCompletionReport[];
   onView: (report: WorkCompletionReport) => void;
   onEdit: (report: WorkCompletionReport) => void;
-  onDuplicate: (report: WorkCompletionReport) => void;
   onChangeStatus: (report: WorkCompletionReport) => void;
 }) {
   const getStatusBadge = (status: WorkCompletionStatus) => {
@@ -196,15 +194,6 @@ export function WorkCompletionTable({
                         onClick={() => onEdit(report)}
                       >
                         <Edit className="w-3.5 h-3.5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 w-7 p-0 text-slate-500 hover:text-[#0B1F33]"
-                        title="Duplicate Report"
-                        onClick={() => onDuplicate(report)}
-                      >
-                        <Copy className="w-3.5 h-3.5" />
                       </Button>
                       <Button
                         variant="ghost"
