@@ -317,6 +317,7 @@ export default function WorkCompletionPage() {
         open={isFormOpen}
         onOpenChange={setIsFormOpen}
         reportToEdit={editingReport}
+        initialData={initialData}
         customers={customers}
         quotations={quotations}
         purchaseOrders={purchaseOrders}
@@ -351,3 +352,4 @@ export default function WorkCompletionPage() {
     </div>
   );
 }
+

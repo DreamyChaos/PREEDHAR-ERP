@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -42,7 +43,16 @@ export default function QuotationsPage() {
   const [isFormOpen, setIsFormOpen] = React.useState(false);
   const [editingQuotation, setEditingQuotation] = React.useState<Quotation | null>(null);
 
-  const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
+    const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
+  const router = useRouter();
+
+  const handleConvertToInvoice = (quote: Quotation) => {
+    router.push(`/invoices?fromQuotation=${quote.id}`);
+  };
+
+  const handleConvertToWCR = (quote: Quotation) => {
+    router.push(`/work-completion?fromQuotation=${quote.id}`);
+  };
   const [selectedQuotation, setSelectedQuotation] = React.useState<Quotation | null>(null);
 
   const [isStatusModalOpen, setIsStatusModalOpen] = React.useState(false);
@@ -277,8 +287,9 @@ export default function QuotationsPage() {
         onOpenChange={setIsDetailsOpen}
         quotation={selectedQuotation}
         onEdit={handleOpenEdit}
-        onChangeStatus={handleOpenStatusModal}
-      />
+                onChangeStatus={handleOpenStatusModal}
+        onConvertToInvoice={handleConvertToInvoice}
+        onConvertToWCR={handleConvertToWCR}/>
 
       {/* Quick Status Transition Modal */}
       <QuotationStatusModal
@@ -299,3 +310,4 @@ export default function QuotationsPage() {
     </div>
   );
 }
+

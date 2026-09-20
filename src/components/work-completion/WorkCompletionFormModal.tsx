@@ -47,6 +47,7 @@ export function WorkCompletionFormModal({
   open,
   onOpenChange,
   reportToEdit,
+  initialData,
   customers,
   quotations,
   purchaseOrders,
@@ -55,6 +56,7 @@ export function WorkCompletionFormModal({
   open: boolean;
   onOpenChange: (open: boolean) => void;
   reportToEdit?: WorkCompletionReport | null;
+  initialData?: any;
   customers: Customer[];
   quotations: Quotation[];
   purchaseOrders: PurchaseOrder[];
@@ -113,51 +115,30 @@ export function WorkCompletionFormModal({
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   React.useEffect(() => {
-    if (reportToEdit) {
+        if (reportToEdit) {
       setFormData({
         reportNumber: reportToEdit.reportNumber,
         customerId: reportToEdit.customerId,
         customerName: reportToEdit.customerName,
-        clientPrintedName:
-          reportToEdit.clientPrintedName || reportToEdit.customerName,
-        attention: reportToEdit.attention || "",
-        customerTrn: reportToEdit.customerTrn || "",
-        purchaseOrderId: reportToEdit.purchaseOrderId || "",
-        purchaseOrderNumber: reportToEdit.purchaseOrderNumber || "",
         quotationId: reportToEdit.quotationId || "",
         quotationNumber: reportToEdit.quotationNumber || "",
+        purchaseOrderId: reportToEdit.purchaseOrderId || "",
+        purchaseOrderNumber: reportToEdit.purchaseOrderNumber || "",
         reportDate: reportToEdit.reportDate,
-        workStartDate: reportToEdit.workStartDate,
-        workCompletionDate: reportToEdit.workCompletionDate,
-        subject: reportToEdit.subject,
         projectName: reportToEdit.projectName,
         projectLocation: reportToEdit.projectLocation,
-        workDescription: reportToEdit.workDescription,
-        completionPercentage: reportToEdit.completionPercentage,
+        scopeOfWork: reportToEdit.scopeOfWork || "",
         observations: reportToEdit.observations || "",
-        materialsUsed: reportToEdit.materialsUsed || "",
-        engineerInCharge: reportToEdit.engineerInCharge,
-        clientRemarks: reportToEdit.clientRemarks || "",
-        clientRepName:
-          reportToEdit.clientAcknowledgement?.clientRepresentativeName || "",
-        clientDesignation:
-          reportToEdit.clientAcknowledgement?.designation || "Facility Engineer",
-        clientContactPhone:
-          reportToEdit.clientAcknowledgement?.contactPhone || "",
-        acknowledgementStatus:
-          reportToEdit.clientAcknowledgement?.status || "ACCEPTED",
-        notes: reportToEdit.notes || "",
-        termsAndConditions:
-          reportToEdit.termsAndConditions || DEFAULT_WCR_TERMS,
+        afterWorkNotes: reportToEdit.afterWorkNotes || "",
+        remarks: reportToEdit.remarks || "",
         status: reportToEdit.status,
       });
-      setItems(
-        (reportToEdit.items || []).map((it) => ({
-          ...it,
-          completionPercentage: it.completionPercentage ?? 100,
-        }))
-      );
       setPhotos(reportToEdit.photos || []);
+    } else if (initialData) {
+      setFormData(prev => ({ ...prev, ...initialData }));
+      if (initialData.photos) {
+        setPhotos(initialData.photos);
+      }
     } else {
       const defaultCust = customers[0];
       const today = getTodayStr();
@@ -211,7 +192,8 @@ export function WorkCompletionFormModal({
       ]);
     }
     setErrors({});
-  }, [reportToEdit, open, customers]);
+  }, [reportToEdit,
+  initialData, open, customers]);
 
   const handleCustomerSelect = (cust: Customer | null) => {
     if (cust) {
@@ -789,3 +771,4 @@ export function WorkCompletionFormModal({
     </EnterpriseWorkspace>
   );
 }
+

@@ -47,13 +47,15 @@ export function InvoiceFormModal({
   open,
   onOpenChange,
   invoiceToEdit,
+  initialData,
   customers,
   quotations,
   onSave,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  invoiceToEdit?: Invoice | null;
+  invoiceToEdit: Invoice | null;
+  initialData?: any;
   customers: Customer[];
   quotations: Quotation[];
   onSave: (savedInvoice: Invoice) => void;
@@ -98,7 +100,7 @@ export function InvoiceFormModal({
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   React.useEffect(() => {
-    if (invoiceToEdit) {
+        if (invoiceToEdit) {
       setFormData({
         invoiceNumber: invoiceToEdit.invoiceNumber,
         customerId: invoiceToEdit.customerId,
@@ -119,9 +121,14 @@ export function InvoiceFormModal({
         status: invoiceToEdit.status,
         paymentStatus: invoiceToEdit.paymentStatus,
         amountPaid: invoiceToEdit.amountPaid || 0,
-        overallDiscount: 0,
+        overallDiscount: invoiceToEdit.overallDiscount || 0,
       });
       setItems(invoiceToEdit.items || []);
+    } else if (initialData) {
+      setFormData(prev => ({ ...prev, ...initialData }));
+      if (initialData.items) {
+        setItems(initialData.items);
+      }
     } else {
       const defaultCust = customers[0];
       const today = getTodayStr();
@@ -651,3 +658,4 @@ export function InvoiceFormModal({
     </EnterpriseWorkspace>
   );
 }
+

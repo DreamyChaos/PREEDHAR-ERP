@@ -11,6 +11,8 @@ import type { Quotation } from "@/lib/data/quotations-mock";
 import { PDFService } from "@/lib/pdf";
 import {
   Edit,
+  FileText,
+  ClipboardCheck,
   Copy,
   RefreshCw,
   Printer,
@@ -22,13 +24,19 @@ export function QuotationDetailsModal({
   onOpenChange,
   quotation,
   onEdit,
+  FileText,
+  ClipboardCheck,
   onChangeStatus,
+  onConvertToInvoice,
+  onConvertToWCR,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   quotation: Quotation | null;
   onEdit: (quotation: Quotation) => void;
   onChangeStatus: (quotation: Quotation) => void;
+  onConvertToInvoice?: (quotation: Quotation) => void;
+  onConvertToWCR?: (quotation: Quotation) => void;
 }) {
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
   if (!quotation) return null;
@@ -70,7 +78,7 @@ export function QuotationDetailsModal({
         <span className="sm:hidden">Download</span>
       </Button>
 
-      <Button variant="toolbar"
+            <Button variant="toolbar"
         size="sm"
         leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
         onClick={() => onChangeStatus(quotation)}
@@ -78,6 +86,32 @@ export function QuotationDetailsModal({
       >
         Status
       </Button>
+
+      {onConvertToInvoice && (
+        <Button variant="toolbar"
+          size="sm"
+          leftIcon={<FileText className="w-3.5 h-3.5" />}
+          onClick={() => onConvertToInvoice(quotation)}
+          className="hidden lg:inline-flex"
+          title="Convert to Invoice"
+        >
+          <span className="hidden xl:inline">Create Invoice</span>
+          <span className="xl:hidden">Invoice</span>
+        </Button>
+      )}
+
+      {onConvertToWCR && (
+        <Button variant="toolbar"
+          size="sm"
+          leftIcon={<ClipboardCheck className="w-3.5 h-3.5" />}
+          onClick={() => onConvertToWCR(quotation)}
+          className="hidden lg:inline-flex"
+          title="Convert to WCR"
+        >
+          <span className="hidden xl:inline">Create WCR</span>
+          <span className="xl:hidden">WCR</span>
+        </Button>
+      )}
 
       <Button variant="secondary"
         size="sm"
@@ -272,6 +306,8 @@ export function QuotationDetailsModal({
     </>
   );
 }
+
+
 
 
 

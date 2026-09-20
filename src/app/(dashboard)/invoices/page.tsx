@@ -46,7 +46,43 @@ export default function InvoicesPage() {
 
   // Modal State
   const [isFormOpen, setIsFormOpen] = React.useState(false);
-  const [editingInvoice, setEditingInvoice] = React.useState<Invoice | null>(null);
+    const [editingInvoice, setEditingInvoice] = React.useState<Invoice | null>(null);
+  const [initialData, setInitialData] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const fromQuoteId = params.get("fromQuotation");
+      if (fromQuoteId) {
+        window.history.replaceState(null, "", "/invoices");
+        Promise.all([
+          CustomersRepository.getAll(),
+          QuotationsRepository.getAll(),
+        ]).then(([custData, quotData]) => {
+          setCustomers(custData);
+          setQuotations(quotData);
+          const quote = quotData.find(q => q.id === fromQuoteId);
+          if (quote) {
+            setInitialData({
+              customerId: quote.customerId,
+              customerName: quote.customerName,
+              clientPrintedName: quote.clientPrintedName || quote.customerName,
+              attention: quote.attention,
+              customerTrn: quote.customerTrn,
+              quotationId: quote.id,
+              quotationNumber: quote.quotationNumber,
+              subject: quote.subject,
+              projectName: quote.projectName,
+              projectLocation: quote.projectLocation,
+              items: quote.items.map(item => ({ ...item, id: crypto.randomUUID() }))
+            });
+            setEditingInvoice(null);
+            setIsFormOpen(true);
+          }
+        });
+      }
+    }
+  }, []);
 
   const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
   const [selectedInvoice, setSelectedInvoice] = React.useState<Invoice | null>(null);
@@ -341,6 +377,7 @@ export default function InvoicesPage() {
         open={isFormOpen}
         onOpenChange={setIsFormOpen}
         invoiceToEdit={editingInvoice}
+        initialData={initialData}
         customers={customers}
         quotations={quotations}
         onSave={handleSaveInvoice}
@@ -377,3 +414,4 @@ export default function InvoicesPage() {
     </div>
   );
 }
+
