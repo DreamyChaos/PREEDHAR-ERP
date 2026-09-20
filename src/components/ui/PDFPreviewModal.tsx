@@ -46,13 +46,21 @@ export function PDFPreviewModal({ open, onClose, blobUrl, filename }: PDFPreview
         </div>
       </div>
 
-      {/* PDF iframe */}
-      <div className="flex-1 min-h-0">
-        <iframe
-          src={blobUrl}
-          className="w-full h-full border-0"
+      {/* PDF viewer */}
+      <div className="flex-1 min-h-0 bg-zinc-900/50 flex items-center justify-center p-4">
+        <object
+          data={blobUrl}
+          type="application/pdf"
+          className="w-full h-full max-w-5xl rounded shadow-2xl bg-white"
           title={filename}
-        />
+        >
+          <div className="text-white text-center">
+            <p>Your browser does not support inline PDF viewing.</p>
+            <a href={blobUrl} download={filename} className="text-[#E07614] hover:underline mt-2 inline-block">
+              Click here to download the PDF
+            </a>
+          </div>
+        </object>
       </div>
     </div>
   );

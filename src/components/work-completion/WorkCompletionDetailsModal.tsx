@@ -139,9 +139,7 @@ export function WorkCompletionDetailsModal({
               <span className="text-[#0B1F33]">PREEDHAR</span>
               <span className="text-[#E07614]"> TECHNICAL SERVICES CO. L.L.C.</span>
             </h2>
-            <p className="text-[11px] text-slate-500 font-medium mt-0.5">
-              Commercial Electro-Mechanical & HVAC Technical Services | Deira, Dubai, UAE
-            </p>
+            
           </div>
         </div>
 
@@ -317,4 +315,5 @@ export function WorkCompletionDetailsModal({
     </>
   );
 }
+
 

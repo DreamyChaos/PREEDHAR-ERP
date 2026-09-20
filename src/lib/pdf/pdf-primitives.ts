@@ -117,10 +117,7 @@ export function renderOfficialHeader(
   // TECHNICAL SERVICES CO. L.L.C. in orange
   doc.setTextColor(...PDF_COLORS.brandOrange);
   doc.text(' TECHNICAL SERVICES CO. L.L.C.', textX + nw, 18);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(7);
-  doc.setTextColor(...PDF_COLORS.textMuted);
-  doc.text('Commercial Electro-Mechanical & HVAC Technical Services | Deira, Dubai, UAE', textX, 24);
+
 
   // Thin navy divider
   doc.setDrawColor(...PDF_COLORS.primaryNavy);

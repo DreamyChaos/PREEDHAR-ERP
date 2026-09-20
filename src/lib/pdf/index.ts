@@ -29,8 +29,8 @@ export function downloadPDF(doc: jsPDF, filename: string): void {
  * Generates a blob URL for inline preview (caller is responsible for revoking)
  */
 export function getPDFBlobUrl(doc: jsPDF): string {
-  const blob = doc.output("blob");
-  return URL.createObjectURL(blob);
+  const blob = new Blob([doc.output("arraybuffer")], { type: "application/pdf" });
+  return URL.createObjectURL(blob) + "#toolbar=0";
 }
 
 export const PDFService = {
