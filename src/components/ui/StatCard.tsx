@@ -28,10 +28,19 @@ export function StatCard({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 py-5 px-6 border-r border-slate-200 last:border-r-0",
+        "flex flex-col gap-3 py-5 px-6 border-r border-slate-200 last:border-r-0 relative overflow-hidden transition-all hover:bg-slate-50/50",
         className
       )}
     >
+      {variant === "orange" && (
+        <div className="absolute top-0 left-0 w-full h-[3px] bg-[#E07614]" />
+      )}
+      {variant === "navy" && (
+        <div className="absolute top-0 left-0 w-full h-[3px] bg-[#0B1F33]" />
+      )}
+      {variant === "default" && (
+        <div className="absolute top-0 left-0 w-full h-[3px] bg-slate-200" />
+      )}
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs font-medium text-slate-500 leading-tight">{title}</span>
         {icon && (

@@ -46,7 +46,7 @@ export default function DashboardPage() {
       value: "0",
       subtitle: "AED 0.00 balance due",
       trend: { value: "0 overdue", direction: "neutral" },
-      variant: "default",
+      variant: "orange",
     },
     {
       id: "kpi-4",
@@ -148,7 +148,7 @@ export default function DashboardPage() {
             value: outstandingInvoices.length.toString(),
             subtitle: `AED ${outstandingAmountSum.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} balance due`,
             trend: { value: `${overdueInvoicesCount} overdue`, direction: overdueInvoicesCount > 0 ? "up" : "neutral" },
-            variant: "default",
+            variant: "orange",
           },
           {
             id: "kpi-4",

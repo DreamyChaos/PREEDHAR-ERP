@@ -66,15 +66,73 @@ export function TopBar() {
 
       {/* Right Area: Notification + User Menu */}
       <div className="flex items-center gap-3">
-        {/* Notification indicator */}
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative w-8 h-8 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100 flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 cursor-pointer"
-        >
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-slate-400 rounded-full" />
-        </button>
+        {/* Notification Dropdown */}
+        <Dropdown
+          align="right"
+          width="w-72"
+          trigger={
+            <button
+              type="button"
+              aria-label="Notifications"
+              className="relative w-8 h-8 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100 flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 cursor-pointer"
+            >
+              <Bell className="w-4 h-4" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#E07614] rounded-full border-2 border-white" />
+            </button>
+          }
+          items={[
+            {
+              id: "notif_header",
+              label: (
+                <div className="py-1">
+                  <p className="text-xs font-bold text-[#0F172A]">Notifications</p>
+                  <p className="text-[10px] text-slate-500">You have 3 unread messages</p>
+                </div>
+              ),
+              disabled: true,
+            },
+            { id: "divider-n1", label: "", disabled: true },
+            {
+              id: "n1",
+              label: (
+                <div className="flex flex-col gap-0.5 whitespace-normal">
+                  <span className="text-xs font-semibold text-slate-800">Payment Received</span>
+                  <span className="text-[11px] text-slate-500">AED 45,000 received for Invoice PTS-INV-2026-437</span>
+                  <span className="text-[10px] text-[#E07614] font-medium mt-1">10 mins ago</span>
+                </div>
+              ),
+              onClick: () => { window.location.href = "/invoices" },
+            },
+            {
+              id: "n2",
+              label: (
+                <div className="flex flex-col gap-0.5 whitespace-normal">
+                  <span className="text-xs font-semibold text-slate-800">Quotation Approved</span>
+                  <span className="text-[11px] text-slate-500">Client accepted Quotation PTS-Q2026-118</span>
+                  <span className="text-[10px] text-[#E07614] font-medium mt-1">1 hour ago</span>
+                </div>
+              ),
+              onClick: () => { window.location.href = "/quotations" },
+            },
+            {
+              id: "n3",
+              label: (
+                <div className="flex flex-col gap-0.5 whitespace-normal">
+                  <span className="text-xs font-semibold text-slate-800">Material Delivery</span>
+                  <span className="text-[11px] text-slate-500">PO-2026-049 materials delivered to site</span>
+                  <span className="text-[10px] text-slate-400 font-medium mt-1">2 hours ago</span>
+                </div>
+              ),
+              onClick: () => { window.location.href = "/purchase-orders" },
+            },
+            { id: "divider-n2", label: "", disabled: true },
+            {
+              id: "mark-read",
+              label: "Mark all as read",
+              onClick: () => {},
+            }
+          ]}
+        />
 
         <div className="h-5 w-px bg-[#E2E8F0]" />
 
