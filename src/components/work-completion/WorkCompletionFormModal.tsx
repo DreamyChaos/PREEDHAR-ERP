@@ -643,11 +643,27 @@ export function WorkCompletionFormModal({
               />
             </WorkspaceSection>
 
-            <WorkspaceSection title="Site Inspection & Handover Photos" icon={Camera}>
+                        <WorkspaceSection title="Before Work Photos" icon={Camera}>
               <WCRPhotoUploader
                 reportId={reportToEdit ? reportToEdit.id : formData.reportNumber}
-                photos={photos}
-                onChange={setPhotos}
+                category="BEFORE"
+                photos={photos.filter(p => p.category === 'BEFORE' || !p.category)}
+                onChange={(newBefore) => {
+                  const others = photos.filter(p => p.category === 'AFTER');
+                  setPhotos([...others, ...newBefore]);
+                }}
+              />
+            </WorkspaceSection>
+
+            <WorkspaceSection title="After Work Photos" icon={Camera}>
+              <WCRPhotoUploader
+                reportId={reportToEdit ? reportToEdit.id : formData.reportNumber}
+                category="AFTER"
+                photos={photos.filter(p => p.category === 'AFTER')}
+                onChange={(newAfter) => {
+                  const others = photos.filter(p => p.category === 'BEFORE' || !p.category);
+                  setPhotos([...others, ...newAfter]);
+                }}
               />
             </WorkspaceSection>
 
@@ -771,4 +787,5 @@ export function WorkCompletionFormModal({
     </EnterpriseWorkspace>
   );
 }
+
 

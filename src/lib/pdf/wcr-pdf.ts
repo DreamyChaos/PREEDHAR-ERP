@@ -148,13 +148,18 @@ export function generateWCRPDF(
   }
   currentY += remarksHeight + 6;
 
-  // 7. SITE INSPECTION & HANDOVER PHOTOS
-  if (report.photos && report.photos.length > 0) {
+    // 7. SITE INSPECTION & HANDOVER PHOTOS
+  const beforePhotos = report.photos?.filter(p => p.category === "BEFORE" || !p.category) || [];
+  const afterPhotos = report.photos?.filter(p => p.category === "AFTER") || [];
+
+  const renderPhotoGrid = (title: string, photosToRender: any[]) => {
+    if (photosToRender.length === 0) return;
+    
     if (currentY + 60 > doc.internal.pageSize.getHeight() - 15) {
       doc.addPage();
       currentY = 16;
     }
-    currentY = drawSectionHeader("SITE INSPECTION & HANDOVER PHOTOS", currentY);
+    currentY = drawSectionHeader(title, currentY);
     
     const photosPerRow = 2;
     const padding = 6;
@@ -162,10 +167,10 @@ export function generateWCRPDF(
     const imgHeight = 65; 
     let photoCount = 0;
 
-    for (let i = 0; i < report.photos.length; i++) {
-      const p = report.photos[i];
+    for (let i = 0; i < photosToRender.length; i++) {
+      const p = photosToRender[i];
       if (photoCount > 0 && photoCount % photosPerRow === 0) {
-        currentY += imgHeight + 12; // advance row
+        currentY += imgHeight + 12;
         if (currentY + imgHeight + 15 > doc.internal.pageSize.getHeight() - 15) {
           doc.addPage();
           currentY = 16;
@@ -183,13 +188,12 @@ export function generateWCRPDF(
         if (p.mimeType === "image/png") fmt = "PNG";
         else if (p.mimeType === "image/webp") fmt = "WEBP";
 
-        // Draw image frame
-        doc.setDrawColor(...PDF_COLORS.tableBorder);
+        doc.setDrawColor(220, 220, 220);
         doc.setLineWidth(0.2);
         doc.rect(x, currentY + 2, boxWidth, imgHeight);
 
         // Add image
-        doc.addImage(source, fmt, x + 1, currentY + 3, boxWidth - 2, imgHeight - 2);
+        doc.addImage(source, fmt, x + 1, currentY + 3, boxWidth - 2, imgHeight - 2, undefined, 'FAST');
         
         // Add caption
         doc.setFont("helvetica", "normal");
@@ -201,18 +205,27 @@ export function generateWCRPDF(
         doc.text(captionWrapped, x, currentY + imgHeight + 5);
         
         photoCount++;
-      } catch (e) {
-        // Fallback if image failed to load
+      } catch (err) {
+        // Fallback
         doc.setFont("helvetica", "italic");
         doc.text("Image format not supported", x + 5, currentY + Math.floor(imgHeight/2));
         photoCount++;
       }
     }
-    // After loop, increment currentY by the last row's height
+    
     if (photoCount > 0) {
       currentY += imgHeight + 12;
+    } else {
+      doc.setFont("helvetica", "italic");
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textMuted);
+      doc.text("No photos attached for this section.", startX + 3, currentY + 5);
+      currentY += 12;
     }
-  }
+  };
+
+  renderPhotoGrid("SITE INSPECTION PHOTOS (BEFORE WORK)", beforePhotos);
+  renderPhotoGrid("SITE HANDOVER PHOTOS (AFTER WORK)", afterPhotos);
 
   // 8. Dual Signature Blocks (PREEDHAR + Client)
   if (currentY + 26 > doc.internal.pageSize.getHeight() - 15) {
@@ -224,3 +237,5 @@ export function generateWCRPDF(
   renderOfficialFooter(doc, companyOverride);
   return doc;
 }
+
+

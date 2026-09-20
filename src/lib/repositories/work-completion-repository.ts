@@ -79,6 +79,8 @@ export const WorkCompletionRepository = {
           fileName: p.file_name,
           storagePath: p.storage_path,
           url: p.public_url || p.storage_path,
+          dataUrl: p.data_url || undefined,
+          category: p.storage_path?.includes('/after_') ? 'AFTER' : 'BEFORE',
           mimeType: p.mime_type,
           fileSize: Number(p.file_size),
           caption: p.caption || undefined,

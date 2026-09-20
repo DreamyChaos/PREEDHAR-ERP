@@ -60,6 +60,7 @@ export const PhotoStorageService = {
    */
   async uploadWCRPhoto(
     file: File,
+    category: 'BEFORE' | 'AFTER' = 'BEFORE',
     reportId: string,
     caption?: string,
     uploaderName?: string
@@ -71,7 +72,8 @@ export const PhotoStorageService = {
 
     const photoId = `photo_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const cleanName = sanitizeFileName(file.name);
-    const storagePath = `work-completion-reports/${reportId}/${photoId}-${cleanName}`;
+    const categoryPrefix = category === 'AFTER' ? 'after_' : 'before_';
+    const storagePath = `work-completion-reports/${reportId}/${categoryPrefix}${photoId}-${cleanName}`;
 
     try {
       // Create compressed base64 for PDF rendering directly
@@ -110,7 +112,8 @@ export const PhotoStorageService = {
         storagePath,
         url: finalUrl,
         dataUrl: compressedDataUrl, // Guaranteed accessible synchronous base64
-        mimeType: file.type,
+        category,
+          mimeType: file.type,
         fileSize: file.size,
         caption: caption?.trim() || undefined,
         uploadedAt: new Date().toISOString(),
@@ -134,6 +137,7 @@ export const PhotoStorageService = {
           storagePath,
           url: compressedDataUrl,
           dataUrl: compressedDataUrl,
+          category,
           mimeType: file.type,
           fileSize: file.size,
           caption: caption?.trim() || undefined,
@@ -171,3 +175,4 @@ export const PhotoStorageService = {
     }
   },
 };
+

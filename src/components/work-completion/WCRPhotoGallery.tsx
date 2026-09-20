@@ -1,9 +1,7 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { Dialog, DialogContent } from "@/components/ui/Dialog";
-import { Badge } from "@/components/ui/Badge";
 import type { WCRPhotoAttachment } from "@/lib/storage/types";
 import { formatDate } from "@/lib/utils";
 import {
@@ -32,6 +30,8 @@ export function WCRPhotoGallery({ photos }: WCRPhotoGalleryProps) {
   }
 
   const activePhoto = selectedPhotoIndex !== null ? photos[selectedPhotoIndex] : null;
+  const beforePhotos = photos.filter(p => p.category === 'BEFORE' || !p.category);
+  const afterPhotos = photos.filter(p => p.category === 'AFTER');
 
   const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -47,74 +47,77 @@ export function WCRPhotoGallery({ photos }: WCRPhotoGalleryProps) {
     }
   };
 
+  const renderPhotoGrid = (gridPhotos: WCRPhotoAttachment[], title: string) => {
+    if (gridPhotos.length === 0) return null;
+    return (
+      <div className="space-y-3 mt-6 first:mt-0">
+        <div className="flex items-center justify-between">
+          <h4 className="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+            <Camera className="w-3.5 h-3.5 text-[#2563EB]" />
+            {title} ({gridPhotos.length})
+          </h4>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {gridPhotos.map((photo) => {
+            const index = photos.findIndex(p => p.id === photo.id);
+            return (
+              <div
+                key={photo.id}
+                onClick={() => setSelectedPhotoIndex(index)}
+                className="group relative rounded-lg border border-slate-200 overflow-hidden bg-slate-100 cursor-pointer shadow-2xs hover:shadow-md transition-all hover:border-[#2563EB]"
+              >
+                <div className="aspect-4/3 w-full relative">
+                  {photo.url ? (
+                    <img
+                      src={photo.url}
+                      alt={photo.caption || photo.fileName}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center w-full h-full text-slate-400">
+                      <ImageIcon className="w-6 h-6" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Maximize2 className="w-5 h-5 text-white" />
+                  </div>
+                </div>
+                {photo.caption && (
+                  <div className="p-2 bg-white border-t border-slate-100">
+                    <p className="text-[10px] text-slate-700 font-medium line-clamp-2 leading-tight">
+                      {photo.caption}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h4 className="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-          <Camera className="w-3.5 h-3.5 text-[#2563EB]" />
-          Site Inspection & Execution Photos ({photos.length})
-        </h4>
-        <span className="text-[10px] text-slate-400 font-medium">
+    <div className="space-y-2">
+      <div className="flex justify-end">
+        <span className="text-[10px] text-slate-400 font-medium -mt-4">
           Click any photo to enlarge & inspect
         </span>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-        {photos.map((photo, index) => (
-          <div
-            key={photo.id}
-            onClick={() => setSelectedPhotoIndex(index)}
-            className="group relative rounded-lg border border-slate-200 overflow-hidden bg-slate-100 cursor-pointer shadow-2xs hover:shadow-md transition-all hover:border-[#2563EB]"
-          >
-            <div className="aspect-4/3 w-full relative">
-              {photo.url ? (
-                <img
-                  src={photo.url}
-                  alt={photo.caption || photo.fileName}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              ) : (
-                <div className="flex items-center justify-center w-full h-full text-slate-400">
-                  <ImageIcon className="w-6 h-6" />
-                </div>
-              )}
-
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <Maximize2 className="w-5 h-5 text-white" />
-              </div>
-
-              {/* Index Badge */}
-              <span className="absolute top-1.5 left-1.5 bg-black/60 text-white text-[9px] font-bold px-1.5 py-0.5 rounded backdrop-blur-xs">
-                #{index + 1}
-              </span>
-            </div>
-
-            {/* Caption in Card */}
-            {photo.caption && (
-              <div className="p-2 bg-white border-t border-slate-100">
-                <p className="text-[10px] text-slate-700 font-medium line-clamp-2 leading-tight">
-                  {photo.caption}
-                </p>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      {renderPhotoGrid(beforePhotos, "Before Work Execution")}
+      {renderPhotoGrid(afterPhotos, "After Work Execution")}
 
       {/* Fullscreen Lightbox Modal */}
       {activePhoto && (
         <Dialog open={selectedPhotoIndex !== null} onOpenChange={() => setSelectedPhotoIndex(null)}>
           <DialogContent className="max-w-4xl p-0 overflow-hidden bg-slate-950 border-slate-800 text-white">
             <div className="relative flex flex-col">
-              {/* Header Bar */}
               <div className="flex items-center justify-between px-4 py-3 bg-slate-900/80 border-b border-slate-800 z-10">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-semibold text-slate-200">
-                    Photo {(selectedPhotoIndex ?? 0) + 1} of {photos.length}
-                  </span>
-                  <span className="text-[11px] text-slate-400 truncate max-w-xs">
-                    • {activePhoto.fileName}
+                    Photo {(selectedPhotoIndex ?? 0) + 1} of {photos.length} ({activePhoto.category === 'AFTER' ? 'After Work' : 'Before Work'})
                   </span>
                 </div>
                 <button
@@ -125,7 +128,6 @@ export function WCRPhotoGallery({ photos }: WCRPhotoGalleryProps) {
                 </button>
               </div>
 
-              {/* Main Image View */}
               <div className="relative min-h-[400px] max-h-[70vh] flex items-center justify-center bg-black/90 p-4">
                 {activePhoto.url && (
                   <img
@@ -134,8 +136,6 @@ export function WCRPhotoGallery({ photos }: WCRPhotoGalleryProps) {
                     className="max-h-[65vh] max-w-full object-contain rounded"
                   />
                 )}
-
-                {/* Nav Arrows */}
                 {photos.length > 1 && (
                   <>
                     <button
@@ -154,15 +154,13 @@ export function WCRPhotoGallery({ photos }: WCRPhotoGalleryProps) {
                 )}
               </div>
 
-              {/* Caption & Metadata Footer */}
               <div className="px-4 py-3 bg-slate-900 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                 <p className="text-slate-200 font-medium">
                   {activePhoto.caption || "No caption provided"}
                 </p>
                 <div className="text-[10px] text-slate-400 flex items-center gap-2 shrink-0">
                   <span>{(activePhoto.fileSize / 1024).toFixed(0)} KB</span>
-                  {activePhoto.uploadedBy && <span>• Uploaded by {activePhoto.uploadedBy}</span>}
-                  <span>• {formatDate(activePhoto.uploadedAt)}</span>
+                  <span>� {formatDate(activePhoto.uploadedAt)}</span>
                 </div>
               </div>
             </div>

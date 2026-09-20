@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 interface WCRPhotoUploaderProps {
+  category?: 'BEFORE' | 'AFTER';
   reportId: string;
   photos: WCRPhotoAttachment[];
   onChange: (photos: WCRPhotoAttachment[]) => void;
@@ -251,3 +252,4 @@ export function WCRPhotoUploader({
     </div>
   );
 }
+
