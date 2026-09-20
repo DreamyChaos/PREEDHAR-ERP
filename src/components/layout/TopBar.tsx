@@ -45,7 +45,7 @@ export function TopBar() {
           type="button"
           onClick={toggleMobileDrawer}
           aria-label="Open navigation menu"
-          className="lg:hidden w-8 h-8 rounded-lg border border-[#E2E8F0] bg-white text-slate-700 hover:bg-slate-50 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] cursor-pointer"
+          className="lg:hidden w-8 h-8 rounded-lg border border-[#E2E8F0] bg-white text-slate-700 hover:bg-slate-50 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 cursor-pointer"
         >
           <Menu className="w-4 h-4" />
         </button>
@@ -70,7 +70,7 @@ export function TopBar() {
         <button
           type="button"
           aria-label="Notifications"
-          className="relative w-8 h-8 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100 flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] cursor-pointer"
+          className="relative w-8 h-8 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100 flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 cursor-pointer"
         >
           <Bell className="w-4 h-4" />
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-slate-400 rounded-full" />
@@ -84,7 +84,7 @@ export function TopBar() {
           trigger={
             <button
               type="button"
-              className="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] cursor-pointer"
+              className="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 cursor-pointer"
             >
               <div className="w-7 h-7 rounded-lg bg-[#0B1F33] text-white flex items-center justify-center text-xs font-bold shrink-0">
                 {user?.name ? user.name.charAt(0).toUpperCase() : <User className="w-3.5 h-3.5" />}

@@ -80,7 +80,7 @@ export function MobileDrawer() {
             type="button"
             onClick={() => setMobileDrawerOpen(false)}
             aria-label="Close navigation menu"
-            className="w-8 h-8 rounded-lg bg-[#112843] text-slate-300 hover:text-white flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] cursor-pointer"
+            className="w-8 h-8 rounded-lg bg-[#112843] text-slate-300 hover:text-white flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -104,7 +104,7 @@ export function MobileDrawer() {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]",
+                        "flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 relative focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400",
                         isActive
                           ? "bg-[#1A385C] text-white font-semibold"
                           : "text-slate-300 hover:text-white hover:bg-[#112843]/60"

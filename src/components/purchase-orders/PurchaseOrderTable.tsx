@@ -95,7 +95,7 @@ export function PurchaseOrderTable({
                         {po.purchaseOrderNumber}
                       </span>
                       {po.quotationNumber && (
-                        <span className="text-[10px] text-[#2563EB] font-normal flex items-center gap-1">
+                        <span className="text-[10px] text-slate-600 font-normal flex items-center gap-1">
                           Quote: {po.quotationNumber}
                         </span>
                       )}

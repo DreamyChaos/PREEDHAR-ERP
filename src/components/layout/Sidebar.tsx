@@ -44,7 +44,7 @@ export function Sidebar({ className }: { className?: string }) {
         <Link
           href="/dashboard"
           className={cn(
-            "flex items-center gap-3 overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] rounded-lg py-1",
+            "flex items-center gap-3 overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 rounded-lg py-1",
             isCollapsed && "justify-center w-full"
           )}
         >
@@ -77,7 +77,7 @@ export function Sidebar({ className }: { className?: string }) {
             type="button"
             onClick={toggleCollapsed}
             aria-label="Collapse sidebar"
-            className="w-7 h-7 rounded-lg bg-[#112843] text-slate-300 hover:text-white hover:bg-[#1A385C] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] cursor-pointer"
+            className="w-7 h-7 rounded-lg bg-[#112843] text-slate-300 hover:text-white hover:bg-[#1A385C] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
@@ -91,7 +91,7 @@ export function Sidebar({ className }: { className?: string }) {
             type="button"
             onClick={toggleCollapsed}
             aria-label="Expand sidebar"
-            className="w-7 h-7 rounded-lg bg-[#112843] text-slate-300 hover:text-white hover:bg-[#1A385C] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] cursor-pointer"
+            className="w-7 h-7 rounded-lg bg-[#112843] text-slate-300 hover:text-white hover:bg-[#1A385C] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 cursor-pointer"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -122,7 +122,7 @@ export function Sidebar({ className }: { className?: string }) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150 group relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]",
+                      "flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150 group relative focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400",
                       isActive
                         ? "bg-[#1A385C] text-white font-semibold shadow-xs"
                         : "text-slate-300 hover:text-white hover:bg-[#112843]/60",

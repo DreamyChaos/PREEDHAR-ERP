@@ -49,7 +49,7 @@ export function QuotationTable({
   if (quotations.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-[#E2E8F0] p-12 text-center shadow-2xs">
-        <div className="w-12 h-12 rounded-full bg-[#EFF6FF] border border-[#BFDBFE] flex items-center justify-center text-[#2563EB] mx-auto mb-3">
+        <div className="w-12 h-12 rounded-full bg-[#EFF6FF] border border-[#BFDBFE] flex items-center justify-center text-slate-600 mx-auto mb-3">
           <FileText className="w-6 h-6" />
         </div>
         <h3 className="text-sm font-bold text-[#0F172A]">No Quotations Found</h3>
@@ -89,7 +89,7 @@ export function QuotationTable({
                   {/* Quotation Number */}
                   <td className="py-3.5 px-4 font-numeric font-bold text-[#0F172A] whitespace-nowrap">
                     <div className="flex items-center gap-1.5">
-                      <span className="hover:text-[#2563EB] transition-colors">{q.quotationNumber}</span>
+                      <span className="hover:text-slate-600 transition-colors">{q.quotationNumber}</span>
                     </div>
                   </td>
 

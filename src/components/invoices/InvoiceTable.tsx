@@ -58,7 +58,7 @@ export function InvoiceTable({
   if (invoices.length === 0) {
     return (
       <div className="bg-white rounded-lg border border-slate-200/80 p-12 text-center shadow-2xs">
-        <div className="w-12 h-12 rounded-full bg-[#EFF6FF] border border-[#DBEAFE] flex items-center justify-center text-[#2563EB] mx-auto mb-3">
+        <div className="w-12 h-12 rounded-full bg-[#EFF6FF] border border-[#DBEAFE] flex items-center justify-center text-slate-600 mx-auto mb-3">
           <Receipt className="w-6 h-6" />
         </div>
         <h3 className="text-sm font-bold text-[#0B1F33]">No Tax Invoices Found</h3>

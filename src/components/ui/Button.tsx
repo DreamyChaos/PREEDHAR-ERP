@@ -42,7 +42,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       destructive:
         "bg-[#B91C1C] hover:bg-[#991B1B] active:bg-[#7F1D1D] text-white shadow-xs focus-visible:ring-[#B91C1C] border border-[#B91C1C]",
       link:
-        "bg-transparent text-[#2563EB] hover:underline underline-offset-4 p-0 h-auto focus-visible:ring-0",
+        "bg-transparent text-slate-700 hover:underline underline-offset-4 p-0 h-auto focus-visible:ring-0",
     };
 
     const sizeStyles = {

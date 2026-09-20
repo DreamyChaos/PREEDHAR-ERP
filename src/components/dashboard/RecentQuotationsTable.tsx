@@ -29,7 +29,7 @@ export function RecentQuotationsTable({ quotations }: { quotations: RecentQuotat
     <Panel
       title={
         <div className="flex items-center gap-2">
-          <FileText className="w-4 h-4 text-[#2563EB]" />
+          <FileText className="w-4 h-4 text-slate-500" />
           <span>Recent Quotations</span>
         </div>
       }
