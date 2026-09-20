@@ -46,6 +46,7 @@ export default function WorkCompletionPage() {
   const [isFormOpen, setIsFormOpen] = React.useState(false);
   const [editingReport, setEditingReport] =
     React.useState<WorkCompletionReport | null>(null);
+  const [initialData, setInitialData] = React.useState<any>(null);
 
   const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
   const [selectedReport, setSelectedReport] =
@@ -76,6 +77,37 @@ export default function WorkCompletionPage() {
       }
     }
     loadData();
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const fromQuoteId = params.get("fromQuotation");
+      if (fromQuoteId) {
+        window.history.replaceState(null, "", "/work-completion");
+        Promise.all([
+          CustomersRepository.getAll(),
+          QuotationsRepository.getAll(),
+          PurchaseOrdersRepository.getAll(),
+        ]).then(([custData, quotData, poData]) => {
+          setCustomers(custData);
+          setQuotations(quotData);
+          setPurchaseOrders(poData);
+          const quote = quotData.find((q) => q.id === fromQuoteId);
+          if (quote) {
+            setInitialData({
+              customerId: quote.customerId,
+              customerName: quote.customerName,
+              quotationId: quote.id,
+              quotationNumber: quote.quotationNumber,
+              projectName: quote.projectName,
+              projectLocation: quote.projectLocation,
+              subject: quote.subject,
+            });
+            setEditingReport(null);
+            setIsFormOpen(true);
+          }
+        });
+      }
+    }
   }, []);
 
   // Handlers
@@ -100,13 +132,13 @@ export default function WorkCompletionPage() {
         // Search query
         if (filters.search.trim()) {
           const query = filters.search.toLowerCase();
-          const matchNumber = r.reportNumber.toLowerCase().includes(query);
-          const matchCustomer = r.customerName.toLowerCase().includes(query);
-          const matchQuote = r.quotationNumber?.toLowerCase().includes(query);
-          const matchPO = r.purchaseOrderNumber?.toLowerCase().includes(query);
-          const matchSubject = r.subject.toLowerCase().includes(query);
-          const matchProject = r.projectName.toLowerCase().includes(query);
-          const matchEngineer = r.engineerInCharge.toLowerCase().includes(query);
+          const matchNumber = (r.reportNumber || "").toLowerCase().includes(query);
+          const matchCustomer = (r.customerName || "").toLowerCase().includes(query);
+          const matchQuote = (r.quotationNumber || "").toLowerCase().includes(query);
+          const matchPO = (r.purchaseOrderNumber || "").toLowerCase().includes(query);
+          const matchSubject = (r.subject || "").toLowerCase().includes(query);
+          const matchProject = (r.projectName || "").toLowerCase().includes(query);
+          const matchEngineer = (r.engineerInCharge || "").toLowerCase().includes(query);
           if (
             !matchNumber &&
             !matchCustomer &&
