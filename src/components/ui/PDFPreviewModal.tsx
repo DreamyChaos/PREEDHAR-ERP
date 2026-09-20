@@ -22,7 +22,7 @@ export function PDFPreviewModal({ open, onClose, blobUrl, filename }: PDFPreview
   if (!open || !blobUrl) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex flex-col bg-black/80" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-[700] flex flex-col bg-black/80" role="dialog" aria-modal="true">
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-[#0B1F33] shrink-0">
         <span className="text-sm font-medium text-white truncate">{filename}</span>

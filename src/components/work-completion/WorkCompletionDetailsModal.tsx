@@ -60,8 +60,7 @@ export function WorkCompletionDetailsModal({
 
   const toolbarActions = (
     <>
-      <Button
-        variant="outline"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<Printer className="w-3.5 h-3.5" />}
         onClick={() => setPreviewUrl(PDFService.previewWCR(report))}
@@ -71,8 +70,7 @@ export function WorkCompletionDetailsModal({
         <span className="sm:hidden">PDF</span>
       </Button>
 
-      <Button
-        variant="outline"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<Download className="w-3.5 h-3.5" />}
         onClick={() => PDFService.downloadWCR(report)}
@@ -82,8 +80,7 @@ export function WorkCompletionDetailsModal({
         <span className="sm:hidden">Download</span>
       </Button>
 
-      <Button
-        variant="outline"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
         onClick={() => onChangeStatus(report)}
@@ -92,8 +89,7 @@ export function WorkCompletionDetailsModal({
         Status
       </Button>
 
-      <Button
-        variant="primary"
+      <Button variant="secondary"
         size="sm"
         leftIcon={<Edit className="w-3.5 h-3.5" />}
         onClick={() => {
@@ -314,6 +310,8 @@ export function WorkCompletionDetailsModal({
     </>
   );
 }
+
+
 
 
 

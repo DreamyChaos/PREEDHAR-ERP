@@ -81,8 +81,7 @@ export function InvoiceDetailsModal({
 
   const toolbarActions = (
     <>
-      <Button
-        variant="outline"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<Printer className="w-3.5 h-3.5" />}
         onClick={() => setPreviewUrl(PDFService.previewInvoice(invoice))}
@@ -92,8 +91,7 @@ export function InvoiceDetailsModal({
         <span className="sm:hidden">PDF</span>
       </Button>
 
-      <Button
-        variant="outline"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<Download className="w-3.5 h-3.5" />}
         onClick={() => PDFService.downloadInvoice(invoice)}
@@ -103,8 +101,7 @@ export function InvoiceDetailsModal({
         <span className="sm:hidden">Download</span>
       </Button>
 
-      <Button
-        variant="outline"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<CreditCard className="w-3.5 h-3.5 text-emerald-600" />}
         onClick={() => {
@@ -115,8 +112,7 @@ export function InvoiceDetailsModal({
         <span className="md:hidden">Payment</span>
       </Button>
 
-      <Button
-        variant="outline"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
         onClick={() => onChangeStatus(invoice)}
@@ -125,8 +121,7 @@ export function InvoiceDetailsModal({
         Status
       </Button>
 
-      <Button
-        variant="primary"
+      <Button variant="secondary"
         size="sm"
         leftIcon={<Edit className="w-3.5 h-3.5" />}
         onClick={() => {
@@ -372,6 +367,8 @@ export function InvoiceDetailsModal({
     </>
   );
 }
+
+
 
 
 

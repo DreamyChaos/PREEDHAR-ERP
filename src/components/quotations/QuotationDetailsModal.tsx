@@ -50,8 +50,7 @@ export function QuotationDetailsModal({
 
   const toolbarActions = (
     <>
-      <Button
-        variant="outline"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<Printer className="w-3.5 h-3.5" />}
         onClick={() => setPreviewUrl(PDFService.previewQuotation(quotation))}
@@ -61,8 +60,7 @@ export function QuotationDetailsModal({
         <span className="sm:hidden">PDF</span>
       </Button>
 
-      <Button
-        variant="outline"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<Download className="w-3.5 h-3.5" />}
         onClick={() => PDFService.downloadQuotation(quotation)}
@@ -72,8 +70,7 @@ export function QuotationDetailsModal({
         <span className="sm:hidden">Download</span>
       </Button>
 
-      <Button
-        variant="outline"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
         onClick={() => onChangeStatus(quotation)}
@@ -82,8 +79,7 @@ export function QuotationDetailsModal({
         Status
       </Button>
 
-      <Button
-        variant="primary"
+      <Button variant="secondary"
         size="sm"
         leftIcon={<Edit className="w-3.5 h-3.5" />}
         onClick={() => {
@@ -276,6 +272,8 @@ export function QuotationDetailsModal({
     </>
   );
 }
+
+
 
 
 
