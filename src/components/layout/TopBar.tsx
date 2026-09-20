@@ -73,7 +73,7 @@ export function TopBar() {
           className="relative w-8 h-8 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100 flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] cursor-pointer"
         >
           <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#E07614] rounded-full ring-2 ring-white" />
+          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-slate-400 rounded-full" />
         </button>
 
         <div className="h-5 w-px bg-[#E2E8F0]" />

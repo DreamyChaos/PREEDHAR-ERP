@@ -35,20 +35,18 @@ export function StatCard({
   return (
     <div
       className={cn(
-        "relative p-5 rounded-xl bg-white border border-[#E2E8F0] shadow-sm overflow-hidden transition-all hover:shadow-md hover:border-slate-300",
+        "p-5 rounded-xl bg-white border border-slate-200 shadow-sm transition-all hover:shadow-md hover:border-slate-300",
         className
       )}
     >
-      {/* Orange left accent bar */}
-      <div className="absolute left-0 top-4 bottom-4 w-[3px] bg-[#E07614] rounded-r-full" />
       <div className="flex items-center justify-between gap-3 mb-3">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] pl-1">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           {title}
         </span>
         {icon && (
           <div
             className={cn(
-              "w-9 h-9 rounded-lg flex items-center justify-center border shrink-0",
+              "w-8 h-8 rounded-lg flex items-center justify-center border shrink-0",
               iconVariantStyles[variant]
             )}
           >
