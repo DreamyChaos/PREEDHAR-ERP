@@ -56,23 +56,23 @@ function getLogoBytes(): Uint8Array {
 }
 
 /**
- * Draw two-tone company name: "PREEDHAR" in orange, rest in navy
+ * Draw two-tone company name: "PREEDHAR" in navy, rest in orange
  */
 function drawTwoToneCompanyName(doc: jsPDF, x: number, y: number, fontSize: number): void {
   const comp = PDF_COMPANY_DETAILS;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(fontSize);
 
-  // "PREEDHAR" in orange
-  doc.setTextColor(...PDF_COLORS.brandOrange);
+  // "PREEDHAR" in navy (blue)
+  doc.setTextColor(...PDF_COLORS.primaryNavy);
   doc.text(comp.nameFirst, x, y);
 
   // Get width of "PREEDHAR" to position rest
-  const orangeWidth = doc.getTextWidth(comp.nameFirst);
+  const navyWidth = doc.getTextWidth(comp.nameFirst);
 
-  // " TECHNICAL SERVICES CO. L.L.C." in navy
-  doc.setTextColor(...PDF_COLORS.primaryNavy);
-  doc.text(comp.nameRest, x + orangeWidth, y);
+  // " TECHNICAL SERVICES CO. L.L.C." in orange
+  doc.setTextColor(...PDF_COLORS.brandOrange);
+  doc.text(comp.nameRest, x + navyWidth, y);
 }
 
 /**
@@ -106,37 +106,21 @@ export function renderOfficialHeader(
   }
 
   const textX = startX + logoSize + 5;
-  const rightEdge = pageWidth - 14; // leave 14mm margin on right
 
-  if (showAddressInHeader) {
-    // Invoice: full 3 lines — name fills right
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(...PDF_COLORS.primaryNavy);
-    doc.text('PREEDHAR', textX, 14);
-    const orangeW = doc.getTextWidth('PREEDHAR');
-    doc.setTextColor(...PDF_COLORS.brandOrange);
-    doc.text(' TECHNICAL SERVICES CO. L.L.C.', textX + orangeW, 14);
-    doc.setTextColor(...PDF_COLORS.primaryNavy);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
-    doc.setTextColor(...PDF_COLORS.textMuted);
-    doc.text(`${comp.address} • Mob: ${comp.phone} • Email: ${comp.email}`, textX, 20);
-    doc.text(`TRN: ${comp.trn} • ${comp.tagline}`, textX, 25);
-  } else {
-    // Quotation/PO/WCR — large name fills the full right half
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(13);
-    doc.setTextColor(...PDF_COLORS.primaryNavy);
-    doc.text('PREEDHAR', textX, 18);
-    const ow = doc.getTextWidth('PREEDHAR');
-    doc.setTextColor(...PDF_COLORS.brandOrange);
-    doc.text(' TECHNICAL SERVICES CO. L.L.C.', textX + ow, 18);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7);
-    doc.setTextColor(...PDF_COLORS.textMuted);
-    doc.text('Commercial Electro-Mechanical & HVAC Technical Services | Deira, Dubai, UAE', textX, 24);
-  }
+  // Same clean header for ALL document types — no address/TRN lines
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  // PREEDHAR in navy
+  doc.setTextColor(...PDF_COLORS.primaryNavy);
+  doc.text('PREEDHAR', textX, 18);
+  const nw = doc.getTextWidth('PREEDHAR');
+  // TECHNICAL SERVICES CO. L.L.C. in orange
+  doc.setTextColor(...PDF_COLORS.brandOrange);
+  doc.text(' TECHNICAL SERVICES CO. L.L.C.', textX + nw, 18);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(...PDF_COLORS.textMuted);
+  doc.text('Commercial Electro-Mechanical & HVAC Technical Services | Deira, Dubai, UAE', textX, 24);
 
   // Thin navy divider
   doc.setDrawColor(...PDF_COLORS.primaryNavy);

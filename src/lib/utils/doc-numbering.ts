@@ -5,10 +5,10 @@ const YEAR = new Date().getFullYear();
 type DocType = "quotation" | "invoice" | "purchase_order" | "work_completion" | "customer";
 
 const TABLE_MAP: Record<DocType, { table: string; col: string; prefix: string }> = {
-  quotation:        { table: "quotations",               col: "quotation_number",      prefix: `PTSC-Q-${YEAR}-` },
-  invoice:          { table: "invoices",                 col: "invoice_number",        prefix: `PTSC-INV-${YEAR}-` },
-  purchase_order:   { table: "purchase_orders",          col: "purchase_order_number", prefix: `PTSC-PO-${YEAR}-` },
-  work_completion:  { table: "work_completion_reports",  col: "report_number",         prefix: `PTSC-WCR-${YEAR}-` },
+  quotation:        { table: "quotations",               col: "quotation_number",      prefix: `PTS-Q-${YEAR}-` },
+  invoice:          { table: "invoices",                 col: "invoice_number",        prefix: `PTS-INV-${YEAR}-` },
+  purchase_order:   { table: "purchase_orders",          col: "purchase_order_number", prefix: `PTS-PO-${YEAR}-` },
+  work_completion:  { table: "work_completion_reports",  col: "report_number",         prefix: `PTS-WCR-${YEAR}-` },
   customer:         { table: "customers",                col: "customer_code",         prefix: `CUS-${YEAR}-` },
 };
 

@@ -26,12 +26,11 @@ export function downloadPDF(doc: jsPDF, filename: string): void {
 }
 
 /**
- * Opens a generated jsPDF document in a new browser tab for preview/printing
+ * Generates a blob URL for inline preview (caller is responsible for revoking)
  */
-export function previewPDF(doc: jsPDF): void {
+export function getPDFBlobUrl(doc: jsPDF): string {
   const blob = doc.output("blob");
-  const blobUrl = URL.createObjectURL(blob);
-  window.open(blobUrl, "_blank");
+  return URL.createObjectURL(blob);
 }
 
 export const PDFService = {
@@ -40,9 +39,9 @@ export const PDFService = {
     downloadPDF(doc, `${quotation.quotationNumber}.pdf`);
   },
 
-  previewQuotation(quotation: Quotation, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>) {
+  previewQuotation(quotation: Quotation, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>): string {
     const doc = generateQuotationPDF(quotation, companyOverride);
-    previewPDF(doc);
+    return getPDFBlobUrl(doc);
   },
 
   downloadInvoice(invoice: Invoice, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>) {
@@ -50,9 +49,9 @@ export const PDFService = {
     downloadPDF(doc, `${invoice.invoiceNumber}.pdf`);
   },
 
-  previewInvoice(invoice: Invoice, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>) {
+  previewInvoice(invoice: Invoice, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>): string {
     const doc = generateInvoicePDF(invoice, companyOverride);
-    previewPDF(doc);
+    return getPDFBlobUrl(doc);
   },
 
   downloadPurchaseOrder(po: PurchaseOrder, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>) {
@@ -60,9 +59,9 @@ export const PDFService = {
     downloadPDF(doc, `${po.purchaseOrderNumber}.pdf`);
   },
 
-  previewPurchaseOrder(po: PurchaseOrder, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>) {
+  previewPurchaseOrder(po: PurchaseOrder, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>): string {
     const doc = generatePurchaseOrderPDF(po, companyOverride);
-    previewPDF(doc);
+    return getPDFBlobUrl(doc);
   },
 
   downloadWCR(report: WorkCompletionReport, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>) {
@@ -70,8 +69,8 @@ export const PDFService = {
     downloadPDF(doc, `${report.reportNumber}.pdf`);
   },
 
-  previewWCR(report: WorkCompletionReport, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>) {
+  previewWCR(report: WorkCompletionReport, companyOverride?: Partial<typeof PDF_COMPANY_DETAILS>): string {
     const doc = generateWCRPDF(report, companyOverride);
-    previewPDF(doc);
+    return getPDFBlobUrl(doc);
   },
 };

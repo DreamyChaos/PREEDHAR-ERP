@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Image from "next/image";
 import { DocumentViewer } from "@/components/ui/DocumentViewer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { PDFPreviewModal } from "@/components/ui/PDFPreviewModal";
 import { formatAED, formatDate } from "@/lib/utils";
 import type { Invoice } from "@/lib/data/invoices-mock";
 import { PDFService } from "@/lib/pdf";
@@ -37,6 +38,7 @@ export function InvoiceDetailsModal({
   onChangeStatus: (invoice: Invoice) => void;
   onUpdatePayment: (invoice: Invoice) => void;
 }) {
+  const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
   if (!invoice) return null;
 
   const today = new Date();
@@ -83,7 +85,7 @@ export function InvoiceDetailsModal({
         variant="outline"
         size="sm"
         leftIcon={<Printer className="w-3.5 h-3.5" />}
-        onClick={() => PDFService.previewInvoice(invoice)}
+        onClick={() => setPreviewUrl(PDFService.previewInvoice(invoice))}
         title="Preview / Print Tax Invoice PDF"
       >
         <span className="hidden sm:inline">Preview PDF</span>
@@ -139,14 +141,21 @@ export function InvoiceDetailsModal({
   );
 
   return (
-    <DocumentViewer
-      open={open}
-      onClose={() => onOpenChange(false)}
-      documentType="Tax Invoice"
-      documentNumber={invoice.invoiceNumber}
-      statusBadges={toolbarStatusBadges}
-      actions={toolbarActions}
-    >
+    <>
+      <PDFPreviewModal
+        open={!!previewUrl}
+        onClose={() => { URL.revokeObjectURL(previewUrl!); setPreviewUrl(null); }}
+        blobUrl={previewUrl}
+        filename={`${invoice.invoiceNumber}.pdf`}
+      />
+      <DocumentViewer
+        open={open}
+        onClose={() => onOpenChange(false)}
+        documentType="Tax Invoice"
+        documentNumber={invoice.invoiceNumber}
+        statusBadges={toolbarStatusBadges}
+        actions={toolbarActions}
+      >
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200">
         <div className="flex items-center gap-3.5">
@@ -164,10 +173,10 @@ export function InvoiceDetailsModal({
               {PREEDHAR_COMPANY_DETAILS.legalName}
             </h2>
             <p className="text-[11px] text-slate-500 font-medium">
-              {PREEDHAR_COMPANY_DETAILS.address}, {PREEDHAR_COMPANY_DETAILS.city} – UAE
+              {PREEDHAR_COMPANY_DETAILS.address}, {PREEDHAR_COMPANY_DETAILS.city} â€“ UAE
             </p>
             <p className="text-[11px] text-slate-600 font-numeric font-medium">
-              TRN: <strong>{PREEDHAR_COMPANY_DETAILS.trn}</strong> • Tel: {PREEDHAR_COMPANY_DETAILS.phone}
+              TRN: <strong>{PREEDHAR_COMPANY_DETAILS.trn}</strong> â€¢ Tel: {PREEDHAR_COMPANY_DETAILS.phone}
             </p>
           </div>
         </div>
@@ -366,5 +375,7 @@ export function InvoiceDetailsModal({
       </div>
 
     </DocumentViewer>
+    </>
   );
 }
+

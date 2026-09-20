@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { formatAED, formatDate } from "@/lib/utils";
 import type { PurchaseOrder } from "@/lib/data/purchase-orders-mock";
 import { PDFService } from "@/lib/pdf";
+import { PDFPreviewModal } from "@/components/ui/PDFPreviewModal";
 import {
   PREEDHAR_COMPANY_DETAILS,
   type PurchaseOrderStatus,
@@ -33,6 +34,7 @@ export function PurchaseOrderDetailsModal({
   onEdit: (po: PurchaseOrder) => void;
   onChangeStatus: (po: PurchaseOrder) => void;
 }) {
+  const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
   if (!purchaseOrder) return null;
 
   const getStatusBadge = (status: PurchaseOrderStatus) => {
@@ -52,7 +54,7 @@ export function PurchaseOrderDetailsModal({
         variant="outline"
         size="sm"
         leftIcon={<Printer className="w-3.5 h-3.5" />}
-        onClick={() => PDFService.previewPurchaseOrder(purchaseOrder)}
+        onClick={() => setPreviewUrl(PDFService.previewPurchaseOrder(purchaseOrder))}
         title="Preview / Print Purchase Order PDF"
       >
         <span className="hidden sm:inline">Preview PDF</span>
@@ -95,14 +97,21 @@ export function PurchaseOrderDetailsModal({
   );
 
   return (
-    <DocumentViewer
-      open={open}
-      onClose={() => onOpenChange(false)}
-      documentType="Purchase Order"
-      documentNumber={purchaseOrder.purchaseOrderNumber}
-      statusBadges={getStatusBadge(purchaseOrder.status)}
-      actions={toolbarActions}
-    >
+    <>
+      <PDFPreviewModal
+        open={!!previewUrl}
+        onClose={() => { URL.revokeObjectURL(previewUrl!); setPreviewUrl(null); }}
+        blobUrl={previewUrl}
+        filename={`${purchaseOrder.purchaseOrderNumber}.pdf`}
+      />
+      <DocumentViewer
+        open={open}
+        onClose={() => onOpenChange(false)}
+        documentType="Purchase Order"
+        documentNumber={purchaseOrder.purchaseOrderNumber}
+        statusBadges={getStatusBadge(purchaseOrder.status)}
+        actions={toolbarActions}
+      >
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200">
         <div className="flex items-center gap-3.5">
@@ -286,5 +295,6 @@ export function PurchaseOrderDetailsModal({
       </div>
 
     </DocumentViewer>
+    </>
   );
 }

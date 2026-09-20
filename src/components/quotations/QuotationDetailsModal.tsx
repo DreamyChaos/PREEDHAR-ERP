@@ -5,6 +5,7 @@ import Image from "next/image";
 import { DocumentViewer } from "@/components/ui/DocumentViewer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { PDFPreviewModal } from "@/components/ui/PDFPreviewModal";
 import { formatAED, formatDate } from "@/lib/utils";
 import type { Quotation } from "@/lib/data/quotations-mock";
 import { PDFService } from "@/lib/pdf";
@@ -29,6 +30,7 @@ export function QuotationDetailsModal({
   onEdit: (quotation: Quotation) => void;
   onChangeStatus: (quotation: Quotation) => void;
 }) {
+  const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
   if (!quotation) return null;
 
   const getStatusBadge = (status: Quotation["status"]) => {
@@ -52,7 +54,7 @@ export function QuotationDetailsModal({
         variant="outline"
         size="sm"
         leftIcon={<Printer className="w-3.5 h-3.5" />}
-        onClick={() => PDFService.previewQuotation(quotation)}
+        onClick={() => setPreviewUrl(PDFService.previewQuotation(quotation))}
         title="Preview / Print PDF"
       >
         <span className="hidden sm:inline">Preview PDF</span>
@@ -95,14 +97,21 @@ export function QuotationDetailsModal({
   );
 
   return (
-    <DocumentViewer
-      open={open}
-      onClose={() => onOpenChange(false)}
-      documentType="Quotation"
-      documentNumber={quotation.quotationNumber}
-      statusBadges={getStatusBadge(quotation.status)}
-      actions={toolbarActions}
-    >
+    <>
+      <PDFPreviewModal
+        open={!!previewUrl}
+        onClose={() => { URL.revokeObjectURL(previewUrl!); setPreviewUrl(null); }}
+        blobUrl={previewUrl}
+        filename={`${quotation.quotationNumber}.pdf`}
+      />
+      <DocumentViewer
+        open={open}
+        onClose={() => onOpenChange(false)}
+        documentType="Quotation"
+        documentNumber={quotation.quotationNumber}
+        statusBadges={getStatusBadge(quotation.status)}
+        actions={toolbarActions}
+      >
       {/* Document Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200">
         <div className="flex items-center gap-3.5">
@@ -266,5 +275,6 @@ export function QuotationDetailsModal({
       </div>
 
     </DocumentViewer>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import { formatDate } from "@/lib/utils";
 import type { WorkCompletionReport } from "@/lib/data/work-completion-mock";
 import { WCRPhotoGallery } from "./WCRPhotoGallery";
 import { PDFService } from "@/lib/pdf";
+import { PDFPreviewModal } from "@/components/ui/PDFPreviewModal";
 import {
   PREEDHAR_COMPANY_DETAILS,
   type WorkCompletionStatus,
@@ -34,6 +35,7 @@ export function WorkCompletionDetailsModal({
   onEdit: (report: WorkCompletionReport) => void;
   onChangeStatus: (report: WorkCompletionReport) => void;
 }) {
+  const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
   if (!report) return null;
 
   const getStatusBadge = (status: WorkCompletionStatus) => {
@@ -62,7 +64,7 @@ export function WorkCompletionDetailsModal({
         variant="outline"
         size="sm"
         leftIcon={<Printer className="w-3.5 h-3.5" />}
-        onClick={() => PDFService.previewWCR(report)}
+        onClick={() => setPreviewUrl(PDFService.previewWCR(report))}
         title="Preview / Print Work Completion Certificate PDF"
       >
         <span className="hidden sm:inline">Preview PDF</span>
@@ -105,14 +107,21 @@ export function WorkCompletionDetailsModal({
   );
 
   return (
-    <DocumentViewer
-      open={open}
-      onClose={() => onOpenChange(false)}
-      documentType="Work Completion Report"
-      documentNumber={report.reportNumber}
-      statusBadges={toolbarStatusBadges}
-      actions={toolbarActions}
-    >
+    <>
+      <PDFPreviewModal
+        open={!!previewUrl}
+        onClose={() => { URL.revokeObjectURL(previewUrl!); setPreviewUrl(null); }}
+        blobUrl={previewUrl}
+        filename={`${report.reportNumber}.pdf`}
+      />
+      <DocumentViewer
+        open={open}
+        onClose={() => onOpenChange(false)}
+        documentType="Work Completion Report"
+        documentNumber={report.reportNumber}
+        statusBadges={toolbarStatusBadges}
+        actions={toolbarActions}
+      >
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200">
         <div className="flex items-center gap-3">
@@ -130,10 +139,10 @@ export function WorkCompletionDetailsModal({
               {PREEDHAR_COMPANY_DETAILS.legalName}
             </h2>
             <p className="text-[11px] text-slate-500 font-medium">
-              {PREEDHAR_COMPANY_DETAILS.address}, {PREEDHAR_COMPANY_DETAILS.city} – UAE
+              {PREEDHAR_COMPANY_DETAILS.address}, {PREEDHAR_COMPANY_DETAILS.city} â€“ UAE
             </p>
             <p className="text-[11px] text-slate-600 font-numeric font-medium">
-              TRN: <strong>{PREEDHAR_COMPANY_DETAILS.trn}</strong> • Tel: {PREEDHAR_COMPANY_DETAILS.phone}
+              TRN: <strong>{PREEDHAR_COMPANY_DETAILS.trn}</strong> â€¢ Tel: {PREEDHAR_COMPANY_DETAILS.phone}
             </p>
           </div>
         </div>
@@ -193,7 +202,7 @@ export function WorkCompletionDetailsModal({
             {report.projectLocation}
           </p>
           <p className="text-[11px] text-slate-500 font-numeric">
-            Execution: {formatDate(report.workStartDate)} → {formatDate(report.workCompletionDate)}
+            Execution: {formatDate(report.workStartDate)} â†’ {formatDate(report.workCompletionDate)}
           </p>
         </div>
       </div>
@@ -236,7 +245,7 @@ export function WorkCompletionDetailsModal({
                   {it.description}
                 </td>
                 <td className="py-2.5 px-3 text-center border-r border-slate-200 font-numeric font-medium">
-                  {it.quantity || "—"}
+                  {it.quantity || "â€”"}
                 </td>
                 <td className="py-2.5 px-3 text-center border-r border-slate-200 text-slate-600 font-medium">
                   {it.unit || "LOT"}
@@ -307,5 +316,6 @@ export function WorkCompletionDetailsModal({
       </div>
 
     </DocumentViewer>
+    </>
   );
 }
