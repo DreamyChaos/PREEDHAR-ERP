@@ -37,11 +37,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             </div>
             <div>
               <h1 className="text-white font-bold text-[17px] leading-snug tracking-tight">
-                <span className="text-[#E07614]">PREEDHAR</span>
+                <span className="text-[#3B82F6]">PREEDHAR</span>
                 <br />
+                <span className="text-[#E07614]">
                 TECHNICAL SERVICES
                 <br />
                 CO. L.L.C.
+                </span>
               </h1>
               <p className="text-slate-500 text-[11px] font-medium tracking-widest uppercase mt-2">
                 Dubai • UAE

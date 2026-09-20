@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Image from "next/image";
@@ -124,15 +124,13 @@ export function PurchaseOrderDetailsModal({
               className="object-contain"
             />
           </div>
-          <div>
-            <h2 className="text-base font-bold tracking-tight text-[#0B1F33]">
-              {PREEDHAR_COMPANY_DETAILS.legalName}
+                    <div>
+            <h2 className="text-base font-bold tracking-tight">
+              <span className="text-[#0B1F33]">PREEDHAR</span>
+              <span className="text-[#E07614]"> TECHNICAL SERVICES CO. L.L.C.</span>
             </h2>
-            <p className="text-[11px] text-slate-500 font-medium">
-              {PREEDHAR_COMPANY_DETAILS.address}, {PREEDHAR_COMPANY_DETAILS.city} – UAE
-            </p>
-            <p className="text-[11px] text-slate-600 font-numeric font-medium">
-              TRN: <strong>{PREEDHAR_COMPANY_DETAILS.trn}</strong> • Tel: {PREEDHAR_COMPANY_DETAILS.phone}
+            <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+              Commercial Electro-Mechanical & HVAC Technical Services | Deira, Dubai, UAE
             </p>
           </div>
         </div>
@@ -298,3 +296,4 @@ export function PurchaseOrderDetailsModal({
     </>
   );
 }
+

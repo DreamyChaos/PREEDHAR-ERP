@@ -67,10 +67,10 @@ export function MobileDrawer() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tight text-white leading-tight">
+              <span className="text-sm font-bold tracking-tight text-[#3B82F6] leading-tight">
                 PREEDHAR
               </span>
-              <span className="text-[9px] font-semibold text-slate-300 tracking-wider uppercase">
+              <span className="text-[9px] font-semibold text-[#E07614] tracking-wider uppercase">
                 TECHNICAL SERVICES
               </span>
             </div>
@@ -179,3 +179,4 @@ export function MobileDrawer() {
     </div>
   );
 }
+

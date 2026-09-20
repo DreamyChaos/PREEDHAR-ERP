@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Image from "next/image";
@@ -124,12 +124,13 @@ export function QuotationDetailsModal({
               className="object-contain"
             />
           </div>
-          <div>
-            <h2 className="text-base font-bold tracking-tight text-[#0B1F33]">
-              PREEDHAR TECHNICAL SERVICES CO. L.L.C.
+                    <div>
+            <h2 className="text-base font-bold tracking-tight">
+              <span className="text-[#0B1F33]">PREEDHAR</span>
+              <span className="text-[#E07614]"> TECHNICAL SERVICES CO. L.L.C.</span>
             </h2>
-            <p className="text-[10px] text-[#2563EB] font-semibold uppercase tracking-wider">
-              Electro-Mechanical & Technical Services
+            <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+              Commercial Electro-Mechanical & HVAC Technical Services | Deira, Dubai, UAE
             </p>
           </div>
         </div>
@@ -219,7 +220,7 @@ export function QuotationDetailsModal({
                   {formatAED(item.unitPrice)}
                 </td>
                 <td className="py-2.5 px-3 border-r border-slate-200 text-right font-numeric text-slate-500">
-                  {item.discount > 0 ? formatAED(item.discount) : "—"}
+                  {item.discount > 0 ? formatAED(item.discount) : "â€”"}
                 </td>
                 <td className="py-2.5 px-3 text-right font-numeric font-semibold text-slate-900">
                   {formatAED(item.taxableAmount)}
@@ -234,8 +235,8 @@ export function QuotationDetailsModal({
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pt-4 border-t border-slate-200">
         <div className="text-[11px] text-slate-500 space-y-1 max-w-sm">
           <p className="font-semibold text-slate-700">Commercial Notes & UAE VAT:</p>
-          <p>• All prices quoted in United Arab Emirates Dirham (AED).</p>
-          <p>• Standard 5.00% VAT applied as per UAE Federal Tax Authority (FTA) regulations.</p>
+          <p>â€¢ All prices quoted in United Arab Emirates Dirham (AED).</p>
+          <p>â€¢ Standard 5.00% VAT applied as per UAE Federal Tax Authority (FTA) regulations.</p>
         </div>
 
         <div className="w-full sm:w-72 space-y-1.5 text-xs bg-slate-50 p-4 rounded-lg border border-slate-200">
@@ -278,3 +279,4 @@ export function QuotationDetailsModal({
     </>
   );
 }
+

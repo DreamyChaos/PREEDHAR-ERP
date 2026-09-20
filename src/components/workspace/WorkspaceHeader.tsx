@@ -51,7 +51,7 @@ export function WorkspaceHeader({
             </h1>
             {documentNumber && (
               <>
-                <span className="hidden sm:inline text-slate-500">•</span>
+                <span className="hidden sm:inline text-slate-500">â€¢</span>
                 <span className="text-xs sm:text-sm font-bold bg-white/10 text-white px-2 py-0.5 rounded border border-white/20 font-numeric tracking-tight truncate">
                   {documentNumber}
                 </span>
@@ -59,8 +59,16 @@ export function WorkspaceHeader({
             )}
           </div>
           {subtitle && (
-            <p className="text-[10px] sm:text-xs font-medium text-slate-400 truncate mt-0.5 uppercase tracking-wider">
-              {subtitle}
+            <p className="text-[10px] sm:text-xs font-medium truncate mt-0.5 uppercase tracking-wider">
+              {typeof subtitle === 'string' && subtitle.startsWith("PREEDHAR TECHNICAL SERVICES CO. L.L.C.") ? (
+                <>
+                  <span className="text-[#3B82F6]">PREEDHAR</span>
+                  <span className="text-[#E07614]"> TECHNICAL SERVICES CO. L.L.C.</span>
+                  <span className="text-slate-400">{subtitle.replace("PREEDHAR TECHNICAL SERVICES CO. L.L.C.", "")}</span>
+                </>
+              ) : (
+                <span className="text-slate-400">{subtitle}</span>
+              )}
             </p>
           )}
         </div>
@@ -88,3 +96,4 @@ export function WorkspaceHeader({
     </header>
   );
 }
+

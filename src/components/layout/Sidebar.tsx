@@ -61,10 +61,10 @@ export function Sidebar({ className }: { className?: string }) {
 
           {!isCollapsed && (
             <div className="flex flex-col min-w-0">
-              <span className="text-sm font-bold tracking-tight text-white leading-tight truncate">
+              <span className="text-sm font-bold tracking-tight text-[#3B82F6] leading-tight truncate">
                 PREEDHAR
               </span>
-              <span className="text-[10px] font-semibold text-slate-300 tracking-wider uppercase truncate">
+              <span className="text-[10px] font-semibold text-[#E07614] tracking-wider uppercase truncate">
                 TECHNICAL SERVICES
               </span>
             </div>
@@ -243,3 +243,4 @@ export function Sidebar({ className }: { className?: string }) {
     </aside>
   );
 }
+
