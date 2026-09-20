@@ -1,50 +1,86 @@
 import * as React from "react";
 import Image from "next/image";
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#0B1F33] flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 relative selection:bg-blue-600 selection:text-white">
-      {/* Subtle brand ambient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-80 bg-gradient-to-b from-blue-900/20 via-blue-950/10 to-transparent pointer-events-none blur-3xl" />
+    <div className="min-h-screen bg-[#060F1E] flex items-center justify-center p-4 selection:bg-orange-500 selection:text-white">
+      {/* Background grid pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+      />
 
-      {/* Main Authentication Container */}
-      <div className="w-full max-w-[440px] relative z-10 space-y-6">
-        {/* Brand Header */}
-        <div className="text-center space-y-3">
-          <div className="inline-flex w-14 h-14 bg-white rounded-xl p-2.5 shadow-md shadow-black/25 items-center justify-center border border-slate-200/20">
-            <Image
-              src="/brand/preedhar-logo.jpeg"
-              alt="PREEDHAR Logo"
-              width={40}
-              height={40}
-              className="object-contain"
-              priority
-            />
+      {/* Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] bg-orange-600/8 blur-[100px] rounded-full pointer-events-none" />
+
+      {/* Card */}
+      <div className="relative z-10 w-full max-w-[900px] min-h-[540px] flex rounded-2xl overflow-hidden shadow-2xl shadow-black/60 border border-white/5">
+
+        {/* LEFT — Brand Panel */}
+        <div className="hidden md:flex flex-col justify-between w-[42%] bg-[#0B1F33] p-10 border-r border-white/5">
+          {/* Logo + name */}
+          <div className="space-y-5">
+            <div className="w-16 h-16 bg-white rounded-xl p-2.5 shadow-lg flex items-center justify-center">
+              <Image
+                src="/brand/preedhar-logo.png"
+                alt="PREEDHAR Logo"
+                width={44}
+                height={44}
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div>
+              <h1 className="text-white font-bold text-[17px] leading-snug tracking-tight">
+                <span className="text-[#E07614]">PREEDHAR</span>
+                <br />
+                TECHNICAL SERVICES
+                <br />
+                CO. L.L.C.
+              </h1>
+              <p className="text-slate-500 text-[11px] font-medium tracking-widest uppercase mt-2">
+                Dubai • UAE
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-lg font-bold tracking-tight text-white uppercase font-sans">
-              PREEDHAR TECHNICAL SERVICES
-            </h1>
-            <p className="text-[11px] text-slate-300 font-medium uppercase tracking-widest mt-0.5">
-              CO. L.L.C. • DUBAI • UAE
+
+          {/* Middle tagline */}
+          <div className="space-y-4">
+            <div className="w-8 h-0.5 bg-[#E07614] rounded-full" />
+            <p className="text-slate-300 text-sm leading-relaxed font-medium">
+              Enterprise Operations Platform
+            </p>
+            <p className="text-slate-500 text-xs leading-relaxed">
+              Quotations · Invoices · Purchase Orders
+              <br />
+              Work Completion · Customer Management
             </p>
           </div>
-        </div>
 
-        {/* Login Card */}
-        <div className="bg-white py-8 px-6 sm:px-8 shadow-xl shadow-black/20 rounded-xl border border-[#E2E8F0]">
-          {children}
-        </div>
-
-        {/* Security Reassurance & Copyright Footer */}
-        <div className="text-center space-y-2 pt-1">
-          <p className="text-[11px] text-slate-400/80">
-            © 2026 Preedhar Technical Services Co. L.L.C. All rights reserved.
+          {/* Footer */}
+          <p className="text-slate-600 text-[10px]">
+            © 2026 Preedhar Technical Services Co. L.L.C.
           </p>
+        </div>
+
+        {/* RIGHT — Login Form */}
+        <div className="flex-1 bg-white flex flex-col justify-center px-8 sm:px-12 py-12">
+          {/* Mobile logo */}
+          <div className="flex md:hidden items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-[#0B1F33] rounded-lg p-1.5 flex items-center justify-center">
+              <Image src="/brand/preedhar-logo.png" alt="PREEDHAR" width={28} height={28} className="object-contain" />
+            </div>
+            <span className="font-bold text-[#0B1F33] text-sm tracking-tight">
+              <span className="text-[#E07614]">PREEDHAR</span> ERP
+            </span>
+          </div>
+
+          {children}
         </div>
       </div>
     </div>

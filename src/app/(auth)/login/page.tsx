@@ -41,13 +41,11 @@ export default function LoginPage() {
       if (error) {
         const msg = (error.message || "").toLowerCase();
         if (msg.includes("invalid login credentials") || msg.includes("invalid_credentials")) {
-          setErrorMessage("Invalid email address or password. Please verify and try again.");
+          setErrorMessage("Invalid email or password. Please try again.");
         } else if (msg.includes("email not confirmed")) {
-          setErrorMessage("Email address has not been confirmed yet. Please check your inbox.");
+          setErrorMessage("Email not confirmed yet. Please check your inbox.");
         } else if (msg.includes("failed to fetch") || msg.includes("network")) {
-          setErrorMessage(
-            "Unable to connect to the Supabase authentication server. Please check your network connection and ensure NEXT_PUBLIC_SUPABASE_URL is properly configured in Vercel."
-          );
+          setErrorMessage("Connection failed. Please check your network and try again.");
         } else {
           setErrorMessage(error.message);
         }
@@ -58,51 +56,43 @@ export default function LoginPage() {
     } catch (err: unknown) {
       const errStr = err instanceof Error ? err.message.toLowerCase() : String(err).toLowerCase();
       if (errStr.includes("failed to fetch") || errStr.includes("network")) {
-        setErrorMessage(
-          "Unable to connect to the Supabase authentication server. Please verify your network connection and NEXT_PUBLIC_SUPABASE_URL in Vercel settings."
-        );
+        setErrorMessage("Connection failed. Please check your network and try again.");
       } else {
-        setErrorMessage("An unexpected authentication error occurred. Please try again.");
+        setErrorMessage("An unexpected error occurred. Please try again.");
       }
     } finally {
       setIsLoading(false);
     }
   };
 
+  const inputClass =
+    "w-full h-11 pl-10 pr-4 text-sm bg-slate-50 border border-slate-200 rounded-lg text-[#0F172A] placeholder:text-slate-400 transition-all duration-150 focus:outline-none focus:bg-white focus:border-[#0B1F33] focus:ring-2 focus:ring-[#0B1F33]/10 disabled:opacity-50";
+
   return (
-    <div className="space-y-6">
-      {/* Card Header */}
-      <div className="text-center space-y-1.5">
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0F172A]">
-          Portal Sign In
-        </h2>
-        <p className="text-xs text-[#475569] leading-relaxed max-w-xs mx-auto">
-          Enter your authorized enterprise credentials to access the PREEDHAR operations platform.
-        </p>
+    <div className="space-y-7">
+      {/* Heading */}
+      <div className="space-y-1">
+        <h2 className="text-2xl font-bold tracking-tight text-[#0B1F33]">Welcome back</h2>
+        <p className="text-sm text-slate-500">Sign in to your operations portal</p>
       </div>
 
-      {/* Inline Error Alert */}
+      {/* Error */}
       {errorMessage && (
         <div className="flex items-start gap-2.5 p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs animate-in fade-in duration-200">
-          <AlertCircle className="w-4 h-4 text-[#B91C1C] shrink-0 mt-0.5" />
-          <div className="flex-1 font-medium leading-relaxed">{errorMessage}</div>
+          <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+          <span className="font-medium leading-relaxed">{errorMessage}</span>
         </div>
       )}
 
-      {/* Credentials Form */}
+      {/* Form */}
       <form onSubmit={handleSignIn} className="space-y-4">
-        {/* Email Address Field */}
-        <div className="space-y-1.5 text-left">
-          <label
-            htmlFor="login-email"
-            className="block text-xs font-semibold text-[#334155] tracking-wide uppercase"
-          >
+        {/* Email */}
+        <div className="space-y-1.5">
+          <label htmlFor="login-email" className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
             Email Address
           </label>
-          <div className="relative flex items-center">
-            <div className="absolute left-3.5 flex items-center pointer-events-none text-[#64748B]">
-              <Mail className="w-4 h-4" />
-            </div>
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
             <input
               id="login-email"
               type="email"
@@ -112,60 +102,53 @@ export default function LoginPage() {
               placeholder="name@preedhar.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-11 pl-10 pr-3.5 text-sm bg-white border border-[#E2E8F0] rounded-lg text-[#0F172A] placeholder:text-slate-400 transition-colors duration-150 focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15 disabled:bg-slate-50 disabled:text-slate-400"
+              className={inputClass}
             />
           </div>
         </div>
 
-        {/* Password Field */}
-        <div className="space-y-1.5 text-left">
-          <label
-            htmlFor="login-password"
-            className="block text-xs font-semibold text-[#334155] tracking-wide uppercase"
-          >
+        {/* Password */}
+        <div className="space-y-1.5">
+          <label htmlFor="login-password" className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
             Password
           </label>
-          <div className="relative flex items-center">
-            <div className="absolute left-3.5 flex items-center pointer-events-none text-[#64748B]">
-              <Lock className="w-4 h-4" />
-            </div>
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
             <input
               id="login-password"
               type="password"
               autoComplete="current-password"
               required
               disabled={isLoading}
-              placeholder="••••••••••••"
+              placeholder="••••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full h-11 pl-10 pr-3.5 text-sm bg-white border border-[#E2E8F0] rounded-lg text-[#0F172A] placeholder:text-slate-400 transition-colors duration-150 focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15 disabled:bg-slate-50 disabled:text-slate-400"
+              className={inputClass}
             />
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div className="pt-2">
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-11 inline-flex items-center justify-center font-semibold text-sm rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] active:bg-[#1E40AF] text-white shadow-sm transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-          >
-            {isLoading ? (
-              <span className="inline-flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Signing in...
-              </span>
-            ) : (
-              "Sign In"
-            )}
-          </button>
-        </div>
+        {/* Submit */}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full h-11 mt-2 inline-flex items-center justify-center gap-2 font-semibold text-sm rounded-lg bg-[#0B1F33] hover:bg-[#0F2940] active:scale-[0.99] text-white shadow-sm transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#0B1F33]/40 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Signing in…
+            </>
+          ) : (
+            "Sign In →"
+          )}
+        </button>
       </form>
 
-      {/* Security Reassurance Indicator */}
-      <div className="pt-3 border-t border-[#E2E8F0] flex items-center justify-center gap-1.5 text-[11px] text-[#64748B]">
-        <ShieldCheck className="w-3.5 h-3.5 text-[#15803D]" />
-        <span>Authorized Personnel Only • Secure Portal</span>
+      {/* Footer */}
+      <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400 pt-2 border-t border-slate-100">
+        <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+        <span>Authorized Personnel Only · Secure Portal</span>
       </div>
     </div>
   );
