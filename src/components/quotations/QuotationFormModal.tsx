@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/Button";
 import { toast } from "@/components/ui/Toast";
 import { LineItemsEditor } from "./LineItemsEditor";
 import { formatAED, generateUUID } from "@/lib/utils";
+import { getNextDocNumber } from "@/lib/utils/doc-numbering";
 import { SearchableCustomerSelector } from "@/components/customers/SearchableCustomerSelector";
 import {
   calculateQuotationTotals,
@@ -100,9 +101,11 @@ export function QuotationFormModal({
       setItems(quotationToEdit.items || []);
     } else {
       const defaultCust = customers[0];
-      const randomNum = Math.floor(Math.random() * 800) + 100;
+      getNextDocNumber("quotation").then((nextNum) => {
+        setFormData((prev) => ({ ...prev, quotationNumber: nextNum }));
+      });
       setFormData({
-        quotationNumber: `PTS-Q2026-${randomNum}`,
+        quotationNumber: "Generating...",
         customerId: defaultCust?.id || "",
         customerName: defaultCust?.companyName || "",
         clientPrintedName: defaultCust?.companyName || "",

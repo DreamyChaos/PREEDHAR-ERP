@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import {
@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/Button";
 import { toast } from "@/components/ui/Toast";
 import { LineItemsEditor } from "@/components/quotations/LineItemsEditor";
 import { formatAED, generateUUID } from "@/lib/utils";
+import { getNextDocNumber } from "@/lib/utils/doc-numbering";
 import { SearchableCustomerSelector } from "@/components/customers/SearchableCustomerSelector";
 import {
   calculateQuotationTotals,
@@ -121,10 +122,11 @@ export function PurchaseOrderFormModal({
     } else {
       const defaultCust = customers[0];
       const today = getTodayStr();
-      const randomSeq = Math.floor(Math.random() * 800) + 100;
-
+      getNextDocNumber("purchase_order").then((nextNum) => {
+        setFormData((prev) => ({ ...prev, purchaseOrderNumber: nextNum }));
+      });
       setFormData({
-        purchaseOrderNumber: `PTS-PO-2026-${randomSeq}`,
+        purchaseOrderNumber: "Generating...",
         customerId: defaultCust?.id || "",
         customerName: defaultCust?.companyName || "",
         clientPrintedName: defaultCust?.companyName || "",

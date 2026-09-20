@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import {
@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { toast } from "@/components/ui/Toast";
 import { generateUUID } from "@/lib/utils";
+import { getNextDocNumber } from "@/lib/utils/doc-numbering";
 import type { Customer, CustomerType, CustomerStatus } from "@/lib/data/customers-mock";
 import { Building2, User, MapPin, Receipt, Save, ShieldCheck } from "lucide-react";
 
@@ -118,11 +119,12 @@ export function CustomerFormModal({
 
     try {
       const now = new Date().toISOString();
-      const newCustomer: Customer = {
-        id: customerToEdit ? customerToEdit.id : generateUUID(),
-        customerCode: customerToEdit
+      const customerCode = customerToEdit
           ? customerToEdit.customerCode
-          : `CUS-2026-${String(Math.floor(Math.random() * 900) + 100)}`,
+          : await getNextDocNumber("customer");
+        const newCustomer: Customer = {
+          id: customerToEdit ? customerToEdit.id : generateUUID(),
+          customerCode,
         companyName: formData.companyName.trim(),
         customerType: formData.customerType,
         contactPerson: formData.contactPerson.trim(),

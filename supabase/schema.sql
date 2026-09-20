@@ -243,19 +243,17 @@ alter table work_completion_items   enable row level security;
 alter table wcr_photos              enable row level security;
 alter table company_settings        enable row level security;
 
--- Allow all authenticated users to read/write all tables
-do $$
-declare
-  t text;
-begin
-  foreach t in array array[
-    'profiles','customers','quotations','quotation_items',
-    'invoices','invoice_items','purchase_orders','purchase_order_items',
-    'work_completion_reports','work_completion_items','wcr_photos','company_settings'
-  ] loop
-    execute format('
-      create policy if not exists "auth_all_%s" on %I
-      for all to authenticated using (true) with check (true);
-    ', t, t);
-  end loop;
-end$$;
+-- Allow all authenticated users full read/write on all tables
+create policy "auth_all_profiles"                on profiles                for all to authenticated using (true) with check (true);
+create policy "auth_all_customers"               on customers               for all to authenticated using (true) with check (true);
+create policy "auth_all_quotations"              on quotations              for all to authenticated using (true) with check (true);
+create policy "auth_all_quotation_items"         on quotation_items         for all to authenticated using (true) with check (true);
+create policy "auth_all_invoices"                on invoices                for all to authenticated using (true) with check (true);
+create policy "auth_all_invoice_items"           on invoice_items           for all to authenticated using (true) with check (true);
+create policy "auth_all_purchase_orders"         on purchase_orders         for all to authenticated using (true) with check (true);
+create policy "auth_all_purchase_order_items"    on purchase_order_items    for all to authenticated using (true) with check (true);
+create policy "auth_all_wcr"                     on work_completion_reports for all to authenticated using (true) with check (true);
+create policy "auth_all_wcr_items"               on work_completion_items   for all to authenticated using (true) with check (true);
+create policy "auth_all_wcr_photos"              on wcr_photos              for all to authenticated using (true) with check (true);
+create policy "auth_all_company_settings"        on company_settings        for all to authenticated using (true) with check (true);
+

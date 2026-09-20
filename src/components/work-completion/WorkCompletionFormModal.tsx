@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import {
@@ -16,6 +16,7 @@ import { toast } from "@/components/ui/Toast";
 import { WorkItemEditor } from "./WorkItemEditor";
 import { WCRPhotoUploader } from "./WCRPhotoUploader";
 import { generateUUID } from "@/lib/utils";
+import { getNextDocNumber } from "@/lib/utils/doc-numbering";
 import { SearchableCustomerSelector } from "@/components/customers/SearchableCustomerSelector";
 import type { WCRPhotoAttachment } from "@/lib/storage/types";
 import {
@@ -160,10 +161,11 @@ export function WorkCompletionFormModal({
     } else {
       const defaultCust = customers[0];
       const today = getTodayStr();
-      const randomSeq = Math.floor(Math.random() * 800) + 100;
-
+      getNextDocNumber("work_completion").then((nextNum) => {
+        setFormData((prev) => ({ ...prev, reportNumber: nextNum }));
+      });
       setFormData({
-        reportNumber: `PTS-WCR-2026-${randomSeq}`,
+        reportNumber: "Generating...",
         customerId: defaultCust?.id || "",
         customerName: defaultCust?.companyName || "",
         clientPrintedName: defaultCust?.companyName || "",

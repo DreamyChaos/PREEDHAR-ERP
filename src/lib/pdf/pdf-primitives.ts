@@ -106,18 +106,36 @@ export function renderOfficialHeader(
   }
 
   const textX = startX + logoSize + 5;
+  const rightEdge = pageWidth - 14; // leave 14mm margin on right
 
   if (showAddressInHeader) {
-    // Invoice: 3 lines
-    drawTwoToneCompanyName(doc, textX, 14, 14);
+    // Invoice: full 3 lines — name fills right
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(...PDF_COLORS.primaryNavy);
+    doc.text('PREEDHAR', textX, 14);
+    const orangeW = doc.getTextWidth('PREEDHAR');
+    doc.setTextColor(...PDF_COLORS.brandOrange);
+    doc.text(' TECHNICAL SERVICES CO. L.L.C.', textX + orangeW, 14);
+    doc.setTextColor(...PDF_COLORS.primaryNavy);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
     doc.setTextColor(...PDF_COLORS.textMuted);
     doc.text(`${comp.address} • Mob: ${comp.phone} • Email: ${comp.email}`, textX, 20);
     doc.text(`TRN: ${comp.trn} • ${comp.tagline}`, textX, 25);
   } else {
-    // Quotation/PO/WCR: just name
-    drawTwoToneCompanyName(doc, textX, 20, 15);
+    // Quotation/PO/WCR — large name fills the full right half
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(...PDF_COLORS.primaryNavy);
+    doc.text('PREEDHAR', textX, 18);
+    const ow = doc.getTextWidth('PREEDHAR');
+    doc.setTextColor(...PDF_COLORS.brandOrange);
+    doc.text(' TECHNICAL SERVICES CO. L.L.C.', textX + ow, 18);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(...PDF_COLORS.textMuted);
+    doc.text('Commercial Electro-Mechanical & HVAC Technical Services | Deira, Dubai, UAE', textX, 24);
   }
 
   // Thin navy divider
