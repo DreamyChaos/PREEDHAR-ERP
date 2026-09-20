@@ -72,14 +72,14 @@ export function DataTable<T>({
       <div className="w-full overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-[#E2E8F0] bg-[#F8FAFC] text-[11px] font-bold uppercase tracking-wider text-[#475569]">
+            <tr className="border-b border-[#1A385C] bg-[#0B1F33] text-[11px] font-bold uppercase tracking-wider text-slate-300">
               {onSelectKey && (
                 <th className="w-10 px-4 py-3 text-center">
                   <input
                     type="checkbox"
                     checked={isAllSelected}
                     onChange={(e) => onSelectAll?.(e.target.checked)}
-                    className="w-3.5 h-3.5 text-[#2563EB] rounded border-slate-300 focus:ring-[#2563EB]"
+                    className="w-3.5 h-3.5 accent-[#E07614] rounded border-slate-600"
                   />
                 </th>
               )}
@@ -92,7 +92,7 @@ export function DataTable<T>({
                       "px-4 py-3 whitespace-nowrap",
                       col.align === "right" && "text-right",
                       col.align === "center" && "text-center",
-                      col.sortable && "cursor-pointer select-none hover:bg-slate-100 transition-colors",
+                      col.sortable && "cursor-pointer select-none hover:bg-white/5 transition-colors",
                       col.headerClassName
                     )}
                     onClick={() => col.sortable && onSort?.(col.key)}
@@ -106,12 +106,12 @@ export function DataTable<T>({
                     >
                       <span>{col.header}</span>
                       {col.sortable && (
-                        <span className="text-slate-400">
+                        <span className="text-slate-500">
                           {isSorted ? (
                             sortDirection === "asc" ? (
-                              <ChevronUp className="w-3.5 h-3.5 text-[#2563EB]" />
+                              <ChevronUp className="w-3.5 h-3.5 text-[#E07614]" />
                             ) : (
-                              <ChevronDown className="w-3.5 h-3.5 text-[#2563EB]" />
+                              <ChevronDown className="w-3.5 h-3.5 text-[#E07614]" />
                             )
                           ) : (
                             <ChevronDown className="w-3.5 h-3.5 opacity-30" />

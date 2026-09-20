@@ -50,7 +50,7 @@ export function Sidebar({ className }: { className?: string }) {
         >
           <div className="w-10 h-10 bg-white rounded-lg p-1.5 flex items-center justify-center shrink-0 shadow-sm border border-slate-200/30">
             <Image
-              src="/brand/preedhar-logo.jpeg"
+              src="/brand/preedhar-logo.png"
               alt="PREEDHAR Logo"
               width={32}
               height={32}
@@ -131,14 +131,14 @@ export function Sidebar({ className }: { className?: string }) {
                   >
                     {/* Active Left Indicator */}
                     {isActive && (
-                      <span className="absolute left-0 top-2 bottom-2 w-1 bg-[#2563EB] rounded-r-full" />
+                      <span className="absolute left-0 top-2 bottom-2 w-[3px] bg-[#E07614] rounded-r-full" />
                     )}
 
                     <Icon
                       className={cn(
                         "w-4 h-4 shrink-0 transition-colors",
                         isActive
-                          ? "text-[#60A5FA]"
+                          ? "text-[#E07614]"
                           : "text-slate-400 group-hover:text-slate-200"
                       )}
                     />

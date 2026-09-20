@@ -59,7 +59,7 @@ export function MobileDrawer() {
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-white rounded-lg p-1.5 flex items-center justify-center shrink-0 shadow-sm">
               <Image
-                src="/brand/preedhar-logo.jpeg"
+                src="/brand/preedhar-logo.png"
                 alt="PREEDHAR Logo"
                 width={28}
                 height={28}

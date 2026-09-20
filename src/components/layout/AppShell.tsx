@@ -24,7 +24,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return (
       <div className="min-h-screen bg-[#0B1F33] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#E07614] border-t-transparent rounded-full animate-spin" />
           <p className="text-xs font-semibold text-slate-300">
             Verifying session...
           </p>
@@ -38,11 +38,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col antialiased">
+    <div className="min-h-screen bg-[#F4F6F9] flex flex-col antialiased">
       {/* Accessible Skip Link */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#2563EB] focus:text-white focus:rounded-md focus:font-bold focus:shadow-lg focus:outline-none"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#0B1F33] focus:text-white focus:rounded-md focus:font-bold focus:shadow-lg focus:outline-none"
       >
         Skip to main content
       </a>
