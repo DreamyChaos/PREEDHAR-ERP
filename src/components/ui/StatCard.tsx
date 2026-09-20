@@ -33,13 +33,13 @@ export function StatCard({
       )}
     >
       {variant === "orange" && (
-        <div className="absolute top-0 left-0 w-full h-[3px] bg-[#E07614]" />
+        <div className="absolute top-0 left-0 h-full w-[3px] bg-[#E07614]" />
       )}
       {variant === "navy" && (
-        <div className="absolute top-0 left-0 w-full h-[3px] bg-[#0B1F33]" />
+        <div className="absolute top-0 left-0 h-full w-[3px] bg-[#0B1F33]" />
       )}
       {variant === "default" && (
-        <div className="absolute top-0 left-0 w-full h-[3px] bg-slate-200" />
+        <div className="absolute top-0 left-0 h-full w-[3px] bg-slate-200" />
       )}
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs font-medium text-slate-500 leading-tight">{title}</span>
