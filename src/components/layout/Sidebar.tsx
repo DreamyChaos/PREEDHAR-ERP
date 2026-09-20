@@ -99,16 +99,16 @@ export function Sidebar({ className }: { className?: string }) {
       )}
 
       {/* Navigation Groups */}
-      <div className="flex-1 overflow-y-auto py-4 px-2.5 space-y-6">
-        {navGroups.map((group) => (
-          <div key={group.group} className="space-y-1">
-            {!isCollapsed && (
-              <h4 className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+      <div className="flex-1 overflow-y-auto py-3 px-2 space-y-1">
+        {navGroups.map((group, groupIdx) => (
+          <div key={group.group}>
+            {/* Group label (expanded) or thin divider (collapsed, skip first) */}
+            {!isCollapsed ? (
+              <h4 className="px-3 pt-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                 {group.group}
               </h4>
-            )}
-            {isCollapsed && (
-              <div className="h-px bg-[#1A385C] mx-2 my-2" />
+            ) : (
+              groupIdx > 0 && <div className="h-px bg-[#1A385C]/60 mx-3 my-2" />
             )}
 
             <nav className="space-y-0.5">
@@ -126,7 +126,7 @@ export function Sidebar({ className }: { className?: string }) {
                       isActive
                         ? "bg-[#1A385C] text-white font-semibold shadow-xs"
                         : "text-slate-300 hover:text-white hover:bg-[#112843]/60",
-                      isCollapsed && "justify-center px-0 py-2.5"
+                      isCollapsed && "justify-center px-0 py-2.5 w-full"
                     )}
                   >
                     {/* Active Left Indicator */}
@@ -136,7 +136,7 @@ export function Sidebar({ className }: { className?: string }) {
 
                     <Icon
                       className={cn(
-                        "w-4 h-4 shrink-0 transition-colors",
+                        "w-[18px] h-[18px] shrink-0 transition-colors",
                         isActive
                           ? "text-[#E07614]"
                           : "text-slate-400 group-hover:text-slate-200"
