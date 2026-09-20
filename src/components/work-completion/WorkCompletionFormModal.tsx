@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import {
@@ -450,7 +450,7 @@ export function WorkCompletionFormModal({
     <EnterpriseWorkspace open={open} onClose={() => onOpenChange(false)}>
       <WorkspaceHeader
         title={isEditing ? "Edit Work Completion Report" : "Create Work Completion Report (WCR)"}
-        subtitle="PREEDHAR TECHNICAL SERVICES CO. L.L.C. • Site Execution & Handover Sign-Off"
+        subtitle="PREEDHAR TECHNICAL SERVICES CO. L.L.C. â€¢ Site Execution & Handover Sign-Off"
         documentNumber={formData.reportNumber}
         onClose={() => onOpenChange(false)}
         actions={
@@ -475,6 +475,7 @@ export function WorkCompletionFormModal({
                 <div className="sm:col-span-3 bg-slate-50 p-3.5 rounded-md border border-slate-200">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Select
+                      allowCustom
                       label="Reference Purchase Order (Optional)"
                       value={formData.purchaseOrderId}
                       onChange={(e) => handlePurchaseOrderSelect(e.target.value)}
@@ -482,7 +483,7 @@ export function WorkCompletionFormModal({
                         { value: "", label: "-- None (Direct Site Execution) --" },
                         ...purchaseOrders.map((p) => ({
                           value: p.id,
-                          label: `${p.purchaseOrderNumber} — ${p.customerName}`,
+                          label: `${p.purchaseOrderNumber} â€” ${p.customerName}`,
                         })),
                       ]}
                     />
@@ -495,7 +496,7 @@ export function WorkCompletionFormModal({
                         { value: "", label: "-- None (Direct Requisition) --" },
                         ...quotations.map((q) => ({
                           value: q.id,
-                          label: `${q.quotationNumber} — ${q.customerName}`,
+                          label: `${q.quotationNumber} â€” ${q.customerName}`,
                         })),
                       ]}
                     />

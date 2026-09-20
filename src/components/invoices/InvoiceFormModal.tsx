@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import {
@@ -357,7 +357,7 @@ export function InvoiceFormModal({
     <EnterpriseWorkspace open={open} onClose={() => onOpenChange(false)}>
       <WorkspaceHeader
         title={isEditing ? "Edit Tax Invoice" : "Create Commercial Tax Invoice"}
-        subtitle="PREEDHAR TECHNICAL SERVICES CO. L.L.C. • UAE VAT Commercial Invoicing"
+        subtitle="PREEDHAR TECHNICAL SERVICES CO. L.L.C. â€¢ UAE VAT Commercial Invoicing"
         documentNumber={formData.invoiceNumber}
         onClose={() => onOpenChange(false)}
         actions={
@@ -381,6 +381,7 @@ export function InvoiceFormModal({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-3 bg-slate-50 p-3.5 rounded-md border border-slate-200">
                   <Select
+                    allowCustom
                     label="Reference Existing Quotation (Optional)"
                     value={formData.quotationId}
                     onChange={(e) => handleQuotationSelect(e.target.value)}
@@ -388,7 +389,7 @@ export function InvoiceFormModal({
                       { value: "", label: "-- None (Direct Commercial Invoice) --" },
                       ...quotations.map((q) => ({
                         value: q.id,
-                        label: `${q.quotationNumber} — ${q.customerName} (${formatAED(q.grandTotal)})`,
+                        label: `${q.quotationNumber} â€” ${q.customerName} (${formatAED(q.grandTotal)})`,
                       })),
                     ]}
                   />

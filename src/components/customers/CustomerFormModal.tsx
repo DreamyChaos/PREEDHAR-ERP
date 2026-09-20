@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import {
@@ -158,7 +158,7 @@ export function CustomerFormModal({
     <EnterpriseWorkspace open={open} onClose={() => onOpenChange(false)}>
       <WorkspaceHeader
         title={isEditing ? "Edit Customer" : "Register New Customer"}
-        subtitle="PREEDHAR TECHNICAL SERVICES CO. L.L.C. • Client Database"
+        subtitle="PREEDHAR TECHNICAL SERVICES CO. L.L.C. â€¢ Client Database"
         documentNumber={customerToEdit?.customerCode}
         onClose={() => onOpenChange(false)}
         actions={
@@ -192,6 +192,7 @@ export function CustomerFormModal({
                 </div>
 
                 <Select
+                  allowCustom
                   label="Customer Type"
                   required
                   value={formData.customerType}

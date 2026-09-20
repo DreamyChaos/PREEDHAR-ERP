@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import {
@@ -330,7 +330,7 @@ export function PurchaseOrderFormModal({
     <EnterpriseWorkspace open={open} onClose={() => onOpenChange(false)}>
       <WorkspaceHeader
         title={isEditing ? "Edit Purchase Order" : "Create Purchase Order"}
-        subtitle="PREEDHAR TECHNICAL SERVICES CO. L.L.C. • Materials & Services Procurement"
+        subtitle="PREEDHAR TECHNICAL SERVICES CO. L.L.C. â€¢ Materials & Services Procurement"
         documentNumber={formData.purchaseOrderNumber}
         onClose={() => onOpenChange(false)}
         actions={
@@ -354,6 +354,7 @@ export function PurchaseOrderFormModal({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-3 bg-slate-50 p-3.5 rounded-md border border-slate-200">
                   <Select
+                    allowCustom
                     label="Reference Existing Quotation (Optional)"
                     value={formData.quotationId}
                     onChange={(e) => handleQuotationSelect(e.target.value)}
@@ -361,7 +362,7 @@ export function PurchaseOrderFormModal({
                       { value: "", label: "-- None (Direct Purchase Order) --" },
                       ...quotations.map((q) => ({
                         value: q.id,
-                        label: `${q.quotationNumber} — ${q.customerName} (${formatAED(q.grandTotal)})`,
+                        label: `${q.quotationNumber} â€” ${q.customerName} (${formatAED(q.grandTotal)})`,
                       })),
                     ]}
                   />

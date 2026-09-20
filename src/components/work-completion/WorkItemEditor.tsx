@@ -128,6 +128,7 @@ export function WorkItemEditor({
 
               <div className="sm:col-span-2">
                 <Select
+                  allowCustom
                   label="Unit"
                   value={item.unit || "NOS"}
                   onChange={(e) =>
@@ -139,6 +140,7 @@ export function WorkItemEditor({
 
               <div className="sm:col-span-2">
                 <Select
+                  allowCustom
                   label="Status"
                   value={item.status}
                   onChange={(e) =>

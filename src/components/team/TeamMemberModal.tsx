@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import {
@@ -185,6 +185,8 @@ export function TeamMemberModal({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <Select
+                allowCustom
+                allowCustom
                 label="Department"
                 value={formData.department}
                 onChange={(e) =>
