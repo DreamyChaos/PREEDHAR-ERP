@@ -4,6 +4,7 @@ export interface WCRPhotoAttachment {
   fileName: string;
   storagePath: string;
   url: string; // Base64 or signed/public URL
+  dataUrl?: string; // Compressed base64 string for PDFs
   mimeType: string;
   fileSize: number; // In bytes
   caption?: string;

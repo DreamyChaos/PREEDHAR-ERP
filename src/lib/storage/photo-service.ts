@@ -74,7 +74,10 @@ export const PhotoStorageService = {
     const storagePath = `work-completion-reports/${reportId}/${photoId}-${cleanName}`;
 
     try {
-      const dataUrl = await fileToDataUrl(file);
+      // Create compressed base64 for PDF rendering directly
+      const { compressImage } = await import("@/lib/utils/image-compression");
+      const compressedDataUrl = await compressImage(file, 800, 0.7);
+      
       const supabase = createClient();
 
       // Attempt upload to Supabase Storage bucket
@@ -85,7 +88,7 @@ export const PhotoStorageService = {
           upsert: true,
         });
 
-      let finalUrl = dataUrl;
+      let finalUrl = compressedDataUrl;
       let isLive = false;
 
       if (!uploadError && uploadData) {
@@ -106,6 +109,7 @@ export const PhotoStorageService = {
         fileName: file.name,
         storagePath,
         url: finalUrl,
+        dataUrl: compressedDataUrl, // Guaranteed accessible synchronous base64
         mimeType: file.type,
         fileSize: file.size,
         caption: caption?.trim() || undefined,
@@ -121,13 +125,15 @@ export const PhotoStorageService = {
     } catch {
       // Graceful fallback for local development or disconnected storage
       try {
-        const dataUrl = await fileToDataUrl(file);
+        const { compressImage } = await import("@/lib/utils/image-compression");
+        const compressedDataUrl = await compressImage(file, 800, 0.7);
         const photoAttachment: WCRPhotoAttachment = {
           id: photoId,
           reportId,
           fileName: file.name,
           storagePath,
-          url: dataUrl,
+          url: compressedDataUrl,
+          dataUrl: compressedDataUrl,
           mimeType: file.type,
           fileSize: file.size,
           caption: caption?.trim() || undefined,

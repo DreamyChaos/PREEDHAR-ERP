@@ -356,7 +356,6 @@ export function PurchaseOrderFormModal({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-3 bg-slate-50 p-3.5 rounded-md border border-slate-200">
                   <Select
-                    allowCustom
                     label="Reference Existing Quotation (Optional)"
                     value={formData.quotationId}
                     onChange={(e) => handleQuotationSelect(e.target.value)}

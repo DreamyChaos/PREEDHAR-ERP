@@ -477,7 +477,6 @@ export function WorkCompletionFormModal({
                 <div className="sm:col-span-3 bg-slate-50 p-3.5 rounded-md border border-slate-200">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Select
-                      allowCustom
                       label="Reference Purchase Order (Optional)"
                       value={formData.purchaseOrderId}
                       onChange={(e) => handlePurchaseOrderSelect(e.target.value)}
