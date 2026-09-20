@@ -115,27 +115,42 @@ export function WorkCompletionFormModal({
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   React.useEffect(() => {
-        if (reportToEdit) {
+            if (reportToEdit) {
       setFormData({
         reportNumber: reportToEdit.reportNumber,
         customerId: reportToEdit.customerId,
         customerName: reportToEdit.customerName,
-        quotationId: reportToEdit.quotationId || "",
-        quotationNumber: reportToEdit.quotationNumber || "",
+        clientPrintedName: reportToEdit.clientPrintedName || "",
+        attention: reportToEdit.attention || "",
+        customerTrn: reportToEdit.customerTrn || "",
         purchaseOrderId: reportToEdit.purchaseOrderId || "",
         purchaseOrderNumber: reportToEdit.purchaseOrderNumber || "",
+        quotationId: reportToEdit.quotationId || "",
+        quotationNumber: reportToEdit.quotationNumber || "",
         reportDate: reportToEdit.reportDate,
+        workStartDate: reportToEdit.workStartDate,
+        workCompletionDate: reportToEdit.workCompletionDate,
+        subject: reportToEdit.subject,
         projectName: reportToEdit.projectName,
         projectLocation: reportToEdit.projectLocation,
-        scopeOfWork: reportToEdit.scopeOfWork || "",
+        workDescription: reportToEdit.workDescription || "",
+        completionPercentage: reportToEdit.completionPercentage,
         observations: reportToEdit.observations || "",
-        afterWorkNotes: reportToEdit.afterWorkNotes || "",
-        remarks: reportToEdit.remarks || "",
+        materialsUsed: reportToEdit.materialsUsed || "",
+        engineerInCharge: reportToEdit.engineerInCharge,
+        clientRemarks: reportToEdit.clientRemarks || "",
+        clientRepName: reportToEdit.clientAcknowledgement?.representativeName || "",
+        clientDesignation: reportToEdit.clientAcknowledgement?.designation || "",
+        clientContactPhone: reportToEdit.clientAcknowledgement?.contactPhone || "",
         status: reportToEdit.status,
       });
+      setItems(reportToEdit.items || []);
       setPhotos(reportToEdit.photos || []);
     } else if (initialData) {
       setFormData(prev => ({ ...prev, ...initialData }));
+      if (initialData.items) {
+        setItems(initialData.items);
+      }
       if (initialData.photos) {
         setPhotos(initialData.photos);
       }
@@ -787,5 +802,6 @@ export function WorkCompletionFormModal({
     </EnterpriseWorkspace>
   );
 }
+
 
 
