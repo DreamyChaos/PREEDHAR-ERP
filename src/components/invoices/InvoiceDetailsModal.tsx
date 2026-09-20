@@ -105,7 +105,10 @@ export function InvoiceDetailsModal({
         variant="outline"
         size="sm"
         leftIcon={<CreditCard className="w-3.5 h-3.5 text-emerald-600" />}
-        onClick={() => onUpdatePayment(invoice)}
+        onClick={() => {
+          onOpenChange(false);
+          setTimeout(() => onUpdatePayment(invoice), 80);
+        }}
       >
         <span className="hidden md:inline">Record Payment</span>
         <span className="md:hidden">Payment</span>
