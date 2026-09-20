@@ -13,6 +13,7 @@ import {
   type PurchaseOrderFilters,
 } from "@/components/purchase-orders/PurchaseOrderToolbar";
 import { PurchaseOrderTable } from "@/components/purchase-orders/PurchaseOrderTable";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { PurchaseOrderFormModal } from "@/components/purchase-orders/PurchaseOrderFormModal";
 import { PurchaseOrderDetailsModal } from "@/components/purchase-orders/PurchaseOrderDetailsModal";
 import { PurchaseOrderStatusModal } from "@/components/purchase-orders/PurchaseOrderStatusModal";
@@ -200,11 +201,18 @@ export default function PurchaseOrdersPage() {
   };
 
   // Change Status Action
-  const handleDelete = async (po: PurchaseOrder) => {
-    if (!window.confirm(`Are you sure you want to delete purchase order ${po.poNumber}?`)) return;
-    await PurchaseOrdersRepository.delete(po.id);
-    setPurchaseOrders((prev) => prev.filter((p) => p.id !== po.id));
-    toast.success(`Purchase Order ${po.poNumber} deleted`);
+  const [itemToDelete, setItemToDelete] = React.useState<PurchaseOrder | null>(null);
+
+  const handleDeleteRequest = (po: PurchaseOrder) => {
+    setItemToDelete(po);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    await PurchaseOrdersRepository.delete(itemToDelete.id);
+    setPurchaseOrders((prev) => prev.filter((p) => p.id !== itemToDelete.id));
+    toast.success(`Purchase Order ${itemToDelete.poNumber} deleted`);
+    setItemToDelete(null);
   };
 
   const handleOpenStatusModal = (po: PurchaseOrder) => {
@@ -286,7 +294,7 @@ export default function PurchaseOrdersPage() {
         onView={handleViewDetails}
         onEdit={handleOpenEdit}
         onChangeStatus={handleOpenStatusModal}
-        onDelete={handleDelete}
+        onDelete={handleDeleteRequest}
       />
 
       {/* Create / Edit Form Modal */}
@@ -314,6 +322,15 @@ export default function PurchaseOrdersPage() {
         onOpenChange={setIsStatusModalOpen}
         purchaseOrder={poForStatus}
         onSave={handleStatusChange}
+      />
+
+      <ConfirmDialog
+        open={itemToDelete !== null}
+        onOpenChange={(open) => !open && setItemToDelete(null)}
+        title="Delete Purchase Order"
+        description={`Are you sure you want to permanently delete PO ${itemToDelete?.poNumber}? This action cannot be undone.`}
+        confirmLabel="Delete Document"
+        onConfirm={confirmDelete}
       />
     </div>
   );

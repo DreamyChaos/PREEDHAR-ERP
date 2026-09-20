@@ -13,6 +13,7 @@ import {
   type QuotationFilters,
 } from "@/components/quotations/QuotationToolbar";
 import { QuotationTable } from "@/components/quotations/QuotationTable";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { QuotationFormModal } from "@/components/quotations/QuotationFormModal";
 import { QuotationDetailsModal } from "@/components/quotations/QuotationDetailsModal";
 import { QuotationStatusModal } from "@/components/quotations/QuotationStatusModal";
@@ -198,12 +199,19 @@ export default function QuotationsPage() {
     toast.success(`Quotation status updated to ${newStatus}`);
   };
 
+  const [itemToDelete, setItemToDelete] = React.useState<Quotation | null>(null);
+
   // Delete Action
-  const handleDelete = async (quote: Quotation) => {
-    if (!window.confirm(`Are you sure you want to delete quotation ${quote.quotationNumber}?`)) return;
-    await QuotationsRepository.delete(quote.id);
-    setQuotations((prev) => prev.filter((q) => q.id !== quote.id));
-    toast.success(`Quotation ${quote.quotationNumber} deleted`);
+  const handleDeleteRequest = (quote: Quotation) => {
+    setItemToDelete(quote);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    await QuotationsRepository.delete(itemToDelete.id);
+    setQuotations((prev) => prev.filter((q) => q.id !== itemToDelete.id));
+    toast.success(`Quotation ${itemToDelete.quotationNumber} deleted`);
+    setItemToDelete(null);
   };
 
   const customersList = React.useMemo(() => {
@@ -251,7 +259,7 @@ export default function QuotationsPage() {
         onView={handleViewDetails}
         onEdit={handleOpenEdit}
         onChangeStatus={handleOpenStatusModal}
-        onDelete={handleDelete}
+        onDelete={handleDeleteRequest}
       />
 
       {/* Create / Edit Form Modal */}
@@ -278,6 +286,15 @@ export default function QuotationsPage() {
         onOpenChange={setIsStatusModalOpen}
         quotation={quotationForStatus}
         onStatusChange={handleStatusChange}
+      />
+
+      <ConfirmDialog
+        open={itemToDelete !== null}
+        onOpenChange={(open) => !open && setItemToDelete(null)}
+        title="Delete Quotation"
+        description={`Are you sure you want to permanently delete Quotation ${itemToDelete?.quotationNumber}? This action cannot be undone.`}
+        confirmLabel="Delete Document"
+        onConfirm={confirmDelete}
       />
     </div>
   );

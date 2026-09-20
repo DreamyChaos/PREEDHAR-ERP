@@ -13,6 +13,7 @@ import {
   type WorkCompletionFilters,
 } from "@/components/work-completion/WorkCompletionToolbar";
 import { WorkCompletionTable } from "@/components/work-completion/WorkCompletionTable";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { WorkCompletionFormModal } from "@/components/work-completion/WorkCompletionFormModal";
 import { WorkCompletionDetailsModal } from "@/components/work-completion/WorkCompletionDetailsModal";
 import { WorkCompletionStatusModal } from "@/components/work-completion/WorkCompletionStatusModal";
@@ -213,11 +214,18 @@ export default function WorkCompletionPage() {
   };
 
   // Change Status Action
-  const handleDelete = async (report: WorkCompletionReport) => {
-    if (!window.confirm(`Are you sure you want to delete report ${report.reportNumber}?`)) return;
-    await WorkCompletionRepository.delete(report.id);
-    setReports((prev) => prev.filter((r) => r.id !== report.id));
-    toast.success(`Report ${report.reportNumber} deleted`);
+  const [itemToDelete, setItemToDelete] = React.useState<WorkCompletionReport | null>(null);
+
+  const handleDeleteRequest = (report: WorkCompletionReport) => {
+    setItemToDelete(report);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    await WorkCompletionRepository.delete(itemToDelete.id);
+    setReports((prev) => prev.filter((r) => r.id !== itemToDelete.id));
+    toast.success(`Report ${itemToDelete.reportNumber} deleted`);
+    setItemToDelete(null);
   };
 
   const handleOpenStatusModal = (report: WorkCompletionReport) => {
@@ -301,7 +309,7 @@ export default function WorkCompletionPage() {
         onView={handleViewDetails}
         onEdit={handleOpenEdit}
         onChangeStatus={handleOpenStatusModal}
-        onDelete={handleDelete}
+        onDelete={handleDeleteRequest}
       />
 
       {/* Create / Edit Form Modal */}
@@ -330,6 +338,15 @@ export default function WorkCompletionPage() {
         onOpenChange={setIsStatusModalOpen}
         report={reportForStatus}
         onSave={handleStatusChange}
+      />
+
+      <ConfirmDialog
+        open={itemToDelete !== null}
+        onOpenChange={(open) => !open && setItemToDelete(null)}
+        title="Delete Work Completion Report"
+        description={`Are you sure you want to permanently delete Report ${itemToDelete?.reportNumber}? This action cannot be undone.`}
+        confirmLabel="Delete Document"
+        onConfirm={confirmDelete}
       />
     </div>
   );

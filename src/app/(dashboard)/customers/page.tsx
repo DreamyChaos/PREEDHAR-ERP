@@ -8,6 +8,7 @@ import { toast } from "@/components/ui/Toast";
 import { CustomerSummary } from "@/components/customers/CustomerSummary";
 import { CustomerToolbar, type CustomerFilters } from "@/components/customers/CustomerToolbar";
 import { CustomerTable } from "@/components/customers/CustomerTable";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { CustomerFormModal } from "@/components/customers/CustomerFormModal";
 import { CustomerDetailsModal } from "@/components/customers/CustomerDetailsModal";
 import { type Customer } from "@/lib/data/customers-mock";
@@ -149,11 +150,18 @@ export default function CustomersPage() {
     setIsFormOpen(true);
   };
 
-  const handleDelete = async (customer: Customer) => {
-    if (!window.confirm(`Are you sure you want to delete ${customer.companyName}?`)) return;
-    await CustomersRepository.delete(customer.id);
-    setCustomers((prev) => prev.filter((c) => c.id !== customer.id));
-    toast.success(`Customer ${customer.companyName} deleted`);
+  const [itemToDelete, setItemToDelete] = React.useState<Customer | null>(null);
+
+  const handleDeleteRequest = (customer: Customer) => {
+    setItemToDelete(customer);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    await CustomersRepository.delete(itemToDelete.id);
+    setCustomers((prev) => prev.filter((c) => c.id !== itemToDelete.id));
+    toast.success(`Customer ${itemToDelete.companyName} deleted`);
+    setItemToDelete(null);
   };
 
   const handleToggleStatus = async (customer: Customer) => {
@@ -213,7 +221,7 @@ export default function CustomersPage() {
         onViewCustomer={handleViewCustomer}
         onEditCustomer={handleEditCustomer}
         onToggleStatus={handleToggleStatus}
-        onDelete={handleDelete}
+        onDelete={handleDeleteRequest}
         onAddNew={handleOpenCreateModal}
       />
 
@@ -231,6 +239,15 @@ export default function CustomersPage() {
         onOpenChange={setIsDetailsOpen}
         customer={selectedCustomer}
         onEdit={handleEditCustomer}
+      />
+
+      <ConfirmDialog
+        open={itemToDelete !== null}
+        onOpenChange={(open) => !open && setItemToDelete(null)}
+        title="Delete Customer"
+        description={`Are you sure you want to permanently delete ${itemToDelete?.companyName}? This action cannot be undone.`}
+        confirmLabel="Delete Customer"
+        onConfirm={confirmDelete}
       />
     </div>
   );

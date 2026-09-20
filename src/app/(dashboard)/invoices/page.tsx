@@ -13,6 +13,7 @@ import {
   type InvoiceFilters,
 } from "@/components/invoices/InvoiceToolbar";
 import { InvoiceTable } from "@/components/invoices/InvoiceTable";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { InvoiceFormModal } from "@/components/invoices/InvoiceFormModal";
 import { InvoiceDetailsModal } from "@/components/invoices/InvoiceDetailsModal";
 import { InvoiceStatusModal } from "@/components/invoices/InvoiceStatusModal";
@@ -228,11 +229,18 @@ export default function InvoicesPage() {
     setIsStatusModalOpen(true);
   };
 
-  const handleDelete = async (inv: Invoice) => {
-    if (!window.confirm(`Are you sure you want to delete invoice ${inv.invoiceNumber}?`)) return;
-    await InvoicesRepository.delete(inv.id);
-    setInvoices((prev) => prev.filter((i) => i.id !== inv.id));
-    toast.success(`Invoice ${inv.invoiceNumber} deleted`);
+  const [itemToDelete, setItemToDelete] = React.useState<Invoice | null>(null);
+
+  const handleDeleteRequest = (inv: Invoice) => {
+    setItemToDelete(inv);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    await InvoicesRepository.delete(itemToDelete.id);
+    setInvoices((prev) => prev.filter((i) => i.id !== itemToDelete.id));
+    toast.success(`Invoice ${itemToDelete.invoiceNumber} deleted`);
+    setItemToDelete(null);
   };
 
   const handleOpenPaymentModal = (inv: Invoice) => {
@@ -325,7 +333,7 @@ export default function InvoicesPage() {
         onEdit={handleOpenEdit}
         onChangeStatus={handleOpenDocStatusModal}
         onUpdatePayment={handleOpenPaymentModal}
-        onDelete={handleDelete}
+        onDelete={handleDeleteRequest}
       />
 
       {/* Create / Edit Form Modal */}
@@ -346,7 +354,7 @@ export default function InvoicesPage() {
         onEdit={handleOpenEdit}
         onChangeStatus={handleOpenDocStatusModal}
         onUpdatePayment={handleOpenPaymentModal}
-        onDelete={handleDelete}
+        onDelete={handleDeleteRequest}
       />
 
       {/* Status & Payment Transition Modal */}
@@ -356,6 +364,15 @@ export default function InvoicesPage() {
         invoice={invoiceForStatus}
         mode={statusModalMode}
         onSave={handleStatusOrPaymentSave}
+      />
+
+      <ConfirmDialog
+        open={itemToDelete !== null}
+        onOpenChange={(open) => !open && setItemToDelete(null)}
+        title="Delete Invoice"
+        description={`Are you sure you want to permanently delete Invoice ${itemToDelete?.invoiceNumber}? This action cannot be undone.`}
+        confirmLabel="Delete Document"
+        onConfirm={confirmDelete}
       />
     </div>
   );
