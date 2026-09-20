@@ -15,7 +15,6 @@ export const InvoicesRepository = {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("InvoicesRepository.getAll error:", error);
         return [];
       }
 
@@ -68,7 +67,6 @@ export const InvoicesRepository = {
           })),
       }));
     } catch (err) {
-      console.error("InvoicesRepository.getAll exception:", err);
       return [];
     }
   },
@@ -127,7 +125,6 @@ export const InvoicesRepository = {
     });
 
     if (invErr) {
-      console.error("InvoicesRepository.save invoice error:", invErr);
       throw new Error(invErr.message || "Failed to persist invoice header");
     }
 
@@ -149,7 +146,6 @@ export const InvoicesRepository = {
         }))
       );
       if (itemsErr) {
-        console.error("InvoicesRepository.save items error:", itemsErr);
         throw new Error(itemsErr.message || "Failed to persist invoice items");
       }
     }
@@ -163,12 +159,10 @@ export const InvoicesRepository = {
       const supabase = createClient();
       const { error } = await supabase.from("invoices").delete().eq("id", id);
       if (error) {
-        console.error("InvoicesRepository.delete error:", error);
         return false;
       }
       return true;
     } catch (err) {
-      console.error("InvoicesRepository.delete exception:", err);
       return false;
     }
   },

@@ -120,7 +120,7 @@ export default function LoginPage() {
               autoComplete="current-password"
               required
               disabled={isLoading}
-              placeholder="••••••••••"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={inputClass}
@@ -148,7 +148,7 @@ export default function LoginPage() {
       {/* Footer */}
       <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400 pt-2 border-t border-slate-100">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-        <span>Authorized Personnel Only · Secure Portal</span>
+        <span>Authorized Personnel Only &mdash; Secure Portal</span>
       </div>
     </div>
   );

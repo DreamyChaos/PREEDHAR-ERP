@@ -15,7 +15,6 @@ export const PurchaseOrdersRepository = {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("PurchaseOrdersRepository.getAll error:", error);
         return [];
       }
 
@@ -67,7 +66,6 @@ export const PurchaseOrdersRepository = {
           })),
       }));
     } catch (err) {
-      console.error("PurchaseOrdersRepository.getAll exception:", err);
       return [];
     }
   },
@@ -127,7 +125,6 @@ export const PurchaseOrdersRepository = {
     });
 
     if (poErr) {
-      console.error("PurchaseOrdersRepository.save PO error:", poErr);
       throw new Error(poErr.message || "Failed to persist purchase order header");
     }
 
@@ -149,7 +146,6 @@ export const PurchaseOrdersRepository = {
         }))
       );
       if (itemsErr) {
-        console.error("PurchaseOrdersRepository.save items error:", itemsErr);
         throw new Error(itemsErr.message || "Failed to persist purchase order items");
       }
     }
@@ -163,12 +159,10 @@ export const PurchaseOrdersRepository = {
       const supabase = createClient();
       const { error } = await supabase.from("purchase_orders").delete().eq("id", id);
       if (error) {
-        console.error("PurchaseOrdersRepository.delete error:", error);
         return false;
       }
       return true;
     } catch (err) {
-      console.error("PurchaseOrdersRepository.delete exception:", err);
       return false;
     }
   },

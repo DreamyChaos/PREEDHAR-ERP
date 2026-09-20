@@ -7,8 +7,8 @@
  */
 
 // Direct static access for Next.js build-time AST compiler replacement
-const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://cjmxzzpiptyqhmbismkj.supabase.co";
-const rawKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqbXh6enBpcHR5cWhtYmlzbWtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3OTE2NjAsImV4cCI6MjEwNTM2NzY2MH0.texGnbmAjDdAiK3E7TNB0H5D-YYiwnsNKvvWUAgHC3w";
+const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const rawKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
 function sanitizeUrl(val: string): string {
   return (val || "").trim().replace(/^["']|["']$/g, "").replace(/\/+$/, "");

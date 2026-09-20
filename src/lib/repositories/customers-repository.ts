@@ -12,7 +12,6 @@ export const CustomersRepository = {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("CustomersRepository.getAll error:", error);
         return [];
       }
 
@@ -40,7 +39,6 @@ export const CustomersRepository = {
         updatedAt: row.updated_at,
       }));
     } catch (err) {
-      console.error("CustomersRepository.getAll exception:", err);
       return [];
     }
   },
@@ -79,7 +77,6 @@ export const CustomersRepository = {
     });
 
     if (error) {
-      console.error("CustomersRepository.save error:", error);
       throw new Error(error.message || "Failed to persist customer to database");
     }
 
@@ -92,12 +89,10 @@ export const CustomersRepository = {
       const supabase = createClient();
       const { error } = await supabase.from("customers").delete().eq("id", id);
       if (error) {
-        console.error("CustomersRepository.delete error:", error);
         return false;
       }
       return true;
     } catch (err) {
-      console.error("CustomersRepository.delete exception:", err);
       return false;
     }
   },

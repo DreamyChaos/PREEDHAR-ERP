@@ -16,7 +16,6 @@ export const WorkCompletionRepository = {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("WorkCompletionRepository.getAll error:", error);
         return [];
       }
 
@@ -88,7 +87,6 @@ export const WorkCompletionRepository = {
         })),
       }));
     } catch (err) {
-      console.error("WorkCompletionRepository.getAll exception:", err);
       return [];
     }
   },
@@ -161,7 +159,6 @@ export const WorkCompletionRepository = {
     });
 
     if (wcrErr) {
-      console.error("WorkCompletionRepository.save WCR error:", wcrErr);
       throw new Error(wcrErr.message || "Failed to persist work completion report header");
     }
 
@@ -181,7 +178,6 @@ export const WorkCompletionRepository = {
         }))
       );
       if (itemsErr) {
-        console.error("WorkCompletionRepository.save items error:", itemsErr);
         throw new Error(itemsErr.message || "Failed to persist work completion items");
       }
     }
@@ -203,7 +199,6 @@ export const WorkCompletionRepository = {
         }))
       );
       if (photosErr) {
-        console.error("WorkCompletionRepository.save photos error:", photosErr);
         throw new Error(photosErr.message || "Failed to persist report photos");
       }
     }
@@ -217,12 +212,10 @@ export const WorkCompletionRepository = {
       const supabase = createClient();
       const { error } = await supabase.from("work_completion_reports").delete().eq("id", id);
       if (error) {
-        console.error("WorkCompletionRepository.delete error:", error);
         return false;
       }
       return true;
     } catch (err) {
-      console.error("WorkCompletionRepository.delete exception:", err);
       return false;
     }
   },

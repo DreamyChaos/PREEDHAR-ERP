@@ -14,9 +14,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         }}
       />
 
-      {/* Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] bg-orange-600/8 blur-[100px] rounded-full pointer-events-none" />
+      {/* Glow — brand-matched warm tones */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#0B1F33]/30 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] bg-[#E07614]/6 blur-[100px] rounded-full pointer-events-none" />
 
       {/* Card */}
       <div className="relative z-10 w-full max-w-[900px] min-h-[540px] flex rounded-2xl overflow-hidden shadow-2xl shadow-black/60 border border-white/5">

@@ -15,7 +15,6 @@ export const QuotationsRepository = {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("QuotationsRepository.getAll error:", error);
         return [];
       }
 
@@ -61,7 +60,6 @@ export const QuotationsRepository = {
           })),
       }));
     } catch (err) {
-      console.error("QuotationsRepository.getAll exception:", err);
       return [];
     }
   },
@@ -111,7 +109,6 @@ export const QuotationsRepository = {
     });
 
     if (quoteErr) {
-      console.error("QuotationsRepository.save quote error:", quoteErr);
       throw new Error(quoteErr.message || "Failed to persist quotation header");
     }
 
@@ -133,7 +130,6 @@ export const QuotationsRepository = {
         }))
       );
       if (itemsErr) {
-        console.error("QuotationsRepository.save items error:", itemsErr);
         throw new Error(itemsErr.message || "Failed to persist quotation items");
       }
     }
@@ -147,12 +143,10 @@ export const QuotationsRepository = {
       const supabase = createClient();
       const { error } = await supabase.from("quotations").delete().eq("id", id);
       if (error) {
-        console.error("QuotationsRepository.delete error:", error);
         return false;
       }
       return true;
     } catch (err) {
-      console.error("QuotationsRepository.delete exception:", err);
       return false;
     }
   },

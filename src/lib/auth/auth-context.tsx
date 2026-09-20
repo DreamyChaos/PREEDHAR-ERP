@@ -80,7 +80,6 @@ export function AuthProvider({
           setUser(null);
         }
       } catch (err) {
-        console.warn("Supabase auth session fetch error:", err);
         setUser(null);
       } finally {
         setIsLoading(false);
@@ -149,7 +148,6 @@ export function AuthProvider({
         await supabase.auth.signOut();
       }
     } catch (err) {
-      console.warn("Supabase sign out error:", err);
     } finally {
       setUser(null);
       setIsLoading(false);
