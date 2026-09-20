@@ -483,6 +483,7 @@ export function InvoiceFormModal({
                 <div>
                   <Select
                     label="Payment Credit Terms"
+                    allowCustom
                     value={formData.paymentTerms}
                     onChange={(e) => handlePaymentTermsChange(e.target.value)}
                     options={PAYMENT_TERMS_OPTIONS.map((t) => ({
@@ -506,7 +507,7 @@ export function InvoiceFormModal({
                 </div>
 
                 <div>
-                  <Select
+                  <Select allowCustom
                     label="Document Status"
                     value={formData.status}
                     onChange={(e) =>

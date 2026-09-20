@@ -478,7 +478,7 @@ export function PurchaseOrderFormModal({
                 </div>
 
                 <div>
-                  <Select
+                  <Select allowCustom
                     label="Order Status"
                     value={formData.status}
                     onChange={(e) =>

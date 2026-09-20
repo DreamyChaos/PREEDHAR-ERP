@@ -20,8 +20,8 @@ export {
   type QuotationItemInput,
 };
 
-export type InvoiceDocumentStatus = "DRAFT" | "ISSUED" | "CANCELLED";
-export type InvoicePaymentStatus = "UNPAID" | "PARTIALLY_PAID" | "PAID" | "OVERDUE";
+export type InvoiceDocumentStatus = string;
+export type InvoicePaymentStatus = string;
 
 export interface PaymentTermsOption {
   value: string;

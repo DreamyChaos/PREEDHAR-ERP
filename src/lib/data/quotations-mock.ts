@@ -6,7 +6,7 @@ import {
   type CalculatedItem,
 } from "@/lib/quotations/calculations";
 
-export type QuotationStatus = "DRAFT" | "SENT" | "ACCEPTED" | "REJECTED" | "EXPIRED";
+export type QuotationStatus = string;
 
 export interface Quotation {
   id: string;

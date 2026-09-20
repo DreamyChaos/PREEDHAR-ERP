@@ -3,7 +3,7 @@ import { UNIT_OPTIONS } from "@/lib/quotations/calculations";
 
 export { PREEDHAR_COMPANY_DETAILS, UNIT_OPTIONS };
 
-export type WorkCompletionStatus = "DRAFT" | "COMPLETED" | "CANCELLED";
+export type WorkCompletionStatus = string;
 
 export type WorkItemStatus = "COMPLETED" | "IN_PROGRESS" | "PENDING";
 

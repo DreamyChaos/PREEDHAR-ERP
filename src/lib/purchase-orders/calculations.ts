@@ -22,7 +22,7 @@ export {
   type QuotationItemInput,
 };
 
-export type PurchaseOrderStatus = "DRAFT" | "ISSUED" | "CANCELLED";
+export type PurchaseOrderStatus = string;
 
 export function calculateDeliveryDate(poDateStr: string, daysToAdd: number = 14): string {
   if (!poDateStr) return "";

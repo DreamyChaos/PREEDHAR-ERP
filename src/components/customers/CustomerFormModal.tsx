@@ -209,7 +209,7 @@ export function CustomerFormModal({
                   ]}
                 />
 
-                <Select
+                <Select allowCustom
                   label="Account Status"
                   value={formData.status}
                   onChange={(e) =>

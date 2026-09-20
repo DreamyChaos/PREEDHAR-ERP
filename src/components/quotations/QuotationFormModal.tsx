@@ -326,7 +326,7 @@ export function QuotationFormModal({
                 </div>
 
                 <div>
-                  <Select
+                  <Select allowCustom
                     label="Quotation Status"
                     value={formData.status}
                     onChange={(e) =>

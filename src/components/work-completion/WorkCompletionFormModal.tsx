@@ -606,7 +606,7 @@ export function WorkCompletionFormModal({
                 </div>
 
                 <div>
-                  <Select
+                  <Select allowCustom
                     label="Report Status"
                     value={formData.status}
                     onChange={(e) =>

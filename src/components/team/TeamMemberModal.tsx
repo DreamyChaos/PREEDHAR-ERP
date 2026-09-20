@@ -236,7 +236,7 @@ export function TeamMemberModal({
             </div>
 
             <div>
-              <Select
+              <Select allowCustom
                 label="Account Status"
                 value={formData.status}
                 onChange={(e) =>
