@@ -293,7 +293,6 @@ export default function WorkCompletionPage() {
         reports={filteredReports}
         onView={handleViewDetails}
         onEdit={handleOpenEdit}
-        onDuplicate={handleDuplicate}
         onChangeStatus={handleOpenStatusModal}
       />
 
@@ -314,7 +313,6 @@ export default function WorkCompletionPage() {
         onOpenChange={setIsDetailsOpen}
         report={selectedReport}
         onEdit={handleOpenEdit}
-        onDuplicate={handleDuplicate}
         onChangeStatus={handleOpenStatusModal}
       />
 
