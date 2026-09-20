@@ -68,7 +68,7 @@ export function DataTable<T>({
     data.length > 0 && selectedKeys && data.every((row) => selectedKeys.includes(keyExtractor(row)));
 
   return (
-    <div className={cn("w-full border border-[#E2E8F0] rounded-xl bg-white overflow-hidden shadow-2xs", className)}>
+    <div className={cn("w-full bg-white border border-slate-200 rounded-xl overflow-hidden", className)}>
       <div className="w-full overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
@@ -124,7 +124,7 @@ export function DataTable<T>({
               })}
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#F1F5F9] text-xs">
+          <tbody className="divide-y divide-slate-100 text-xs">
             {isLoading ? (
               Array.from({ length: 5 }).map((_, rIdx) => (
                 <tr key={`skeleton-${rIdx}`} className="animate-pulse">

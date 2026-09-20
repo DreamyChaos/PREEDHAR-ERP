@@ -25,58 +25,42 @@ export function StatCard({
   variant = "default",
   className,
 }: StatCardProps) {
-  const iconVariantStyles = {
-    default: "bg-slate-50 text-[#475569] border-[#E2E8F0]",
-    blue: "bg-[#EFF6FF] text-[#2563EB] border-[#BFDBFE]",
-    orange: "bg-[#EFF6FF] text-[#2563EB] border-[#BFDBFE]", // normalized to corporate blue
-    navy: "bg-[#F1F5F9] text-[#0B1F33] border-[#CBD5E1]",
-  };
-
   return (
     <div
       className={cn(
-        "p-5 rounded-xl bg-white border border-slate-200 shadow-sm transition-all hover:shadow-md hover:border-slate-300",
+        "flex flex-col gap-3 py-5 px-6 border-r border-slate-200 last:border-r-0",
         className
       )}
     >
-      <div className="flex items-center justify-between gap-3 mb-3">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-          {title}
-        </span>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs font-medium text-slate-500 leading-tight">{title}</span>
         {icon && (
-          <div
-            className={cn(
-              "w-8 h-8 rounded-lg flex items-center justify-center border shrink-0",
-              iconVariantStyles[variant]
-            )}
-          >
-            {icon}
-          </div>
+          <span className="text-slate-400 shrink-0">{icon}</span>
         )}
       </div>
-      <div className="space-y-1">
-        <div className="text-2xl font-bold tracking-tight text-[#0F172A] font-numeric">
+      <div>
+        <div className="text-[28px] font-semibold tracking-tight text-slate-900 leading-none font-numeric">
           {value}
         </div>
         {(subtitle || trend) && (
-          <div className="flex items-center gap-2 text-xs text-[#64748B]">
+          <div className="flex items-center gap-1.5 mt-1.5 text-xs text-slate-400">
             {trend && (
               <span
                 className={cn(
                   "inline-flex items-center font-medium font-numeric",
-                  trend.direction === "up" && "text-[#15803D]",
-                  trend.direction === "down" && "text-[#B91C1C]",
-                  trend.direction === "neutral" && "text-[#64748B]"
+                  trend.direction === "up" && "text-emerald-600",
+                  trend.direction === "down" && "text-red-500",
+                  trend.direction === "neutral" && "text-slate-400"
                 )}
               >
-                {trend.direction === "up" && <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" />}
-                {trend.direction === "down" && <ArrowDownRight className="w-3.5 h-3.5 mr-0.5" />}
-                {trend.direction === "neutral" && <Minus className="w-3.5 h-3.5 mr-0.5" />}
+                {trend.direction === "up" && <ArrowUpRight className="w-3 h-3" />}
+                {trend.direction === "down" && <ArrowDownRight className="w-3 h-3" />}
+                {trend.direction === "neutral" && <Minus className="w-3 h-3" />}
                 {trend.value}
               </span>
             )}
             {subtitle && <span className="truncate">{subtitle}</span>}
-            {trend?.label && <span className="text-slate-400">{trend.label}</span>}
+            {trend?.label && <span>{trend.label}</span>}
           </div>
         )}
       </div>

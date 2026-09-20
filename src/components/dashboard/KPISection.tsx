@@ -1,40 +1,31 @@
 "use client";
 
 import * as React from "react";
-import { Grid } from "@/components/layout/Grid";
 import { StatCard } from "@/components/ui/StatCard";
 import type { DashboardKPI } from "@/lib/data/dashboard-mock";
 import { Users, FileText, Receipt, ClipboardList } from "lucide-react";
 
-export function KPISection({ kpis }: { kpis: DashboardKPI[] }) {
-  const getIcon = (id: string) => {
-    switch (id) {
-      case "kpi-1":
-        return <Users className="w-4 h-4" />;
-      case "kpi-2":
-        return <FileText className="w-4 h-4" />;
-      case "kpi-3":
-        return <Receipt className="w-4 h-4" />;
-      case "kpi-4":
-        return <ClipboardList className="w-4 h-4" />;
-      default:
-        return <FileText className="w-4 h-4" />;
-    }
-  };
+const icons: Record<string, React.ReactNode> = {
+  "kpi-1": <Users className="w-4 h-4" />,
+  "kpi-2": <FileText className="w-4 h-4" />,
+  "kpi-3": <Receipt className="w-4 h-4" />,
+  "kpi-4": <ClipboardList className="w-4 h-4" />,
+};
 
+export function KPISection({ kpis }: { kpis: DashboardKPI[] }) {
   return (
-    <Grid cols={4} gap="md">
+    <div className="w-full bg-white border border-slate-200 rounded-xl overflow-hidden grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 divide-x divide-slate-200">
       {kpis.map((kpi) => (
         <StatCard
           key={kpi.id}
           title={kpi.title}
           value={kpi.value}
           subtitle={kpi.subtitle}
-          icon={getIcon(kpi.id)}
+          icon={icons[kpi.id]}
           trend={kpi.trend}
           variant={kpi.variant}
         />
       ))}
-    </Grid>
+    </div>
   );
 }

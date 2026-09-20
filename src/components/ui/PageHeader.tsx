@@ -20,7 +20,7 @@ export function PageHeader({
   className,
 }: PageHeaderProps) {
   return (
-    <div className={cn("space-y-2 pb-5 border-b border-slate-200/80 mb-6", className)}>
+    <div className={cn("space-y-2 pb-4 border-b border-slate-100 mb-6", className)}>
       {breadcrumbs && breadcrumbs.length > 0 && (
         <Breadcrumb items={breadcrumbs} className="mb-2" />
       )}
