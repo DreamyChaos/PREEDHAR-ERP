@@ -16,6 +16,7 @@ import {
   CheckCircle2,
   Clock,
   Link as LinkIcon,
+  Trash2,
 } from "lucide-react";
 
 export function WorkCompletionTable({
@@ -23,11 +24,13 @@ export function WorkCompletionTable({
   onView,
   onEdit,
   onChangeStatus,
+  onDelete,
 }: {
   reports: WorkCompletionReport[];
   onView: (report: WorkCompletionReport) => void;
   onEdit: (report: WorkCompletionReport) => void;
   onChangeStatus: (report: WorkCompletionReport) => void;
+  onDelete?: (report: WorkCompletionReport) => void;
 }) {
   const getStatusBadge = (status: WorkCompletionStatus) => {
     switch (status) {
@@ -203,6 +206,15 @@ export function WorkCompletionTable({
                         onClick={() => onChangeStatus(report)}
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 w-7 p-0 text-slate-400 hover:text-red-600"
+                        title="Delete Report"
+                        onClick={() => onDelete?.(report)}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     </div>
                   </td>

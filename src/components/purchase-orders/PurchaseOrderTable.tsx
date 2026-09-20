@@ -15,6 +15,7 @@ import {
   Calendar,
   AlertCircle,
   Truck,
+  Trash2,
 } from "lucide-react";
 
 export function PurchaseOrderTable({
@@ -22,11 +23,13 @@ export function PurchaseOrderTable({
   onView,
   onEdit,
   onChangeStatus,
+  onDelete,
 }: {
   purchaseOrders: PurchaseOrder[];
   onView: (po: PurchaseOrder) => void;
   onEdit: (po: PurchaseOrder) => void;
   onChangeStatus: (po: PurchaseOrder) => void;
+  onDelete?: (po: PurchaseOrder) => void;
 }) {
   const getStatusBadge = (status: PurchaseOrderStatus) => {
     switch (status) {
@@ -199,6 +202,15 @@ export function PurchaseOrderTable({
                         onClick={() => onChangeStatus(po)}
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 w-7 p-0 text-slate-400 hover:text-red-600"
+                        title="Delete Purchase Order"
+                        onClick={() => onDelete?.(po)}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     </div>
                   </td>

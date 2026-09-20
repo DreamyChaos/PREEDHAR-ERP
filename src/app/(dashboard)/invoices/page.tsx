@@ -228,6 +228,13 @@ export default function InvoicesPage() {
     setIsStatusModalOpen(true);
   };
 
+  const handleDelete = async (inv: Invoice) => {
+    if (!window.confirm(`Are you sure you want to delete invoice ${inv.invoiceNumber}?`)) return;
+    await InvoicesRepository.delete(inv.id);
+    setInvoices((prev) => prev.filter((i) => i.id !== inv.id));
+    toast.success(`Invoice ${inv.invoiceNumber} deleted`);
+  };
+
   const handleOpenPaymentModal = (inv: Invoice) => {
     setInvoiceForStatus(inv);
     setStatusModalMode("payment");
@@ -318,6 +325,7 @@ export default function InvoicesPage() {
         onEdit={handleOpenEdit}
         onChangeStatus={handleOpenDocStatusModal}
         onUpdatePayment={handleOpenPaymentModal}
+        onDelete={handleDelete}
       />
 
       {/* Create / Edit Form Modal */}
@@ -338,6 +346,7 @@ export default function InvoicesPage() {
         onEdit={handleOpenEdit}
         onChangeStatus={handleOpenDocStatusModal}
         onUpdatePayment={handleOpenPaymentModal}
+        onDelete={handleDelete}
       />
 
       {/* Status & Payment Transition Modal */}

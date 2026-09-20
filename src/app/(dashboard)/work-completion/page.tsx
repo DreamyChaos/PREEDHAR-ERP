@@ -213,6 +213,13 @@ export default function WorkCompletionPage() {
   };
 
   // Change Status Action
+  const handleDelete = async (report: WorkCompletionReport) => {
+    if (!window.confirm(`Are you sure you want to delete report ${report.reportNumber}?`)) return;
+    await WorkCompletionRepository.delete(report.id);
+    setReports((prev) => prev.filter((r) => r.id !== report.id));
+    toast.success(`Report ${report.reportNumber} deleted`);
+  };
+
   const handleOpenStatusModal = (report: WorkCompletionReport) => {
     setReportForStatus(report);
     setIsStatusModalOpen(true);
@@ -294,6 +301,7 @@ export default function WorkCompletionPage() {
         onView={handleViewDetails}
         onEdit={handleOpenEdit}
         onChangeStatus={handleOpenStatusModal}
+        onDelete={handleDelete}
       />
 
       {/* Create / Edit Form Modal */}

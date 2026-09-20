@@ -16,6 +16,7 @@ import {
   AlertCircle,
   FileText,
   Ban,
+  Trash2,
 } from "lucide-react";
 
 export function InvoiceTable({
@@ -24,12 +25,14 @@ export function InvoiceTable({
   onEdit,
   onChangeStatus,
   onUpdatePayment,
+  onDelete,
 }: {
   invoices: Invoice[];
   onView: (invoice: Invoice) => void;
   onEdit: (invoice: Invoice) => void;
   onChangeStatus: (invoice: Invoice) => void;
   onUpdatePayment: (invoice: Invoice) => void;
+  onDelete?: (invoice: Invoice) => void;
 }) {
   const getDocumentStatusBadge = (status: InvoiceDocumentStatus) => {
     switch (status) {
@@ -278,6 +281,15 @@ export function InvoiceTable({
                         onClick={() => onChangeStatus(inv)}
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 w-7 p-0 text-slate-400 hover:text-red-600"
+                        title="Delete Invoice"
+                        onClick={() => onDelete?.(inv)}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     </div>
                   </td>

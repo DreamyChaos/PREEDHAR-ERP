@@ -200,6 +200,7 @@ export default function QuotationsPage() {
 
   // Delete Action
   const handleDelete = async (quote: Quotation) => {
+    if (!window.confirm(`Are you sure you want to delete quotation ${quote.quotationNumber}?`)) return;
     await QuotationsRepository.delete(quote.id);
     setQuotations((prev) => prev.filter((q) => q.id !== quote.id));
     toast.success(`Quotation ${quote.quotationNumber} deleted`);

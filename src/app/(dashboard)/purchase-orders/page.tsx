@@ -200,6 +200,13 @@ export default function PurchaseOrdersPage() {
   };
 
   // Change Status Action
+  const handleDelete = async (po: PurchaseOrder) => {
+    if (!window.confirm(`Are you sure you want to delete purchase order ${po.poNumber}?`)) return;
+    await PurchaseOrdersRepository.delete(po.id);
+    setPurchaseOrders((prev) => prev.filter((p) => p.id !== po.id));
+    toast.success(`Purchase Order ${po.poNumber} deleted`);
+  };
+
   const handleOpenStatusModal = (po: PurchaseOrder) => {
     setPoForStatus(po);
     setIsStatusModalOpen(true);
@@ -279,6 +286,7 @@ export default function PurchaseOrdersPage() {
         onView={handleViewDetails}
         onEdit={handleOpenEdit}
         onChangeStatus={handleOpenStatusModal}
+        onDelete={handleDelete}
       />
 
       {/* Create / Edit Form Modal */}

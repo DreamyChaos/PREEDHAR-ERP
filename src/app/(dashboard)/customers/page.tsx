@@ -149,6 +149,13 @@ export default function CustomersPage() {
     setIsFormOpen(true);
   };
 
+  const handleDelete = async (customer: Customer) => {
+    if (!window.confirm(`Are you sure you want to delete ${customer.companyName}?`)) return;
+    await CustomersRepository.delete(customer.id);
+    setCustomers((prev) => prev.filter((c) => c.id !== customer.id));
+    toast.success(`Customer ${customer.companyName} deleted`);
+  };
+
   const handleToggleStatus = async (customer: Customer) => {
     const nextStatus = customer.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
     const updated: Customer = {
@@ -206,6 +213,7 @@ export default function CustomersPage() {
         onViewCustomer={handleViewCustomer}
         onEditCustomer={handleEditCustomer}
         onToggleStatus={handleToggleStatus}
+        onDelete={handleDelete}
         onAddNew={handleOpenCreateModal}
       />
 

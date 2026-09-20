@@ -7,19 +7,21 @@ import { IconButton } from "@/components/ui/IconButton";
 import { Dropdown } from "@/components/ui/Dropdown";
 import { formatDate } from "@/lib/utils";
 import type { Customer } from "@/lib/data/customers-mock";
-import { MoreVertical, Eye, Edit, UserCheck, UserX, Phone, Mail } from "lucide-react";
+import { MoreVertical, Eye, Edit, UserCheck, UserX, Phone, Mail, Trash2 } from "lucide-react";
 
 export function CustomerTable({
   customers,
   onViewCustomer,
   onEditCustomer,
   onToggleStatus,
+  onDelete,
   onAddNew,
 }: {
   customers: Customer[];
   onViewCustomer: (customer: Customer) => void;
   onEditCustomer: (customer: Customer) => void;
   onToggleStatus: (customer: Customer) => void;
+  onDelete?: (customer: Customer) => void;
   onAddNew: () => void;
 }) {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -146,9 +148,15 @@ export function CustomerTable({
               },
               { divider: true, label: "" },
               {
-                label: row.status === "ACTIVE" ? "Mark Inactive" : "Activate Account",
+                label: row.status === "ACTIVE" ? "Deactivate Account" : "Reactivate Account",
                 icon: row.status === "ACTIVE" ? <UserX className="w-3.5 h-3.5 text-amber-600" /> : <UserCheck className="w-3.5 h-3.5 text-emerald-600" />,
                 onClick: () => onToggleStatus(row),
+              },
+              {
+                label: "Delete Customer",
+                icon: <Trash2 className="w-3.5 h-3.5 text-red-600" />,
+                danger: true,
+                onClick: () => onDelete?.(row),
               },
             ]}
           />
