@@ -35,6 +35,13 @@ export function PurchaseOrderDetailsModal({
   onChangeStatus: (po: PurchaseOrder) => void;
 }) {
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!open) {
+      setPreviewUrl(null);
+    }
+  }, [open]);
+
   if (!purchaseOrder) return null;
 
   const getStatusBadge = (status: PurchaseOrderStatus) => {

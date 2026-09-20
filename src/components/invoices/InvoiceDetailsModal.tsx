@@ -39,6 +39,13 @@ export function InvoiceDetailsModal({
   onUpdatePayment: (invoice: Invoice) => void;
 }) {
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!open) {
+      setPreviewUrl(null);
+    }
+  }, [open]);
+
   if (!invoice) return null;
 
   const today = new Date();

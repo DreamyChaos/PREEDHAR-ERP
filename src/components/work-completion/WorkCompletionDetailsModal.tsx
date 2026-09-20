@@ -36,6 +36,13 @@ export function WorkCompletionDetailsModal({
   onChangeStatus: (report: WorkCompletionReport) => void;
 }) {
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!open) {
+      setPreviewUrl(null);
+    }
+  }, [open]);
+
   if (!report) return null;
 
   const getStatusBadge = (status: WorkCompletionStatus) => {
@@ -129,12 +136,11 @@ export function WorkCompletionDetailsModal({
               className="object-contain"
             />
           </div>
-                    <div>
+          <div>
             <h2 className="text-base font-bold tracking-tight">
               <span className="text-[#0B1F33]">PREEDHAR</span>
               <span className="text-[#E07614]"> TECHNICAL SERVICES CO. L.L.C.</span>
             </h2>
-            
           </div>
         </div>
 
@@ -310,8 +316,3 @@ export function WorkCompletionDetailsModal({
     </>
   );
 }
-
-
-
-
-

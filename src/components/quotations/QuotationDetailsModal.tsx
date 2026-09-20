@@ -24,8 +24,6 @@ export function QuotationDetailsModal({
   onOpenChange,
   quotation,
   onEdit,
-  FileText,
-  ClipboardCheck,
   onChangeStatus,
   onConvertToInvoice,
   onConvertToWCR,
@@ -39,6 +37,13 @@ export function QuotationDetailsModal({
   onConvertToWCR?: (quotation: Quotation) => void;
 }) {
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!open) {
+      setPreviewUrl(null);
+    }
+  }, [open]);
+
   if (!quotation) return null;
 
   const getStatusBadge = (status: Quotation["status"]) => {
@@ -78,7 +83,7 @@ export function QuotationDetailsModal({
         <span className="sm:hidden">Download</span>
       </Button>
 
-            <Button variant="toolbar"
+      <Button variant="toolbar"
         size="sm"
         leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
         onClick={() => onChangeStatus(quotation)}
@@ -153,12 +158,11 @@ export function QuotationDetailsModal({
               className="object-contain"
             />
           </div>
-                    <div>
+          <div>
             <h2 className="text-base font-bold tracking-tight">
               <span className="text-[#0B1F33]">PREEDHAR</span>
               <span className="text-[#E07614]"> TECHNICAL SERVICES CO. L.L.C.</span>
             </h2>
-            
           </div>
         </div>
 
@@ -306,10 +310,3 @@ export function QuotationDetailsModal({
     </>
   );
 }
-
-
-
-
-
-
-

@@ -19,6 +19,25 @@ export function PDFPreviewModal({ open, onClose, blobUrl, filename }: PDFPreview
     }
   }, [open, blobUrl]);
 
+  // Intercept Escape key to close ONLY the PDF preview modal without closing underlying viewers
+  React.useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown, true);
+    };
+  }, [open, onClose]);
+
   if (!open || !blobUrl) return null;
 
   return (
