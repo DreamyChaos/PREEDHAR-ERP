@@ -36,7 +36,7 @@ export function WorkspaceHeader({
         
         <div className="hidden sm:flex items-center justify-center w-10 h-10 bg-white rounded-md shrink-0 shadow-sm border border-slate-700 p-0.5">
           <Image
-            src="/brand/preedhar-logo.jpeg"
+            src="/brand/preedhar-logo.png"
             alt="PREEDHAR Logo"
             width={32}
             height={32}
