@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import Image from "next/image";
@@ -108,7 +108,6 @@ export function InvoiceDetailsModal({
         size="sm"
         leftIcon={<CreditCard className="w-3.5 h-3.5 text-emerald-600" />}
         onClick={() => {
-          onOpenChange(false);
           setTimeout(() => onUpdatePayment(invoice), 80);
         }}
       >
@@ -131,7 +130,6 @@ export function InvoiceDetailsModal({
         size="sm"
         leftIcon={<Edit className="w-3.5 h-3.5" />}
         onClick={() => {
-          onOpenChange(false);
           onEdit(invoice);
         }}
       >
@@ -374,6 +372,7 @@ export function InvoiceDetailsModal({
     </>
   );
 }
+
 
 
 

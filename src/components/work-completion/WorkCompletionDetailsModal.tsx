@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import Image from "next/image";
@@ -97,7 +97,6 @@ export function WorkCompletionDetailsModal({
         size="sm"
         leftIcon={<Edit className="w-3.5 h-3.5" />}
         onClick={() => {
-          onOpenChange(false);
           onEdit(report);
         }}
       >
@@ -198,7 +197,7 @@ export function WorkCompletionDetailsModal({
             {report.projectLocation}
           </p>
           <p className="text-[11px] text-slate-500 font-numeric">
-            Execution: {formatDate(report.workStartDate)} â†’ {formatDate(report.workCompletionDate)}
+            Execution: {formatDate(report.workStartDate)} → {formatDate(report.workCompletionDate)}
           </p>
         </div>
       </div>
@@ -241,7 +240,7 @@ export function WorkCompletionDetailsModal({
                   {it.description}
                 </td>
                 <td className="py-2.5 px-3 text-center border-r border-slate-200 font-numeric font-medium">
-                  {it.quantity || "â€”"}
+                  {it.quantity || "—"}
                 </td>
                 <td className="py-2.5 px-3 text-center border-r border-slate-200 text-slate-600 font-medium">
                   {it.unit || "LOT"}
@@ -315,5 +314,6 @@ export function WorkCompletionDetailsModal({
     </>
   );
 }
+
 
 

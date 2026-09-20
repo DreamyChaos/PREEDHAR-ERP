@@ -159,7 +159,6 @@ export function CustomerDetailsModal({
             size="sm"
             leftIcon={<Edit className="w-3.5 h-3.5" />}
             onClick={() => {
-              onOpenChange(false);
               onEdit(customer);
             }}
           >
@@ -170,3 +169,4 @@ export function CustomerDetailsModal({
     </Dialog>
   );
 }
+

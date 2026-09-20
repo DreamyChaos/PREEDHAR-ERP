@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import Image from "next/image";
@@ -87,7 +87,6 @@ export function PurchaseOrderDetailsModal({
         size="sm"
         leftIcon={<Edit className="w-3.5 h-3.5" />}
         onClick={() => {
-          onOpenChange(false);
           onEdit(purchaseOrder);
         }}
       >
@@ -294,5 +293,6 @@ export function PurchaseOrderDetailsModal({
     </>
   );
 }
+
 
 

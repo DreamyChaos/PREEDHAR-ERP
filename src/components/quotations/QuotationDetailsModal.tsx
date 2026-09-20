@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import Image from "next/image";
@@ -87,7 +87,6 @@ export function QuotationDetailsModal({
         size="sm"
         leftIcon={<Edit className="w-3.5 h-3.5" />}
         onClick={() => {
-          onOpenChange(false);
           onEdit(quotation);
         }}
       >
@@ -218,7 +217,7 @@ export function QuotationDetailsModal({
                   {formatAED(item.unitPrice)}
                 </td>
                 <td className="py-2.5 px-3 border-r border-slate-200 text-right font-numeric text-slate-500">
-                  {item.discount > 0 ? formatAED(item.discount) : "â€”"}
+                  {item.discount > 0 ? formatAED(item.discount) : "—"}
                 </td>
                 <td className="py-2.5 px-3 text-right font-numeric font-semibold text-slate-900">
                   {formatAED(item.taxableAmount)}
@@ -233,8 +232,8 @@ export function QuotationDetailsModal({
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pt-4 border-t border-slate-200">
         <div className="text-[11px] text-slate-500 space-y-1 max-w-sm">
           <p className="font-semibold text-slate-700">Commercial Notes & UAE VAT:</p>
-          <p>â€¢ All prices quoted in United Arab Emirates Dirham (AED).</p>
-          <p>â€¢ Standard 5.00% VAT applied as per UAE Federal Tax Authority (FTA) regulations.</p>
+          <p>• All prices quoted in United Arab Emirates Dirham (AED).</p>
+          <p>• Standard 5.00% VAT applied as per UAE Federal Tax Authority (FTA) regulations.</p>
         </div>
 
         <div className="w-full sm:w-72 space-y-1.5 text-xs bg-slate-50 p-4 rounded-lg border border-slate-200">
@@ -277,5 +276,6 @@ export function QuotationDetailsModal({
     </>
   );
 }
+
 
 
