@@ -66,6 +66,7 @@ export function WCRPhotoUploader({
 
       const result = await PhotoStorageService.uploadWCRPhoto(
         file,
+        category,
         reportId || "temp_report"
       );
 
@@ -144,7 +145,7 @@ export function WCRPhotoUploader({
             ref={fileInputRef}
             type="file"
             multiple
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/*,.jpg,.jpeg,.png,.webp,.jfif,.pjpeg,.pjp,.avif,.heic,.heif,.bmp,.tiff,.tif,.svg"
             className="hidden"
             onChange={(e) => handleFiles(e.target.files)}
           />
@@ -158,7 +159,7 @@ export function WCRPhotoUploader({
                 Click to upload or drag & drop site inspection photos
               </p>
               <p className="text-[11px] text-slate-500">
-                Supports JPEG, PNG, WebP (Max 10MB each • Up to {MAX_PHOTOS_PER_REPORT} photos)
+                Supports all image formats: JPG, JPEG, PNG, WebP, JFIF, HEIC, etc. (Max 15MB each • Up to {MAX_PHOTOS_PER_REPORT} photos)
               </p>
             </div>
             {isUploading && (
@@ -188,10 +189,15 @@ export function WCRPhotoUploader({
               >
                 {/* Thumbnail */}
                 <div className="relative w-full sm:w-24 h-24 rounded-md overflow-hidden bg-slate-100 shrink-0 border border-slate-200">
-                  {photo.url ? (
+                  {photo.dataUrl || photo.url ? (
                     <img
-                      src={photo.url}
+                      src={photo.dataUrl || photo.url}
                       alt={photo.caption || photo.fileName}
+                      onError={(e) => {
+                        if (photo.dataUrl && (e.currentTarget as HTMLImageElement).src !== photo.dataUrl) {
+                          (e.currentTarget as HTMLImageElement).src = photo.dataUrl;
+                        }
+                      }}
                       className="w-full h-full object-cover"
                     />
                   ) : (

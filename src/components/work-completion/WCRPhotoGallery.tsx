@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import { Dialog, DialogContent } from "@/components/ui/Dialog";
@@ -68,10 +68,15 @@ export function WCRPhotoGallery({ photos }: WCRPhotoGalleryProps) {
                 className="group relative rounded-lg border border-slate-200 overflow-hidden bg-slate-100 cursor-pointer shadow-2xs hover:shadow-md transition-all hover:border-[#2563EB]"
               >
                 <div className="aspect-4/3 w-full relative">
-                  {photo.url ? (
+                  {photo.dataUrl || photo.url ? (
                     <img
-                      src={photo.url}
+                      src={photo.dataUrl || photo.url}
                       alt={photo.caption || photo.fileName}
+                      onError={(e) => {
+                        if (photo.dataUrl && (e.currentTarget as HTMLImageElement).src !== photo.dataUrl) {
+                          (e.currentTarget as HTMLImageElement).src = photo.dataUrl;
+                        }
+                      }}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
@@ -129,12 +134,21 @@ export function WCRPhotoGallery({ photos }: WCRPhotoGalleryProps) {
               </div>
 
               <div className="relative min-h-[400px] max-h-[70vh] flex items-center justify-center bg-black/90 p-4">
-                {activePhoto.url && (
+                {activePhoto.dataUrl || activePhoto.url ? (
                   <img
-                    src={activePhoto.url}
+                    src={activePhoto.dataUrl || activePhoto.url}
                     alt={activePhoto.caption || activePhoto.fileName}
+                    onError={(e) => {
+                      if (activePhoto.dataUrl && (e.currentTarget as HTMLImageElement).src !== activePhoto.dataUrl) {
+                        (e.currentTarget as HTMLImageElement).src = activePhoto.dataUrl;
+                      }
+                    }}
                     className="max-h-[65vh] max-w-full object-contain rounded"
                   />
+                ) : (
+                  <div className="flex items-center justify-center text-slate-400">
+                    <ImageIcon className="w-12 h-12" />
+                  </div>
                 )}
                 {photos.length > 1 && (
                   <>

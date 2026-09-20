@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/client";
 import {
+  ALLOWED_PHOTO_EXTENSIONS,
   ALLOWED_PHOTO_MIME_TYPES,
   MAX_PHOTO_FILE_SIZE,
   type WCRPhotoAttachment,
@@ -22,17 +23,27 @@ export function sanitizeFileName(name: string): string {
  * Validates photo file constraints (type and size)
  */
 export function validatePhotoFile(file: File): { valid: boolean; error?: string } {
-  if (!ALLOWED_PHOTO_MIME_TYPES.includes(file.type)) {
+  const fileName = (file.name || "").toLowerCase();
+  const lastDot = fileName.lastIndexOf(".");
+  const ext = lastDot !== -1 ? fileName.substring(lastDot) : "";
+  
+  const isAllowedExt = ALLOWED_PHOTO_EXTENSIONS.includes(ext);
+  const isAllowedMime = file.type
+    ? ALLOWED_PHOTO_MIME_TYPES.includes(file.type.toLowerCase()) || file.type.startsWith("image/")
+    : false;
+
+  // Accept if either extension or MIME type indicates it's an image
+  if (!isAllowedExt && !isAllowedMime && !ext) {
     return {
       valid: false,
-      error: `Unsupported format (${file.type || "unknown"}). Allowed formats: JPEG, PNG, WebP.`,
+      error: `Unsupported image format (${ext || file.type || "unknown"}). Supported: JPG, JPEG, PNG, WebP, JFIF, HEIC, etc.`,
     };
   }
 
   if (file.size > MAX_PHOTO_FILE_SIZE) {
     return {
       valid: false,
-      error: `File size exceeds the 10MB limit (${(file.size / (1024 * 1024)).toFixed(1)}MB).`,
+      error: `File size exceeds the limit (${(file.size / (1024 * 1024)).toFixed(1)}MB). Max limit is 15MB.`,
     };
   }
 
@@ -73,12 +84,12 @@ export const PhotoStorageService = {
     const photoId = `photo_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const cleanName = sanitizeFileName(file.name);
     const categoryPrefix = category === 'AFTER' ? 'after_' : 'before_';
-    const storagePath = `work-completion-reports/${reportId}/${categoryPrefix}${photoId}-${cleanName}`;
+    const storagePath = `work-completion-reports/${reportId || 'temp'}/${categoryPrefix}${photoId}-${cleanName}`;
 
     try {
       // Create compressed base64 for PDF rendering directly
       const { compressImage } = await import("@/lib/utils/image-compression");
-      const compressedDataUrl = await compressImage(file, 800, 0.7);
+      const compressedDataUrl = await compressImage(file, 1000, 0.75);
       
       const supabase = createClient();
 
@@ -94,26 +105,36 @@ export const PhotoStorageService = {
       let isLive = false;
 
       if (!uploadError && uploadData) {
-        // Try getting a signed URL for secure private bucket access
-        const { data: signedData } = await supabase.storage
+        // Try getting public URL first
+        const { data: pubData } = supabase.storage
           .from(WCR_STORAGE_BUCKET)
-          .createSignedUrl(storagePath, 60 * 60 * 24 * 7); // 7 days
+          .getPublicUrl(storagePath);
 
-        if (signedData?.signedUrl) {
-          finalUrl = signedData.signedUrl;
+        if (pubData?.publicUrl) {
+          finalUrl = pubData.publicUrl;
           isLive = true;
+        } else {
+          // Try getting a signed URL for secure private bucket access
+          const { data: signedData } = await supabase.storage
+            .from(WCR_STORAGE_BUCKET)
+            .createSignedUrl(storagePath, 60 * 60 * 24 * 365); // 1 year
+
+          if (signedData?.signedUrl) {
+            finalUrl = signedData.signedUrl;
+            isLive = true;
+          }
         }
       }
 
       const photoAttachment: WCRPhotoAttachment = {
         id: photoId,
-        reportId,
+        reportId: reportId || "temp",
         fileName: file.name,
         storagePath,
         url: finalUrl,
         dataUrl: compressedDataUrl, // Guaranteed accessible synchronous base64
         category,
-          mimeType: file.type,
+        mimeType: file.type || "image/jpeg",
         fileSize: file.size,
         caption: caption?.trim() || undefined,
         uploadedAt: new Date().toISOString(),
@@ -129,16 +150,16 @@ export const PhotoStorageService = {
       // Graceful fallback for local development or disconnected storage
       try {
         const { compressImage } = await import("@/lib/utils/image-compression");
-        const compressedDataUrl = await compressImage(file, 800, 0.7);
+        const compressedDataUrl = await compressImage(file, 1000, 0.75);
         const photoAttachment: WCRPhotoAttachment = {
           id: photoId,
-          reportId,
+          reportId: reportId || "temp",
           fileName: file.name,
           storagePath,
           url: compressedDataUrl,
           dataUrl: compressedDataUrl,
           category,
-          mimeType: file.type,
+          mimeType: file.type || "image/jpeg",
           fileSize: file.size,
           caption: caption?.trim() || undefined,
           uploadedAt: new Date().toISOString(),

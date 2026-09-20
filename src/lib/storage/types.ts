@@ -20,13 +20,40 @@ export interface PhotoUploadResult {
   isLiveStorage: boolean;
 }
 
+export const ALLOWED_PHOTO_EXTENSIONS = [
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".webp",
+  ".jfif",
+  ".pjpeg",
+  ".pjp",
+  ".avif",
+  ".heic",
+  ".heif",
+  ".bmp",
+  ".tiff",
+  ".tif",
+  ".svg",
+  ".gif",
+];
+
 export const ALLOWED_PHOTO_MIME_TYPES = [
   "image/jpeg",
   "image/jpg",
   "image/png",
   "image/webp",
+  "image/jfif",
+  "image/pjpeg",
+  "image/avif",
+  "image/heic",
+  "image/heif",
+  "image/bmp",
+  "image/tiff",
+  "image/svg+xml",
+  "image/gif",
 ];
 
-export const MAX_PHOTO_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-export const MAX_PHOTOS_PER_REPORT = 12;
+export const MAX_PHOTO_FILE_SIZE = 15 * 1024 * 1024; // 15MB
+export const MAX_PHOTOS_PER_REPORT = 20;
 
