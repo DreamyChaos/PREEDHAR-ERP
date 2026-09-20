@@ -106,17 +106,28 @@ export function renderOfficialHeader(
   }
 
   const textX = startX + logoSize + 5;
-
-  // Same clean header for ALL document types — no address/TRN lines
+  
+  // Calculate exact font size to fill the remaining width
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(13);
+  const fullText = 'PREEDHAR TECHNICAL SERVICES CO. L.L.C.';
+  doc.setFontSize(10);
+  const textWidthAt10 = doc.getTextWidth(fullText);
+  const targetWidth = pageWidth - textX - startX; // fill to the right margin (startX)
+  const optimalSize = (targetWidth / textWidthAt10) * 10;
+  
+  doc.setFontSize(optimalSize);
+  
+  // Vertically align with logo (logo is 20mm tall from Y=8)
+  const textY = logoY + 14; 
+
   // PREEDHAR in navy
   doc.setTextColor(...PDF_COLORS.primaryNavy);
-  doc.text('PREEDHAR', textX, 18);
+  doc.text('PREEDHAR', textX, textY);
   const nw = doc.getTextWidth('PREEDHAR');
+  
   // TECHNICAL SERVICES CO. L.L.C. in orange
   doc.setTextColor(...PDF_COLORS.brandOrange);
-  doc.text(' TECHNICAL SERVICES CO. L.L.C.', textX + nw, 18);
+  doc.text(' TECHNICAL SERVICES CO. L.L.C.', textX + nw, textY);
 
 
   // Thin navy divider
