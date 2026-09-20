@@ -19,6 +19,7 @@ interface WCRPhotoGalleryProps {
 
 export function WCRPhotoGallery({ photos }: WCRPhotoGalleryProps) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = React.useState<number | null>(null);
+  const [failedImages, setFailedImages] = React.useState<Record<string, boolean>>({});
 
   if (!photos || photos.length === 0) {
     return (
@@ -61,6 +62,8 @@ export function WCRPhotoGallery({ photos }: WCRPhotoGalleryProps) {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {gridPhotos.map((photo) => {
             const index = photos.findIndex(p => p.id === photo.id);
+            const isFailed = failedImages[photo.id];
+
             return (
               <div
                 key={photo.id}
@@ -68,20 +71,25 @@ export function WCRPhotoGallery({ photos }: WCRPhotoGalleryProps) {
                 className="group relative rounded-lg border border-slate-200 overflow-hidden bg-slate-100 cursor-pointer shadow-2xs hover:shadow-md transition-all hover:border-[#2563EB]"
               >
                 <div className="aspect-4/3 w-full relative">
-                  {photo.dataUrl || photo.url ? (
+                  {!isFailed && (photo.dataUrl || photo.url) ? (
                     <img
                       src={photo.dataUrl || photo.url}
                       alt={photo.caption || photo.fileName}
                       onError={(e) => {
                         if (photo.dataUrl && (e.currentTarget as HTMLImageElement).src !== photo.dataUrl) {
                           (e.currentTarget as HTMLImageElement).src = photo.dataUrl;
+                        } else {
+                          setFailedImages((prev) => ({ ...prev, [photo.id]: true }));
                         }
                       }}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
-                    <div className="flex items-center justify-center w-full h-full text-slate-400">
-                      <ImageIcon className="w-6 h-6" />
+                    <div className="flex flex-col items-center justify-center w-full h-full bg-slate-100 p-2 text-center text-slate-400">
+                      <Camera className="w-6 h-6 mb-1 text-slate-400" />
+                      <span className="text-[9px] font-semibold text-slate-600 truncate max-w-full px-1">
+                        {photo.fileName}
+                      </span>
                     </div>
                   )}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

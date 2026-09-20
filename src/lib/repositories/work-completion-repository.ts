@@ -73,20 +73,39 @@ export const WorkCompletionRepository = {
             status: item.status,
             remarks: item.remarks || undefined,
           })),
-        photos: (row.wcr_photos || []).map((p: any) => ({
-          id: p.id,
-          reportId: p.report_id,
-          fileName: p.file_name,
-          storagePath: p.storage_path,
-          url: p.public_url || p.storage_path,
-          dataUrl: p.data_url || undefined,
-          category: p.storage_path?.includes('/after_') ? 'AFTER' : 'BEFORE',
-          mimeType: p.mime_type,
-          fileSize: Number(p.file_size),
-          caption: p.caption || undefined,
-          uploadedAt: p.uploaded_at,
-          uploadedBy: p.uploaded_by || undefined,
-        })),
+        photos: (row.wcr_photos || []).map((p: any) => {
+          let resolvedUrl = p.public_url;
+          if (!resolvedUrl || !resolvedUrl.startsWith("http")) {
+            if (p.storage_path && !p.storage_path.startsWith("data:")) {
+              try {
+                const { data } = supabase.storage.from("wcr-photos").getPublicUrl(p.storage_path);
+                if (data?.publicUrl) {
+                  resolvedUrl = data.publicUrl;
+                }
+              } catch {}
+            }
+          }
+          if (resolvedUrl && (resolvedUrl.startsWith("http://") || resolvedUrl.startsWith("https://"))) {
+            try {
+              resolvedUrl = encodeURI(decodeURI(resolvedUrl));
+            } catch {}
+          }
+
+          return {
+            id: p.id,
+            reportId: p.report_id,
+            fileName: p.file_name,
+            storagePath: p.storage_path,
+            url: resolvedUrl || p.public_url || p.storage_path,
+            dataUrl: p.data_url || undefined,
+            category: p.storage_path?.includes('/after_') ? 'AFTER' : 'BEFORE',
+            mimeType: p.mime_type,
+            fileSize: Number(p.file_size),
+            caption: p.caption || undefined,
+            uploadedAt: p.uploaded_at,
+            uploadedBy: p.uploaded_by || undefined,
+          };
+        }),
       }));
     } catch (err) {
       return [];
